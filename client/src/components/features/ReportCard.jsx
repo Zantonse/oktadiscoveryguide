@@ -1,0 +1,291 @@
+import React, { useState } from 'react';
+import { useSession } from '../../contexts/SessionContext.jsx';
+import { Button } from '../common/Button.jsx';
+
+// Discovery areas by track
+const trackAreas = {
+  sales: {
+    name: 'IGA Sales Discovery',
+    areas: [
+      { id: 'current_state', name: 'Current State', description: 'How they manage access today' },
+      { id: 'pain_points', name: 'Pain Points', description: 'Current challenges discovered' },
+      { id: 'business_impact', name: 'Business Impact', description: 'Cost/risk of problems' },
+      { id: 'budget', name: 'Budget', description: 'Budget situation discussed' },
+      { id: 'timeline', name: 'Timeline', description: 'Urgency/timeline uncovered' },
+      { id: 'decision_process', name: 'Decision Process', description: 'Who decides, how' },
+      { id: 'success_criteria', name: 'Success Criteria', description: 'What success looks like' }
+    ]
+  },
+  technical: {
+    name: 'IGA Technical Discovery',
+    areas: [
+      { id: 'architecture', name: 'Architecture', description: 'Current systems/tools' },
+      { id: 'integrations', name: 'Integrations', description: 'Integration points/dependencies' },
+      { id: 'pain_points', name: 'Pain Points', description: 'Technical gaps/issues' },
+      { id: 'requirements', name: 'Requirements', description: 'Must-have features' },
+      { id: 'compliance', name: 'Compliance', description: 'Security/compliance needs' },
+      { id: 'resources', name: 'Resources', description: 'Team/timeline constraints' },
+      { id: 'migration', name: 'Migration', description: 'Migration considerations' }
+    ]
+  },
+  aiAgents: {
+    name: 'AI Agents Discovery',
+    areas: [
+      { id: 'ai_initiatives', name: 'AI Initiatives', description: 'Current AI/GenAI projects and roadmap' },
+      { id: 'agent_use_cases', name: 'Agent Use Cases', description: 'Customer service, copilots, autonomous agents' },
+      { id: 'mcp_tool_access', name: 'MCP & Tool Access', description: 'Model Context Protocol and tool access patterns' },
+      { id: 'security_concerns', name: 'Security Concerns', description: 'Data exposure, permissions, credential risks' },
+      { id: 'governance_needs', name: 'Governance Needs', description: 'EU AI Act, SOC2, audit requirements' },
+      { id: 'shadow_ai', name: 'Shadow AI', description: 'Ungoverned or unknown AI deployments' },
+      { id: 'timeline', name: 'Timeline', description: 'Pilot, production, scale timeline' },
+      { id: 'decision_process', name: 'Decision Process', description: 'CISO, CTO, Platform team ownership' },
+      { id: 'current_approach', name: 'Current Approach', description: 'How they handle AI auth today' }
+    ]
+  }
+};
+
+export function ReportCard() {
+  const { reportCard, interestLevel, resetSession, selectedTrack, discoveredAreas, discoveryProgress } = useSession();
+  const [showFlowGuide, setShowFlowGuide] = useState(false);
+
+  if (!reportCard) return null;
+
+  const gradeColors = {
+    'A': '#10b981',
+    'B': '#22c55e',
+    'C': '#f59e0b',
+    'D': '#f97316',
+    'F': '#ef4444'
+  };
+
+  const gradeColor = gradeColors[reportCard.grade] || '#64748b';
+  const trackConfig = trackAreas[selectedTrack] || trackAreas.sales;
+  const coveredCount = discoveredAreas.length;
+  const totalAreas = trackConfig.areas.length;
+  const coveragePercent = Math.round((coveredCount / totalAreas) * 100);
+
+  return (
+    <div className="report-card-overlay">
+      <div className="report-card">
+        <div className="report-card-header">
+          <h2>Session Report Card</h2>
+          <p className="report-subtitle">Discovery Conversation Analysis</p>
+        </div>
+
+        <div className="report-grade-section">
+          <div className="report-grade" style={{ backgroundColor: gradeColor }}>
+            {reportCard.grade}
+          </div>
+          <div className="report-score">
+            <span className="score-value">{reportCard.score}</span>
+            <span className="score-label">/100</span>
+          </div>
+          <div className="report-interest">
+            <span className="interest-label">Final Interest:</span>
+            <span className="interest-value">{interestLevel}/10</span>
+          </div>
+        </div>
+
+        <p className="report-summary">{reportCard.summary}</p>
+
+        {/* Discovery Coverage Section */}
+        <div className="report-section coverage">
+          <h3>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 3v18h18"/>
+              <path d="M18 17V9"/>
+              <path d="M13 17V5"/>
+              <path d="M8 17v-3"/>
+            </svg>
+            Discovery Coverage
+          </h3>
+          <div className="coverage-summary">
+            <div className="coverage-stat">
+              <span className="coverage-percent">{coveragePercent}%</span>
+              <span className="coverage-label">Areas Covered</span>
+            </div>
+            <div className="coverage-bar-container">
+              <div className="coverage-bar" style={{ width: `${coveragePercent}%` }} />
+            </div>
+            <span className="coverage-count">{coveredCount} of {totalAreas} areas</span>
+          </div>
+          <button className="flow-guide-toggle" onClick={() => setShowFlowGuide(!showFlowGuide)}>
+            {showFlowGuide ? 'Hide Details' : 'Show Details'}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points={showFlowGuide ? "18 15 12 9 6 15" : "6 9 12 15 18 9"} />
+            </svg>
+          </button>
+
+          {showFlowGuide && (
+            <div className="flow-guide-details">
+              <div className="flow-guide-track-name">{trackConfig.name}</div>
+              <div className="flow-guide-areas">
+                {trackConfig.areas.map(area => {
+                  const isDiscovered = discoveredAreas.includes(area.id);
+                  return (
+                    <div key={area.id} className={`flow-guide-area ${isDiscovered ? 'discovered' : 'missed'}`}>
+                      <div className="area-status">
+                        {isDiscovered ? (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                          </svg>
+                        ) : (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                          </svg>
+                        )}
+                      </div>
+                      <div className="area-info">
+                        <span className="area-name">{area.name}</span>
+                        <span className="area-desc">{area.description}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="report-section">
+          <h3>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            Strengths
+          </h3>
+          <ul>
+            {reportCard.strengths?.map((s, i) => (
+              <li key={i}>{s}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="report-section">
+          <h3>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            Areas to Improve
+          </h3>
+          <ul>
+            {reportCard.improvements?.map((s, i) => (
+              <li key={i}>{s}</li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Discovery Flow Analysis */}
+        {(reportCard.discoveryFlowFeedback || reportCard.flowAnalysis) && (
+          <div className="report-section flow-analysis">
+            <h3>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+              Discovery Flow
+            </h3>
+            {reportCard.discoveryFlowFeedback && (
+              <p className="flow-feedback">{reportCard.discoveryFlowFeedback}</p>
+            )}
+            {reportCard.flowAnalysis && (
+              <div className="flow-details">
+                <div className="flow-score">
+                  <span className="flow-score-label">Flow Score:</span>
+                  <span className={`flow-score-value ${reportCard.flowAnalysis.score >= 70 ? 'good' : 'needs-work'}`}>
+                    {reportCard.flowAnalysis.score}/100
+                  </span>
+                </div>
+                {reportCard.flowAnalysis.issues?.length > 0 && (
+                  <div className="flow-issues">
+                    <span className="issues-label">Flow Issues:</span>
+                    <ul>
+                      {reportCard.flowAnalysis.issues.map((issue, i) => (
+                        <li key={i}>{issue}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {reportCard.flowAnalysis.goodTransitions?.length > 0 && (
+                  <div className="flow-good">
+                    <span className="good-label">Good Transitions:</span>
+                    <ul>
+                      {reportCard.flowAnalysis.goodTransitions.slice(0, 3).map((t, i) => (
+                        <li key={i}>{t}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+            {reportCard.discoveryOrder?.length > 0 && (
+              <div className="discovery-order">
+                <span className="order-label">Your Discovery Path:</span>
+                <div className="order-flow">
+                  {reportCard.discoveryOrder.map((area, i) => (
+                    <span key={area} className="order-item">
+                      {area.replace(/_/g, ' ')}
+                      {i < reportCard.discoveryOrder.length - 1 && <span className="order-arrow">→</span>}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Golden Questions */}
+        {(reportCard.goldenQuestionsFeedback || reportCard.goldenQuestions?.length > 0) && (
+          <div className="report-section golden-questions">
+            <h3>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+              Golden Questions
+            </h3>
+            {reportCard.goldenQuestionsFeedback && (
+              <p className="golden-feedback">{reportCard.goldenQuestionsFeedback}</p>
+            )}
+            {reportCard.goldenQuestions?.length > 0 && (
+              <div className="golden-list">
+                <span className="golden-label">High-impact questions you asked:</span>
+                <ul>
+                  {reportCard.goldenQuestions.map((q, i) => (
+                    <li key={i}>"{q}..."</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="report-section tips">
+          <h3>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            Tips for Next Time
+          </h3>
+          <ul>
+            {reportCard.tips?.map((s, i) => (
+              <li key={i}>{s}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="report-actions">
+          <Button variant="primary" size="large" onClick={resetSession}>
+            Try Again
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

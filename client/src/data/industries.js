@@ -1,0 +1,88 @@
+export const industries = [
+  {
+    id: 'financial-services',
+    name: 'Financial Services',
+    icon: 'bank',
+    sector: 'Financial',
+    description: 'Banking, Insurance, Investment Management'
+  },
+  {
+    id: 'healthcare',
+    name: 'Healthcare & Life Sciences',
+    icon: 'medical',
+    sector: 'Healthcare',
+    description: 'Hospitals, Health Systems, Pharmaceutical, Medical Devices'
+  },
+  {
+    id: 'retail',
+    name: 'Retail & E-commerce',
+    icon: 'shopping',
+    sector: 'Retail',
+    description: 'Retail Chains, E-commerce, Consumer Goods'
+  },
+  {
+    id: 'manufacturing',
+    name: 'Manufacturing',
+    icon: 'factory',
+    sector: 'Industrial',
+    description: 'Discrete Manufacturing, Process Manufacturing, Industrial'
+  },
+  {
+    id: 'technology',
+    name: 'Technology',
+    icon: 'laptop',
+    sector: 'Technology',
+    description: 'Software, SaaS, Hardware, IT Services'
+  },
+  {
+    id: 'government',
+    name: 'Government & Public Sector',
+    icon: 'building',
+    sector: 'Government',
+    description: 'Federal, State, Local Government, Public Agencies'
+  },
+  {
+    id: 'energy',
+    name: 'Energy & Utilities',
+    icon: 'bolt',
+    sector: 'Energy',
+    description: 'Oil & Gas, Power Generation, Utilities'
+  },
+  {
+    id: 'education',
+    name: 'Education (Higher Ed)',
+    icon: 'graduation',
+    sector: 'Education',
+    description: 'Universities, Colleges, Research Institutions'
+  },
+  {
+    id: 'media',
+    name: 'Media & Entertainment',
+    icon: 'film',
+    sector: 'Media',
+    description: 'Broadcasting, Streaming, Studios, Publishing'
+  },
+  {
+    id: 'transportation',
+    name: 'Transportation & Logistics',
+    icon: 'truck',
+    sector: 'Logistics',
+    description: 'Airlines, Shipping, Freight, Logistics'
+  },
+  {
+    id: 'professional-services',
+    name: 'Professional Services',
+    icon: 'briefcase',
+    sector: 'Services',
+    description: 'Consulting, Legal, Accounting, Advisory'
+  },
+  {
+    id: 'telecommunications',
+    name: 'Telecommunications',
+    icon: 'signal',
+    sector: 'Telecom',
+    description: 'Wireless, Wireline, Cable, Internet Service'
+  }
+];
+
+export const sectors = [...new Set(industries.map(i => i.sector))];

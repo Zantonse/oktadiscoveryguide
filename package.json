@@ -1,0 +1,15 @@
+{
+  "name": "discovery-guide",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Okta IGA Discovery Guide - AI-powered discovery conversation simulator",
+  "scripts": {
+    "dev": "cd server && npm run dev",
+    "build": "cd client && npm run build",
+    "vercel-build": "cd client && npm install && npm run build"
+  },
+  "dependencies": {
+    "openai": "^4.28.0"
+  }
+}
