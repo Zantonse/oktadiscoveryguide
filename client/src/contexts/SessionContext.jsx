@@ -156,7 +156,7 @@ export function SessionProvider({ children }) {
     }
   }, [canStartConversation, getConfig, addMessage]);
 
-  // Send a message with streaming
+  // Send a message with streaming (falls back to non-streaming on Vercel)
   const sendMessage = useCallback(async (content) => {
     if (!content.trim() || isLoading) return;
 
@@ -185,58 +185,96 @@ export function SessionProvider({ children }) {
         })
       });
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let fullMessage = '';
+      const contentType = response.headers.get('content-type');
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
+      // Handle non-streaming JSON response (Vercel serverless)
+      if (contentType && contentType.includes('application/json')) {
+        const data = await response.json();
+        setStreamingMessage(null);
 
-        const text = decoder.decode(value);
-        const lines = text.split('\n');
+        if (data.success) {
+          addMessage('assistant', data.message);
+          if (data.coachingHint) {
+            setCoachingHint(data.coachingHint);
+          }
+          if (data.interestLevel) {
+            setInterestLevel(data.interestLevel);
+          }
+          if (data.discoveryProgress !== undefined) {
+            setDiscoveryProgress(data.discoveryProgress);
+          }
+          if (data.discoveredAreas && data.discoveredAreas.length > 0) {
+            setDiscoveredAreas(prev => {
+              const combined = [...new Set([...prev, ...data.discoveredAreas])];
+              return combined;
+            });
+          }
+          if (data.conversationEnded) {
+            setConversationEnded(true);
+            if (data.reportCard) {
+              setReportCard(data.reportCard);
+            }
+          } else {
+            fetchSuggestedQuestions();
+          }
+        } else {
+          addMessage('assistant', 'Sorry, there was an error. Please try again.');
+        }
+      } else {
+        // Handle SSE streaming response (local dev)
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let fullMessage = '';
 
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            try {
-              const data = JSON.parse(line.slice(6));
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
 
-              if (data.type === 'content') {
-                fullMessage += data.content;
-                setStreamingMessage(fullMessage);
-              } else if (data.type === 'done') {
-                // Finalize the message (use cleanMessage if provided to strip interest tag)
-                setStreamingMessage(null);
-                addMessage('assistant', data.cleanMessage || fullMessage);
-                if (data.coachingHint) {
-                  setCoachingHint(data.coachingHint);
-                }
-                if (data.interestLevel) {
-                  setInterestLevel(data.interestLevel);
-                }
-                if (data.discoveryProgress !== undefined) {
-                  setDiscoveryProgress(data.discoveryProgress);
-                }
-                if (data.discoveredAreas && data.discoveredAreas.length > 0) {
-                  setDiscoveredAreas(prev => {
-                    const combined = [...new Set([...prev, ...data.discoveredAreas])];
-                    return combined;
-                  });
-                }
-                if (data.conversationEnded) {
-                  setConversationEnded(true);
-                  if (data.reportCard) {
-                    setReportCard(data.reportCard);
+          const text = decoder.decode(value);
+          const lines = text.split('\n');
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6));
+
+                if (data.type === 'content') {
+                  fullMessage += data.content;
+                  setStreamingMessage(fullMessage);
+                } else if (data.type === 'done') {
+                  // Finalize the message (use cleanMessage if provided to strip interest tag)
+                  setStreamingMessage(null);
+                  addMessage('assistant', data.cleanMessage || fullMessage);
+                  if (data.coachingHint) {
+                    setCoachingHint(data.coachingHint);
                   }
-                } else {
-                  fetchSuggestedQuestions();
+                  if (data.interestLevel) {
+                    setInterestLevel(data.interestLevel);
+                  }
+                  if (data.discoveryProgress !== undefined) {
+                    setDiscoveryProgress(data.discoveryProgress);
+                  }
+                  if (data.discoveredAreas && data.discoveredAreas.length > 0) {
+                    setDiscoveredAreas(prev => {
+                      const combined = [...new Set([...prev, ...data.discoveredAreas])];
+                      return combined;
+                    });
+                  }
+                  if (data.conversationEnded) {
+                    setConversationEnded(true);
+                    if (data.reportCard) {
+                      setReportCard(data.reportCard);
+                    }
+                  } else {
+                    fetchSuggestedQuestions();
+                  }
+                } else if (data.type === 'error') {
+                  setStreamingMessage(null);
+                  addMessage('assistant', 'Sorry, there was an error. Please try again.');
                 }
-              } else if (data.type === 'error') {
-                setStreamingMessage(null);
-                addMessage('assistant', 'Sorry, there was an error. Please try again.');
+              } catch (e) {
+                // Skip malformed JSON
               }
-            } catch (e) {
-              // Skip malformed JSON
             }
           }
         }
