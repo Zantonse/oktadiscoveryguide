@@ -223,17 +223,12 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('OpenAI API Error:', error);
-    const demo = generateDemoResponse(messages, config);
-    return res.json({
-      success: true,
-      message: demo.message,
-      interestLevel: demo.interestLevel,
-      discoveryProgress: demo.discoveryProgress,
-      discoveredAreas: demo.discoveredAreas,
-      conversationEnded: demo.conversationEnded,
-      coachingHint: getDefaultCoachingHint(config.track, config.phaseId),
-      nonStreaming: true,
-      demo: true
+    // Return the actual error so we can debug
+    return res.status(500).json({
+      success: false,
+      error: error.message || 'Unknown error',
+      errorType: error.constructor.name,
+      errorDetails: error.status || error.code || null
     });
   }
 }
