@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { stakeholderPsychology } from '../../data/learningContent.js';
+import { ObjectionHandler } from './ObjectionHandler.jsx';
 
 export function StakeholderPsychology() {
   const [activeSection, setActiveSection] = useState('interest-levels');
+  const [showInteractiveObjections, setShowInteractiveObjections] = useState(true);
   const section = stakeholderPsychology.sections.find(s => s.id === activeSection);
 
   return (
@@ -118,21 +120,56 @@ export function StakeholderPsychology() {
         )}
 
         {section.objections && (
-          <div className="objections-list">
-            {section.objections.map((obj, index) => (
-              <div key={index} className="objection-card">
-                <div className="objection-header">
-                  <span className="objection-quote">"{obj.objection}"</span>
-                </div>
-                <div className="objection-meaning">
-                  <strong>What they mean:</strong> {obj.meaning}
-                </div>
-                <div className="objection-response">
-                  <strong>How to respond:</strong> {obj.response}
-                </div>
+          <>
+            <div className="objections-view-toggle">
+              <button
+                className={`view-toggle-btn ${showInteractiveObjections ? 'active' : ''}`}
+                onClick={() => setShowInteractiveObjections(true)}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                  <line x1="7" y1="2" x2="7" y2="22"/>
+                  <line x1="17" y1="2" x2="17" y2="22"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                </svg>
+                Interactive Cards
+              </button>
+              <button
+                className={`view-toggle-btn ${!showInteractiveObjections ? 'active' : ''}`}
+                onClick={() => setShowInteractiveObjections(false)}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="8" y1="6" x2="21" y2="6"/>
+                  <line x1="8" y1="12" x2="21" y2="12"/>
+                  <line x1="8" y1="18" x2="21" y2="18"/>
+                  <line x1="3" y1="6" x2="3.01" y2="6"/>
+                  <line x1="3" y1="12" x2="3.01" y2="12"/>
+                  <line x1="3" y1="18" x2="3.01" y2="18"/>
+                </svg>
+                List View
+              </button>
+            </div>
+
+            {showInteractiveObjections ? (
+              <ObjectionHandler objections={section.objections} />
+            ) : (
+              <div className="objections-list">
+                {section.objections.map((obj, index) => (
+                  <div key={index} className="objection-item">
+                    <div className="objection-item-header">
+                      <span className="objection-quote">"{obj.objection}"</span>
+                    </div>
+                    <div className="objection-meaning">
+                      <strong>What they mean:</strong> {obj.meaning}
+                    </div>
+                    <div className="objection-response">
+                      <strong>How to respond:</strong> {obj.response}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
     </div>

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { discoveryFramework } from '../../data/learningContent.js';
+import { InteractiveFlow } from './InteractiveFlow.jsx';
 
 export function DiscoveryFramework() {
   const [activeTrack, setActiveTrack] = useState('sales');
+  const [showInteractiveFlow, setShowInteractiveFlow] = useState(true);
   const track = discoveryFramework.tracks[activeTrack];
 
   return (
@@ -39,29 +41,44 @@ export function DiscoveryFramework() {
           <p>{track.description}</p>
         </div>
 
-        <div className="learn-card">
-          <h3>Recommended Discovery Flow</h3>
-          <p className="learn-card-subtitle">Follow this sequence for structured discovery</p>
-          <div className="discovery-flow">
-            {track.flow.map((step, index) => {
-              const area = track.areas.find(a => a.id === step.area);
-              return (
-                <div key={step.step} className="flow-step-item">
-                  <div className="flow-step-number">{step.step}</div>
-                  <div className="flow-step-info">
-                    <span className="flow-step-area">{area?.name || step.area}</span>
-                    <span className="flow-step-goal">{step.goal}</span>
-                  </div>
-                  {index < track.flow.length - 1 && (
-                    <svg className="flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <line x1="12" y1="5" x2="12" y2="19"/>
-                      <polyline points="19 12 12 19 5 12"/>
-                    </svg>
-                  )}
-                </div>
-              );
-            })}
+        <div className="learn-card flow-card">
+          <div className="flow-card-header">
+            <div>
+              <h3>Recommended Discovery Flow</h3>
+              <p className="learn-card-subtitle">Follow this sequence for structured discovery</p>
+            </div>
+            <button
+              className={`flow-toggle-btn ${showInteractiveFlow ? 'active' : ''}`}
+              onClick={() => setShowInteractiveFlow(!showInteractiveFlow)}
+            >
+              {showInteractiveFlow ? 'Simple View' : 'Interactive View'}
+            </button>
           </div>
+
+          {showInteractiveFlow ? (
+            <InteractiveFlow track={track} />
+          ) : (
+            <div className="discovery-flow">
+              {track.flow.map((step, index) => {
+                const area = track.areas.find(a => a.id === step.area);
+                return (
+                  <div key={step.step} className="flow-step-item">
+                    <div className="flow-step-number">{step.step}</div>
+                    <div className="flow-step-info">
+                      <span className="flow-step-area">{area?.name || step.area}</span>
+                      <span className="flow-step-goal">{step.goal}</span>
+                    </div>
+                    {index < track.flow.length - 1 && (
+                      <svg className="flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <polyline points="19 12 12 19 5 12"/>
+                      </svg>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <h3 className="areas-header">Discovery Areas</h3>

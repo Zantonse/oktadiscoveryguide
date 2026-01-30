@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { learningTopics } from '../../data/learningContent.js';
 import { DiscoveryFundamentals } from './DiscoveryFundamentals.jsx';
 import { DiscoveryFramework } from './DiscoveryFramework.jsx';
@@ -6,6 +6,8 @@ import { GoldenQuestions } from './GoldenQuestions.jsx';
 import { StakeholderPsychology } from './StakeholderPsychology.jsx';
 import { CompetitorGuide } from './CompetitorGuide.jsx';
 import { ScenarioPlaybooks } from './ScenarioPlaybooks.jsx';
+import { LearnSearch } from './LearnSearch.jsx';
+import { useLearnSearch } from '../../hooks/useLearnSearch.js';
 
 const TopicIcon = ({ icon }) => {
   const icons = {
@@ -57,6 +59,27 @@ const TopicIcon = ({ icon }) => {
 
 export function LearnSection() {
   const [activeTopic, setActiveTopic] = useState('fundamentals');
+  const search = useLearnSearch();
+
+  // Map topic names from search results to topic IDs
+  const topicNameToId = {
+    'Discovery Fundamentals': 'fundamentals',
+    'Discovery Framework': 'framework',
+    'Golden Questions': 'golden-questions',
+    'Stakeholder Psychology': 'psychology',
+    'Competitive Intelligence': 'competitors',
+    'Scenario Playbooks': 'playbooks'
+  };
+
+  const handleResultClick = useCallback((result) => {
+    // Navigate to the appropriate topic
+    const topicId = result.topic || topicNameToId[result.topicName];
+    if (topicId) {
+      setActiveTopic(topicId);
+    }
+    // Clear the search after navigation
+    search.clearSearch();
+  }, [search]);
 
   const renderContent = () => {
     switch (activeTopic) {
@@ -84,6 +107,14 @@ export function LearnSection() {
           <h2>Discovery Training</h2>
           <p>Master discovery conversations with these resources</p>
         </div>
+        <LearnSearch
+          query={search.query}
+          setQuery={search.setQuery}
+          results={search.results}
+          isSearching={search.isSearching}
+          clearSearch={search.clearSearch}
+          onResultClick={handleResultClick}
+        />
         <nav className="learn-nav">
           {learningTopics.map((topic) => (
             <button

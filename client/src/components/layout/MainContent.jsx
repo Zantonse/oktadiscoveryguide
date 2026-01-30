@@ -3,6 +3,7 @@ import { ChatContainer } from '../chat/ChatContainer.jsx';
 import { BottomPanel } from './BottomPanel.jsx';
 import { ReportCard } from '../features/ReportCard.jsx';
 import { LearnSection } from '../learn/LearnSection.jsx';
+import { DrillMode } from '../drill/DrillMode.jsx';
 import { useSession } from '../../contexts/SessionContext.jsx';
 import { useTheme } from '../../App.jsx';
 
@@ -10,11 +11,20 @@ export function MainContent() {
   const { conversationStarted, conversationEnded } = useSession();
   const { activeView } = useTheme();
 
-  // Render Learn section or Practice view based on activeView
+  // Render Learn section based on activeView
   if (activeView === 'learn') {
     return (
       <main className="main-content learn-view">
         <LearnSection />
+      </main>
+    );
+  }
+
+  // Render Drill mode based on activeView
+  if (activeView === 'drill') {
+    return (
+      <main className="main-content drill-view">
+        <DrillMode />
       </main>
     );
   }
