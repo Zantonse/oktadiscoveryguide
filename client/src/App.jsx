@@ -58,7 +58,7 @@ function App() {
   });
 
   const [showSettings, setShowSettings] = useState(false);
-  const [activeView, setActiveView] = useState('practice'); // 'practice' | 'learn' | 'drill'
+  const [activeView, setActiveView] = useState('practice'); // 'practice' | 'learn' | 'drill' | 'analyze'
 
   useEffect(() => {
     localStorage.setItem('discovery-guide-theme', theme);

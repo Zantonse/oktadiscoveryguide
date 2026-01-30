@@ -2,7 +2,7 @@ import express from 'express';
 import { industries, getIndustryById } from '../prompts/industries.js';
 import { personas, getAllPersonas, getPersonaById } from '../prompts/personas.js';
 import { scenarios, getScenariosByTrack, getScenario } from '../prompts/scenarios.js';
-import { generateResponse, generateResponseStream, generateOpeningMessage, generateSuggestedQuestions, endConversation } from '../services/openai.js';
+import { generateResponse, generateResponseStream, generateOpeningMessage, generateSuggestedQuestions, endConversation, analyzeTranscript } from '../services/openai.js';
 
 const router = express.Router();
 
@@ -362,6 +362,46 @@ router.post('/chat/end', async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to end conversation'
+    });
+  }
+});
+
+// POST /api/analyze-transcript - Analyze a discovery call transcript
+router.post('/analyze-transcript', async (req, res) => {
+  const { messages, analysisType = 'sales' } = req.body;
+
+  if (!messages || !Array.isArray(messages)) {
+    return res.status(400).json({
+      success: false,
+      error: 'Messages array is required'
+    });
+  }
+
+  if (messages.length === 0) {
+    return res.status(400).json({
+      success: false,
+      error: 'Messages array cannot be empty'
+    });
+  }
+
+  if (!['sales', 'technical'].includes(analysisType)) {
+    return res.status(400).json({
+      success: false,
+      error: 'analysisType must be "sales" or "technical"'
+    });
+  }
+
+  try {
+    const response = await analyzeTranscript(messages, analysisType);
+    if (!response.success) {
+      return res.status(500).json(response);
+    }
+    res.json(response);
+  } catch (error) {
+    console.error('Analyze transcript error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to analyze transcript'
     });
   }
 });

@@ -1039,3 +1039,161 @@ export async function endConversation(messages, config, interestLevel, discovere
     };
   }
 }
+
+// Analyze a real discovery call transcript
+export async function analyzeTranscript(messages, analysisType = 'sales') {
+  // Discovery areas by analysis type
+  const discoveryAreas = {
+    sales: ['current_state', 'pain_points', 'business_impact', 'budget', 'timeline', 'decision_process', 'success_criteria'],
+    technical: ['architecture', 'integrations', 'pain_points', 'requirements', 'compliance', 'resources', 'migration']
+  };
+
+  const analysisPrompt = `You are an expert sales coach analyzing a discovery call transcript. Your job is to provide constructive feedback to help salespeople improve their discovery skills.
+
+Analyze this ${analysisType === 'technical' ? 'technical' : 'sales'} discovery conversation and provide a detailed evaluation.
+
+**Discovery Areas to Evaluate:**
+${discoveryAreas[analysisType].map(area => `- ${area.replace(/_/g, ' ')}`).join('\n')}
+
+**IMPORTANT: Respond ONLY with valid JSON in this exact format (no markdown, no code blocks, just raw JSON):**
+{
+  "score": <number 0-100>,
+  "grade": "<A/B/C/D/F>",
+  "summary": "<2-3 sentence overall assessment>",
+  "discoveredAreas": [<array of area IDs that were adequately explored>],
+  "talkRatio": {
+    "salesperson": <percentage 0-100>,
+    "prospect": <percentage 0-100>,
+    "verdict": "<excellent/good/needs_work/poor>"
+  },
+  "questionAnalysis": {
+    "totalQuestions": <number>,
+    "openEndedPercent": <number 0-100>,
+    "followUpPercent": <number 0-100>,
+    "bestQuestions": [<up to 3 best questions asked>]
+  },
+  "strengths": [<3-5 specific things done well>],
+  "improvements": [<3-5 specific areas to improve>],
+  "recommendations": [<3-5 actionable recommendations for next time>]
+}
+
+**Scoring Guidelines:**
+- A (90-100): Exceptional discovery - covered most areas deeply, excellent questions, ideal talk ratio
+- B (80-89): Good discovery - covered key areas, good questions, reasonable talk ratio
+- C (70-79): Adequate discovery - covered some areas, mix of good/poor questions
+- D (60-69): Weak discovery - missed key areas, too many closed questions, poor talk ratio
+- F (<60): Poor discovery - significant issues with technique or coverage
+
+**Talk Ratio Guidelines:**
+- Ideal: 30-40% salesperson, 60-70% prospect
+- Good: Within 10% of ideal
+- Needs work: Within 20% of ideal
+- Poor: More than 20% off ideal
+
+Analyze the following conversation where "user" is the salesperson and "assistant" is the prospect:`;
+
+  // If OpenAI is not configured, return demo analysis
+  if (!openai) {
+    return generateDemoAnalysis(messages, analysisType, discoveryAreas[analysisType]);
+  }
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: MODEL_NAME,
+      messages: [
+        { role: 'system', content: analysisPrompt },
+        ...messages.map(m => ({
+          role: m.role,
+          content: `[${m.role === 'user' ? 'Salesperson' : 'Prospect'}]: ${m.content}`
+        }))
+      ],
+      temperature: 0.3,
+      max_tokens: 1500
+    });
+
+    const rawResponse = response.choices[0].message.content;
+
+    // Parse JSON from response
+    try {
+      // Try to extract JSON from the response (handle potential markdown wrapping)
+      let jsonStr = rawResponse;
+      const jsonMatch = rawResponse.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (jsonMatch) {
+        jsonStr = jsonMatch[1];
+      }
+
+      const result = JSON.parse(jsonStr.trim());
+      return {
+        success: true,
+        ...result
+      };
+    } catch (parseError) {
+      console.error('Failed to parse analysis response:', parseError, rawResponse);
+      return {
+        success: false,
+        error: 'Failed to parse analysis response'
+      };
+    }
+  } catch (error) {
+    console.error('OpenAI API Error:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+}
+
+// Generate demo analysis when OpenAI is not configured
+function generateDemoAnalysis(messages, analysisType, areas) {
+  // Calculate basic stats from messages
+  const sellerMessages = messages.filter(m => m.role === 'user');
+  const prospectMessages = messages.filter(m => m.role === 'assistant');
+
+  const sellerChars = sellerMessages.reduce((sum, m) => sum + m.content.length, 0);
+  const prospectChars = prospectMessages.reduce((sum, m) => sum + m.content.length, 0);
+  const totalChars = sellerChars + prospectChars;
+
+  const sellerPercent = totalChars > 0 ? Math.round((sellerChars / totalChars) * 100) : 50;
+  const prospectPercent = 100 - sellerPercent;
+
+  // Count questions
+  const questionCount = sellerMessages.reduce((count, m) => {
+    return count + (m.content.match(/\?/g) || []).length;
+  }, 0);
+
+  // Generate demo response
+  return {
+    success: true,
+    score: 72,
+    grade: 'C',
+    summary: 'This is a demo analysis. Connect to OpenAI/LiteLLM to get real AI-powered feedback on your discovery calls.',
+    discoveredAreas: areas.slice(0, 3),
+    talkRatio: {
+      salesperson: sellerPercent,
+      prospect: prospectPercent,
+      verdict: prospectPercent >= 60 ? 'good' : 'needs_work'
+    },
+    questionAnalysis: {
+      totalQuestions: questionCount,
+      openEndedPercent: 60,
+      followUpPercent: 30,
+      bestQuestions: ['Example question from your transcript']
+    },
+    strengths: [
+      'Connected API for personalized feedback',
+      'Established rapport at the start',
+      'Showed genuine curiosity'
+    ],
+    improvements: [
+      'Could dig deeper on pain points',
+      'Ask more follow-up questions',
+      'Explore budget and timeline earlier'
+    ],
+    recommendations: [
+      'Practice the "tell me more" technique',
+      'Use the 3-second pause to encourage elaboration',
+      'Connect challenges to business outcomes'
+    ],
+    demo: true
+  };
+}

@@ -4,6 +4,7 @@ import { BottomPanel } from './BottomPanel.jsx';
 import { ReportCard } from '../features/ReportCard.jsx';
 import { LearnSection } from '../learn/LearnSection.jsx';
 import { DrillMode } from '../drill/DrillMode.jsx';
+import { AnalyzeSection } from '../analyze/AnalyzeSection.jsx';
 import { useSession } from '../../contexts/SessionContext.jsx';
 import { useTheme } from '../../App.jsx';
 
@@ -25,6 +26,15 @@ export function MainContent() {
     return (
       <main className="main-content drill-view">
         <DrillMode />
+      </main>
+    );
+  }
+
+  // Render Analyze section based on activeView
+  if (activeView === 'analyze') {
+    return (
+      <main className="main-content analyze-view">
+        <AnalyzeSection />
       </main>
     );
   }

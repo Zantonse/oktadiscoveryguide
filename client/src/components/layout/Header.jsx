@@ -56,6 +56,18 @@ export function Header() {
             </svg>
             Learn
           </button>
+          <button
+            className={`view-tab ${activeView === 'analyze' ? 'active' : ''}`}
+            onClick={() => setActiveView('analyze')}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+              <path d="M11 8v6"/>
+              <path d="M8 11h6"/>
+            </svg>
+            Analyze
+          </button>
         </div>
       </div>
 
