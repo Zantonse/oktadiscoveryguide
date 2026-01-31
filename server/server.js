@@ -54,7 +54,7 @@ const openaiInitialized = initializeOpenAI();
 app.listen(PORT, () => {
   console.log(`
 ╔═══════════════════════════════════════════════════════════╗
-║           Okta IGA Discovery Guide - Server               ║
+║         AI Security Discovery Guide - Server              ║
 ╠═══════════════════════════════════════════════════════════╣
 ║  Server running on http://localhost:${PORT}                   ║
 ║  OpenAI API: ${openaiInitialized ? 'Connected ✓' : 'Not configured (demo mode)'}              ${openaiInitialized ? '' : ' '}║

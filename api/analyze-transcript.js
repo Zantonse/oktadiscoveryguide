@@ -15,14 +15,13 @@ function getOpenAIClient() {
   return new OpenAI(config);
 }
 
-// Discovery areas by analysis type
+// Discovery areas for AI Security
 const discoveryAreas = {
-  sales: ['current_state', 'pain_points', 'business_impact', 'budget', 'timeline', 'decision_process', 'success_criteria'],
-  technical: ['architecture', 'integrations', 'pain_points', 'requirements', 'compliance', 'resources', 'migration']
+  aiAgents: ['ai_initiatives', 'agent_use_cases', 'mcp_tool_access', 'security_concerns', 'governance_needs', 'shadow_ai', 'current_approach', 'timeline', 'decision_process']
 };
 
-function generateDemoAnalysis(messages, analysisType) {
-  const areas = discoveryAreas[analysisType] || discoveryAreas.sales;
+function generateDemoAnalysis(messages) {
+  const areas = discoveryAreas.aiAgents;
 
   // Calculate basic stats from messages
   const sellerMessages = messages.filter(m => m.role === 'user');
@@ -44,7 +43,7 @@ function generateDemoAnalysis(messages, analysisType) {
     success: true,
     score: 72,
     grade: 'C',
-    summary: 'This is a demo analysis. Connect to OpenAI/LiteLLM to get real AI-powered feedback on your discovery calls.',
+    summary: 'This is a demo analysis. Connect to OpenAI/LiteLLM to get real AI-powered feedback on your AI security discovery calls.',
     discoveredAreas: areas.slice(0, 3),
     talkRatio: {
       salesperson: sellerPercent,
@@ -60,17 +59,17 @@ function generateDemoAnalysis(messages, analysisType) {
     strengths: [
       'Connect API for personalized feedback',
       'Established rapport at the start',
-      'Showed genuine curiosity'
+      'Showed genuine curiosity about AI initiatives'
     ],
     improvements: [
-      'Could dig deeper on pain points',
-      'Ask more follow-up questions',
-      'Explore budget and timeline earlier'
+      'Could dig deeper on security concerns',
+      'Ask more follow-up questions about MCP usage',
+      'Explore governance needs earlier'
     ],
     recommendations: [
-      'Practice the "tell me more" technique',
-      'Use the 3-second pause to encourage elaboration',
-      'Connect challenges to business outcomes'
+      'Ask about specific agent use cases',
+      'Explore how they handle agent credentials today',
+      'Understand their shadow AI visibility'
     ],
     demo: true
   };
@@ -90,7 +89,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
   }
 
-  const { messages, analysisType = 'sales' } = req.body;
+  const { messages } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({
@@ -106,25 +105,18 @@ export default async function handler(req, res) {
     });
   }
 
-  if (!['sales', 'technical'].includes(analysisType)) {
-    return res.status(400).json({
-      success: false,
-      error: 'analysisType must be "sales" or "technical"'
-    });
-  }
-
   const openai = getOpenAIClient();
 
   // Return demo response if no API key
   if (!openai) {
-    return res.json(generateDemoAnalysis(messages, analysisType));
+    return res.json(generateDemoAnalysis(messages));
   }
 
-  const areas = discoveryAreas[analysisType] || discoveryAreas.sales;
+  const areas = discoveryAreas.aiAgents;
 
-  const analysisPrompt = `You are an expert sales coach analyzing a discovery call transcript. Your job is to provide constructive feedback to help salespeople improve their discovery skills.
+  const analysisPrompt = `You are an expert sales coach analyzing an AI security discovery call transcript. Your job is to provide constructive feedback to help salespeople improve their discovery skills for Okta's AI security products.
 
-Analyze this ${analysisType === 'technical' ? 'technical' : 'sales'} discovery conversation and provide a detailed evaluation.
+Analyze this AI security discovery conversation and provide a detailed evaluation. The conversation is about AI agents, GenAI security, MCP (Model Context Protocol), token vault, and related agentic AI identity topics.
 
 **Discovery Areas to Evaluate:**
 ${areas.map(area => `- ${area.replace(/_/g, ' ')}`).join('\n')}
@@ -198,10 +190,10 @@ Analyze the following conversation where "user" is the salesperson and "assistan
       });
     } catch (parseError) {
       console.error('Failed to parse analysis response:', parseError, rawResponse);
-      return res.json(generateDemoAnalysis(messages, analysisType));
+      return res.json(generateDemoAnalysis(messages));
     }
   } catch (error) {
     console.error('OpenAI API Error:', error);
-    return res.json(generateDemoAnalysis(messages, analysisType));
+    return res.json(generateDemoAnalysis(messages));
   }
 }

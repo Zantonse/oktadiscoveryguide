@@ -6,64 +6,32 @@ import { generateResponse, generateResponseStream, generateOpeningMessage, gener
 
 const router = express.Router();
 
-// Discovery phases data
+// AI Security Discovery phases
 const phases = {
-  sales: [
+  aiAgents: [
     {
-      id: 'initial-discovery',
-      name: 'Initial Discovery',
-      description: 'Understanding current state and challenges',
+      id: 'ai-initiative-discovery',
+      name: 'AI Initiative Discovery',
+      description: 'Understanding AI roadmap and current projects',
       order: 1
     },
     {
-      id: 'qualification',
-      name: 'Qualification',
-      description: 'Identifying budget, authority, need, timeline',
+      id: 'agent-security-assessment',
+      name: 'Agent Security Assessment',
+      description: 'Security concerns and governance needs',
       order: 2
     },
     {
-      id: 'solution-mapping',
-      name: 'Solution Mapping',
-      description: 'Aligning Okta IGA capabilities to needs',
+      id: 'architecture-integration',
+      name: 'Architecture & Integration',
+      description: 'Technical requirements and MCP patterns',
       order: 3
     },
     {
-      id: 'roi-value',
-      name: 'ROI & Value',
-      description: 'Building business case and demonstrating value',
+      id: 'value-timeline',
+      name: 'Value & Timeline',
+      description: 'ROI, urgency, and decision process',
       order: 4
-    }
-  ],
-  technical: [
-    {
-      id: 'current-state',
-      name: 'Current State Assessment',
-      description: 'Existing IAM landscape review',
-      order: 1
-    },
-    {
-      id: 'requirements',
-      name: 'Requirements Gathering',
-      description: 'Technical and business requirements',
-      order: 2
-    },
-    {
-      id: 'pain-points',
-      name: 'Pain Points Analysis',
-      description: 'Identifying gaps and challenges',
-      order: 3
-    },
-    {
-      id: 'use-cases',
-      name: 'Use Case Definition',
-      description: 'Specific IGA scenarios to address',
-      order: 4
-    },
-    {
-      id: 'architecture',
-      name: 'Architecture & Roadmap',
-      description: 'Technical design and phasing',
-      order: 5
     }
   ]
 };
@@ -156,7 +124,7 @@ router.get('/phases/:track', (req, res) => {
   if (!phases[track]) {
     return res.status(404).json({
       success: false,
-      error: 'Track not found. Use "sales" or "technical"'
+      error: 'Track not found. Use "aiAgents"'
     });
   }
 
@@ -384,15 +352,11 @@ router.post('/analyze-transcript', async (req, res) => {
     });
   }
 
-  if (!['sales', 'technical'].includes(analysisType)) {
-    return res.status(400).json({
-      success: false,
-      error: 'analysisType must be "sales" or "technical"'
-    });
-  }
+  // analysisType parameter is kept for backwards compatibility but defaults to aiAgents
+  const effectiveAnalysisType = 'aiAgents';
 
   try {
-    const response = await analyzeTranscript(messages, analysisType);
+    const response = await analyzeTranscript(messages, effectiveAnalysisType);
     if (!response.success) {
       return res.status(500).json(response);
     }

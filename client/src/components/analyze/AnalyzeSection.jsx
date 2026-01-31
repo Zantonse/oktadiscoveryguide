@@ -8,7 +8,7 @@ import { parseAndAnalyze, swapRoles, assignSpeakerRole } from '../../utils/trans
 export function AnalyzeSection() {
   // View state: 'input' | 'mapping' | 'analyzing' | 'results'
   const [viewState, setViewState] = useState('input');
-  const [analysisType, setAnalysisType] = useState('sales'); // 'sales' | 'technical'
+  const [analysisType] = useState('aiAgents'); // Fixed to AI Security
   const [rawTranscript, setRawTranscript] = useState('');
   const [parseResult, setParseResult] = useState(null);
   const [analysisResult, setAnalysisResult] = useState(null);
@@ -98,35 +98,6 @@ export function AnalyzeSection() {
           </div>
         </div>
 
-        {viewState !== 'results' && (
-          <div className="analysis-type-toggle">
-            <button
-              className={`type-btn ${analysisType === 'sales' ? 'active' : ''}`}
-              onClick={() => setAnalysisType('sales')}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 3v18h18"/>
-                <path d="m19 9-5 5-4-4-3 3"/>
-              </svg>
-              Sales Discovery
-            </button>
-            <button
-              className={`type-btn ${analysisType === 'technical' ? 'active' : ''}`}
-              onClick={() => setAnalysisType('technical')}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect width="18" height="18" x="3" y="3" rx="2"/>
-                <path d="M7 7h.01"/>
-                <path d="M7 12h.01"/>
-                <path d="M7 17h.01"/>
-                <path d="M12 7h5"/>
-                <path d="M12 12h5"/>
-                <path d="M12 17h5"/>
-              </svg>
-              Technical Discovery
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Error display */}

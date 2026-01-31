@@ -8,7 +8,7 @@ export function SessionProvider({ children }) {
   // Selection state
   const [selectedIndustry, setSelectedIndustry] = useState(null);
   const [selectedStakeholder, setSelectedStakeholder] = useState(null);
-  const [selectedTrack, setSelectedTrackInternal] = useState('sales');
+  const selectedTrack = 'aiAgents'; // Fixed to AI Security track
   const [selectedScenario, setSelectedScenario] = useState(null);
   const [availableScenarios, setAvailableScenarios] = useState([]);
   const [discoveryProgress, setDiscoveryProgress] = useState(0);
@@ -18,18 +18,11 @@ export function SessionProvider({ children }) {
   const [timeRemaining, setTimeRemaining] = useState(TIMER_DURATION);
   const timerRef = useRef(null);
 
-  // Custom setter for track that clears stakeholder and scenario selection
-  const setSelectedTrack = useCallback((track) => {
-    setSelectedTrackInternal(track);
-    setSelectedStakeholder(null); // Clear stakeholder when track changes
-    setSelectedScenario(null); // Clear scenario when track changes
-  }, []);
-
-  // Fetch available scenarios when track changes
+  // Fetch available scenarios on mount
   useEffect(() => {
     const fetchScenarios = async () => {
       try {
-        const response = await fetch(`/api/scenarios/${selectedTrack}`);
+        const response = await fetch('/api/scenarios/aiAgents');
         const data = await response.json();
         if (data.success) {
           setAvailableScenarios(data.scenarios);
@@ -42,7 +35,7 @@ export function SessionProvider({ children }) {
       }
     };
     fetchScenarios();
-  }, [selectedTrack]);
+  }, []);
 
   // Conversation state
   const [messages, setMessages] = useState([]);
@@ -95,24 +88,18 @@ export function SessionProvider({ children }) {
   const endConversationRef = useRef(null);
 
   // Check if ready to start conversation
-  const canStartConversation = selectedIndustry && selectedStakeholder && selectedTrack;
+  const canStartConversation = selectedIndustry && selectedStakeholder;
 
   // Get current config for API calls
   const getConfig = useCallback(() => {
-    let phaseId = 'discovery';
-    if (selectedTrack === 'technical') {
-      phaseId = 'technical-discovery';
-    } else if (selectedTrack === 'aiAgents') {
-      phaseId = 'ai-discovery';
-    }
     return {
       industryId: selectedIndustry?.id,
       personaId: selectedStakeholder?.id,
-      track: selectedTrack,
-      phaseId,
+      track: 'aiAgents',
+      phaseId: 'ai-discovery',
       scenarioId: selectedScenario?.id
     };
-  }, [selectedIndustry, selectedStakeholder, selectedTrack, selectedScenario]);
+  }, [selectedIndustry, selectedStakeholder, selectedScenario]);
 
   // Add a message to the conversation
   const addMessage = useCallback((role, content) => {
@@ -363,7 +350,6 @@ export function SessionProvider({ children }) {
   const resetSession = useCallback(() => {
     setSelectedIndustry(null);
     setSelectedStakeholder(null);
-    setSelectedTrackInternal('sales');
     setSelectedScenario(null);
     setDiscoveryProgress(0);
     setMessages([]);
@@ -419,7 +405,6 @@ export function SessionProvider({ children }) {
     selectedScenario,
     setSelectedScenario,
     availableScenarios,
-    setSelectedTrack,
     discoveryProgress,
 
     // Conversation state

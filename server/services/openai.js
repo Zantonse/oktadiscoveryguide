@@ -1041,19 +1041,20 @@ export async function endConversation(messages, config, interestLevel, discovere
 }
 
 // Analyze a real discovery call transcript
-export async function analyzeTranscript(messages, analysisType = 'sales') {
-  // Discovery areas by analysis type
+export async function analyzeTranscript(messages, analysisType = 'aiAgents') {
+  // Discovery areas for AI Security
   const discoveryAreas = {
-    sales: ['current_state', 'pain_points', 'business_impact', 'budget', 'timeline', 'decision_process', 'success_criteria'],
-    technical: ['architecture', 'integrations', 'pain_points', 'requirements', 'compliance', 'resources', 'migration']
+    aiAgents: ['ai_initiatives', 'agent_use_cases', 'mcp_tool_access', 'security_concerns', 'governance_needs', 'shadow_ai', 'current_approach', 'timeline', 'decision_process']
   };
 
-  const analysisPrompt = `You are an expert sales coach analyzing a discovery call transcript. Your job is to provide constructive feedback to help salespeople improve their discovery skills.
+  const areas = discoveryAreas.aiAgents;
 
-Analyze this ${analysisType === 'technical' ? 'technical' : 'sales'} discovery conversation and provide a detailed evaluation.
+  const analysisPrompt = `You are an expert sales coach analyzing an AI security discovery call transcript. Your job is to provide constructive feedback to help salespeople improve their discovery skills for Okta's AI security products.
+
+Analyze this AI security discovery conversation and provide a detailed evaluation. The conversation is about AI agents, GenAI security, MCP (Model Context Protocol), token vault, and related agentic AI identity topics.
 
 **Discovery Areas to Evaluate:**
-${discoveryAreas[analysisType].map(area => `- ${area.replace(/_/g, ' ')}`).join('\n')}
+${areas.map(area => `- ${area.replace(/_/g, ' ')}`).join('\n')}
 
 **IMPORTANT: Respond ONLY with valid JSON in this exact format (no markdown, no code blocks, just raw JSON):**
 {
@@ -1094,7 +1095,7 @@ Analyze the following conversation where "user" is the salesperson and "assistan
 
   // If OpenAI is not configured, return demo analysis
   if (!openai) {
-    return generateDemoAnalysis(messages, analysisType, discoveryAreas[analysisType]);
+    return generateDemoAnalysis(messages, analysisType, areas);
   }
 
   try {

@@ -24,7 +24,15 @@ Key Pain Points:
 - Segregation of duties violations difficult to detect
 - Orphaned accounts from employee departures
 - Contractor lifecycle management
-- Audit findings related to excessive privileges`
+- Audit findings related to excessive privileges
+
+AI Security Concerns:
+- AI agents accessing customer financial data and transaction history
+- Customer service AI with access to account management functions
+- Trading algorithms and AI-powered risk models
+- Fraud detection AI accessing sensitive financial records
+- EU AI Act high-risk classification for credit decisioning
+- AI governance and model risk management requirements`
   },
   {
     id: 'healthcare',
@@ -51,7 +59,15 @@ Key Pain Points:
 - Clinician identity across multiple facilities
 - Resident and fellow rotation access management
 - Vendor access for medical equipment maintenance
-- Patient privacy incidents from over-provisioned access`
+- Patient privacy incidents from over-provisioned access
+
+AI Security Concerns:
+- AI diagnostic tools accessing patient health records (PHI)
+- Clinical decision support AI with treatment recommendations
+- AI-powered drug discovery accessing research data
+- Medical coding AI with access to billing systems
+- HIPAA implications for AI processing patient data
+- EU AI Act high-risk classification for medical AI`
   },
   {
     id: 'retail',
@@ -78,7 +94,15 @@ Key Pain Points:
 - Store manager access sprawl over time
 - Franchise access to corporate systems
 - Third-party logistics provider access
-- Customer account takeover prevention`
+- Customer account takeover prevention
+
+AI Security Concerns:
+- AI shopping assistants accessing customer purchase history
+- Inventory prediction AI with access to supply chain systems
+- Customer service chatbots handling returns and payments
+- Personalization AI accessing customer profiles and preferences
+- Dynamic pricing AI with access to competitive intelligence
+- AI-powered fraud detection accessing transaction data`
   },
   {
     id: 'manufacturing',
@@ -105,7 +129,15 @@ Key Pain Points:
 - Contractor badge-to-access synchronization
 - Engineering data compartmentalization
 - Cross-plant access for traveling employees
-- Legacy MES/SCADA system integration`
+- Legacy MES/SCADA system integration
+
+AI Security Concerns:
+- AI quality control systems with access to production data
+- Predictive maintenance AI accessing OT/SCADA systems
+- Supply chain AI with access to vendor and pricing data
+- AI design assistants with access to CAD and engineering files
+- ITAR/export control implications for AI accessing controlled data
+- AI-powered process optimization in safety-critical systems`
   },
   {
     id: 'technology',
@@ -132,7 +164,15 @@ Key Pain Points:
 - Service account and secret management
 - Cloud IAM across multiple providers
 - Customer environment access controls
-- Shadow IT and SaaS sprawl`
+- Shadow IT and SaaS sprawl
+
+AI Security Concerns:
+- AI coding assistants (Copilot, Cursor) with code repository access
+- AI agents accessing customer production data for debugging
+- Automated deployment AI with production infrastructure access
+- Internal copilots querying databases and documentation
+- LLM integrations accessing API keys and secrets
+- MCP servers connecting agents to development tools`
   },
   {
     id: 'government',
@@ -159,7 +199,15 @@ Key Pain Points:
 - Continuous vetting and access monitoring
 - Contractor off-boarding when contracts end
 - Cross-agency identity federation
-- ICAM maturity requirements`
+- ICAM maturity requirements
+
+AI Security Concerns:
+- Citizen-facing AI services with access to government records
+- AI-powered case management accessing sensitive data
+- Procurement AI with access to contract systems
+- AI fraud detection in benefits systems
+- Federal AI Executive Order compliance requirements
+- EU AI Act considerations for international operations`
   },
   {
     id: 'energy',
@@ -186,7 +234,15 @@ Key Pain Points:
 - Field technician mobile access
 - Contractor access to remote facilities
 - Emergency response access procedures
-- Compliance evidence collection for audits`
+- Compliance evidence collection for audits
+
+AI Security Concerns:
+- AI grid optimization with access to control systems
+- Predictive maintenance AI accessing SCADA/ICS systems
+- AI-powered demand forecasting with customer data
+- Field service AI with access to asset management
+- AI safety systems with access to critical infrastructure
+- NERC CIP implications for AI in control environments`
   },
   {
     id: 'education',
@@ -213,7 +269,15 @@ Key Pain Points:
 - Research collaboration across institutions
 - Faculty access during sabbaticals
 - Departmental admin self-service needs
-- Shadow IT in research labs`
+- Shadow IT in research labs
+
+AI Security Concerns:
+- AI tutoring systems with access to student records
+- Research AI accessing grant-funded data and IP
+- AI admissions tools (EU AI Act high-risk area)
+- Library AI with access to licensed content
+- Student-built AI projects accessing university systems
+- AI plagiarism detection accessing student work`
   },
   {
     id: 'media',
@@ -240,7 +304,15 @@ Key Pain Points:
 - Content access by release date
 - Partner and agency access management
 - Archive access for rights and royalties
-- Global content localization team access`
+- Global content localization team access
+
+AI Security Concerns:
+- AI content generation with access to IP and assets
+- Recommendation AI accessing viewing history and preferences
+- AI content moderation accessing user-generated content
+- Automated editing AI with access to raw footage
+- AI voice/face synthesis with talent data access
+- Copyright and licensing AI with content library access`
   },
   {
     id: 'transportation',
@@ -267,7 +339,15 @@ Key Pain Points:
 - Partner carrier system integration
 - Seasonal capacity workforce
 - Airport/facility badging integration
-- Cross-border operation access controls`
+- Cross-border operation access controls
+
+AI Security Concerns:
+- AI route optimization with access to operational systems
+- Autonomous vehicle AI with fleet management access
+- AI dispatch systems with driver and cargo data
+- Predictive logistics AI accessing customer shipments
+- AI safety systems with access to vehicle telemetrics
+- Customs AI with access to trade and compliance data`
   },
   {
     id: 'professional-services',
@@ -294,7 +374,15 @@ Key Pain Points:
 - Access termination when engagements end
 - Conflicts screening system integration
 - Partner lateral hire access
-- Client data segregation`
+- Client data segregation
+
+AI Security Concerns:
+- AI research assistants accessing client data
+- Legal AI with access to privileged documents
+- Audit AI accessing financial records
+- AI document review accessing sensitive materials
+- Tax AI with access to client financial data
+- Independence implications of AI accessing client data`
   },
   {
     id: 'telecommunications',
@@ -321,7 +409,15 @@ Key Pain Points:
 - Retail channel partner access
 - Customer data access for support
 - Field force mobile access
-- Third-party NOC staff access`
+- Third-party NOC staff access
+
+AI Security Concerns:
+- AI network optimization with access to infrastructure
+- Customer service AI accessing CPNI data
+- AI fraud detection with access to call records
+- Network planning AI accessing capacity data
+- AI chatbots handling account changes
+- Predictive maintenance AI for network equipment`
   }
 ];
 

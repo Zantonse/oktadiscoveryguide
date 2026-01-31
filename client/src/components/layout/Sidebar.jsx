@@ -2,7 +2,6 @@ import React from 'react';
 import { IndustrySelector } from '../selectors/IndustrySelector.jsx';
 import { StakeholderSelector } from '../selectors/StakeholderSelector.jsx';
 import { ScenarioSelector } from '../selectors/ScenarioSelector.jsx';
-import { PhaseSelector } from '../selectors/PhaseSelector.jsx';
 import { SuggestedQuestions } from '../features/SuggestedQuestions.jsx';
 import { useSession } from '../../contexts/SessionContext.jsx';
 import { Button } from '../common/Button.jsx';
@@ -34,7 +33,6 @@ export function Sidebar() {
     <aside className="sidebar">
       <div className="sidebar-content">
         <IndustrySelector />
-        <PhaseSelector />
         <StakeholderSelector />
         <ScenarioSelector />
 
@@ -51,7 +49,7 @@ export function Sidebar() {
             </Button>
             {!canStartConversation && (
               <p className="start-hint">
-                Select industry, track, and stakeholder to begin
+                Select industry and stakeholder to begin
               </p>
             )}
           </div>

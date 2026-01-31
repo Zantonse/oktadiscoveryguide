@@ -17,8 +17,8 @@ export function Header() {
           </svg>
         </div>
         <div className="header-title">
-          <h1>Okta Discovery Guide</h1>
-          <span className="header-subtitle">Practice discovery conversations with realistic stakeholders</span>
+          <h1>AI Security Discovery Guide</h1>
+          <span className="header-subtitle">Practice AI security discovery with realistic stakeholders</span>
         </div>
         <div className="header-view-tabs">
           <button

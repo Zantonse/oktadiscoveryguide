@@ -4,10 +4,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Okta Discovery Guide - A React + Node.js application that simulates AI-powered discovery conversations with stakeholders for practicing sales and technical discovery across three tracks:
-- **IGA Sales Discovery** - Business-focused discovery for Okta Identity Governance
-- **IGA Technical Discovery** - Technical architecture discovery for IGA
-- **AI Agents Discovery** - Discovery for Okta's AI security and agentic AI identity solutions (including MCP - Model Context Protocol)
+AI Security Discovery Guide - A React + Node.js application that simulates AI-powered discovery conversations with stakeholders for practicing sales and technical discovery focused on Okta's AI security products:
+- **Auth for GenAI** - Authentication for generative AI applications
+- **Token Vault** - Secure credential storage for AI agents
+- **Cross App Access** - Agent access across multiple applications
+- **Agent Identity** - Identity management for AI agents
+- **ISPM** - Identity Security Posture Management
+- **MCP** - Model Context Protocol security
+
+## Discovery Focus Areas
+
+The app focuses on AI security discovery areas:
+- `ai_initiatives` - Current AI/GenAI projects and roadmap
+- `agent_use_cases` - Customer service, copilots, autonomous agents
+- `mcp_tool_access` - MCP and agent tool access patterns
+- `security_concerns` - Data exposure, permissions, credential risks
+- `governance_needs` - EU AI Act, SOC2, audit requirements
+- `shadow_ai` - Ungoverned or unknown AI deployments
+- `current_approach` - How they handle AI auth today
+- `timeline` - Pilot, production, scale timeline
+- `decision_process` - CISO, CTO, Platform team ownership
+
+## Stakeholder Personas
+
+6 AI-focused personas for discovery practice:
+- **Executive**: CISO (AI security), CTO (AI innovation)
+- **Management**: AI Platform Lead, Data Science Manager
+- **Technical**: ML Engineer, Platform Engineer
 
 ## Development Commands
 
@@ -67,12 +90,13 @@ The app supports two deployment modes:
 - `api/chat/start.js` - Conversation start endpoint
 - `api/suggestions.js` - Suggested questions
 - `api/industries.js`, `api/personas.js`, `api/phases.js` - Data endpoints
+- `api/analyze-transcript.js` - Analyze uploaded discovery transcripts
 - Uses `/prompts` directory (shared with Vercel, not `/server/prompts`)
 
 ### Prompt Templates
-- `systemPrompt.js` - Base prompt + track-specific prompts (sales, technical, aiAgents)
-- `industries.js` - Industry context (compliance frameworks, challenges)
-- `personas.js` - Flat lookup of all personas by ID with track-specific context
+- `systemPrompt.js` - Base prompt + AI Agents phase prompt
+- `industries.js` - Industry context (compliance frameworks, AI security challenges)
+- `personas.js` - AI-focused personas with MCP and agent security context
 
 ### Client Architecture
 - `client/src/App.jsx` - Root component with ThemeContext (light/dark + color themes)
@@ -80,17 +104,18 @@ The app supports two deployment modes:
 - `client/src/components/` - UI organized by:
   - `common/` - Button, Card, Dropdown
   - `layout/` - Header, Sidebar, MainContent
-  - `selectors/` - IndustrySelector, PhaseSelector (track), StakeholderSelector
+  - `selectors/` - IndustrySelector, StakeholderSelector
   - `chat/` - ChatContainer, ChatInput, ChatMessage, CoachingHint
   - `features/` - FlowGuide, ReportCard, SuggestedQuestions
-- `client/src/data/` - Static data (industries, stakeholders by track)
+  - `analyze/` - AnalyzeSection, AnalysisReport, TranscriptInput
+- `client/src/data/` - Static data (industries, stakeholders, learningContent, flashcards)
 - `client/src/styles.css` - Complete stylesheet with CSS variables for theming
 
 ### State Flow
-1. User selects industry → track → stakeholder (stakeholder options depend on track)
-2. `SessionContext` manages all state; changing track clears stakeholder selection
-3. API calls include config: `{industryId, personaId, track, phaseId}`
-4. Server builds system prompt from industry + persona + phase contexts
+1. User selects industry → stakeholder (track is fixed to 'aiAgents')
+2. `SessionContext` manages all state
+3. API calls include config: `{industryId, personaId, track: 'aiAgents', phaseId: 'ai-discovery'}`
+4. Server builds system prompt from industry + persona contexts
 5. `POST /api/chat/stream` uses SSE for streaming responses (local dev only)
 6. Server parses `[INTEREST:X]`, `[PROGRESS:X]`, `[DISCOVERED:areas]` tags from AI response
 7. Coaching hints generated based on conversation context
@@ -98,18 +123,19 @@ The app supports two deployment modes:
 ### Key API Endpoints
 - `GET /api/industries` - List industries
 - `GET /api/personas` - List stakeholder personas grouped by level
-- `GET /api/phases` - Get track phases
+- `GET /api/phases` - Get discovery phases
 - `POST /api/chat/start` - Get stakeholder opening message
 - `POST /api/chat/stream` - SSE streaming chat (local dev)
 - `POST /api/chat` - Non-streaming chat (Vercel)
 - `POST /api/chat/end` - End session, get report card
 - `POST /api/suggestions` - Get context-aware suggested questions
+- `POST /api/analyze-transcript` - Analyze uploaded discovery transcripts
 
 ### Prompt Architecture
 System prompts composed in `buildSystemPrompt()`:
 1. Base prompt - Stakeholder role-play instructions, interest scoring rules, response format
-2. Industry context - Compliance frameworks, common challenges
-3. Persona context - Role, concerns, communication style (track-specific)
+2. Industry context - Compliance frameworks, AI security challenges by industry
+3. Persona context - Role, concerns, communication style (AI security focused)
 4. Phase context - Discovery areas to track, product knowledge
 
 The AI plays the stakeholder (buyer), not salesperson. It simulates realistic discovery with:
@@ -118,13 +144,14 @@ The AI plays the stakeholder (buyer), not salesperson. It simulates realistic di
 - Discovery progress tracking per area
 - Automatic conversation end if interest drops to 2 or below
 
-### Track-Specific Stakeholders
-Each track has different personas defined in both `server/prompts/personas.js` (and `/prompts/personas.js` for Vercel) and `client/src/data/stakeholders.js`:
-- **Sales**: CISO, CIO, IT Director, IAM Engineer
-- **Technical**: CISO, IT Director, Security Manager, IAM Engineer, Systems Architect
-- **AI Agents**: CISO, CTO, AI Platform Lead, DS Manager, ML Engineer, Platform Engineer
-
-AI Agents personas understand MCP (Model Context Protocol) for agent-tool connections.
+### AI Security Products Context
+All personas understand Okta's AI security portfolio:
+- **Auth for GenAI** - OAuth/OIDC for AI applications
+- **Token Vault** - Secure credential storage for agent-to-service access
+- **Cross App Access** - Agents accessing multiple enterprise systems
+- **Agent Identity** - Machine identity for AI agents
+- **ISPM** - Identity posture management for AI workloads
+- **MCP (Model Context Protocol)** - Anthropic's standard for agent-tool connections
 
 ### Theming
 - Light/dark mode toggle stored in localStorage

@@ -2,270 +2,6 @@
 // Extracted and organized from learning content for quick drilling
 
 export const flashcards = {
-  sales: {
-    golden: [
-      {
-        id: 'sales-golden-1',
-        front: 'Opening a conversation about timing',
-        back: 'What prompted you to look at this now?',
-        why: 'Reveals timing, urgency, and triggering events. Often uncovers audit findings, incidents, or leadership mandates.',
-        unlocks: ['timeline', 'pain_points', 'business_impact']
-      },
-      {
-        id: 'sales-golden-2',
-        front: 'Understanding their vision for success',
-        back: 'What would success look like for this initiative?',
-        why: 'Gets them to articulate their vision. Helps you align your solution to their outcomes.',
-        unlocks: ['success_criteria', 'business_impact', 'decision_process']
-      },
-      {
-        id: 'sales-golden-3',
-        front: 'Uncovering current pain points indirectly',
-        back: 'How do you handle [specific process] today?',
-        why: 'Opens discussion of current pain points without asking directly about problems.',
-        unlocks: ['current_state', 'pain_points']
-      },
-      {
-        id: 'sales-golden-4',
-        front: 'Mapping the buying committee',
-        back: 'Who else is involved in evaluating solutions?',
-        why: 'Maps the buying committee. Reveals politics and priorities of different stakeholders.',
-        unlocks: ['decision_process', 'success_criteria']
-      },
-      {
-        id: 'sales-golden-5',
-        front: 'Creating urgency and cost of inaction',
-        back: "What happens if this doesn't get addressed?",
-        why: 'Creates urgency. Gets them to articulate the cost of inaction.',
-        unlocks: ['business_impact', 'timeline']
-      },
-      {
-        id: 'sales-golden-6',
-        front: 'Learning from past attempts',
-        back: 'What have you tried before?',
-        why: "Reveals past failures and what they've learned. Shows what to avoid.",
-        unlocks: ['current_state', 'pain_points', 'success_criteria']
-      }
-    ],
-    discovery: [
-      {
-        id: 'sales-disc-1',
-        front: 'Current Challenges: Understanding problems',
-        back: 'What challenges are you facing with access management today?',
-        area: 'pain_points'
-      },
-      {
-        id: 'sales-disc-2',
-        front: 'Current Challenges: Impact on productivity',
-        back: "How are these issues affecting your team's productivity?",
-        area: 'pain_points'
-      },
-      {
-        id: 'sales-disc-3',
-        front: 'Business Impact: Quantifying problems',
-        back: "What's the impact of these challenges on your business?",
-        area: 'business_impact'
-      },
-      {
-        id: 'sales-disc-4',
-        front: 'Business Impact: Time investment',
-        back: 'How much time does your team spend on access requests?',
-        area: 'business_impact'
-      },
-      {
-        id: 'sales-disc-5',
-        front: 'Budget: Funding availability',
-        back: 'Is there budget allocated for this initiative?',
-        area: 'budget'
-      },
-      {
-        id: 'sales-disc-6',
-        front: 'Budget: Approval process',
-        back: 'Who typically signs off on investments like this?',
-        area: 'budget'
-      },
-      {
-        id: 'sales-disc-7',
-        front: 'Timeline: Understanding urgency drivers',
-        back: "What's driving your timeline?",
-        area: 'timeline'
-      },
-      {
-        id: 'sales-disc-8',
-        front: 'Timeline: Key deadlines',
-        back: 'Are there any deadlines or events we should know about?',
-        area: 'timeline'
-      },
-      {
-        id: 'sales-disc-9',
-        front: 'Decision Process: Stakeholder mapping',
-        back: 'What does your decision-making process look like?',
-        area: 'decision_process'
-      },
-      {
-        id: 'sales-disc-10',
-        front: 'Decision Process: Evaluation criteria',
-        back: 'What criteria are most important to your team?',
-        area: 'decision_process'
-      },
-      {
-        id: 'sales-disc-11',
-        front: 'Success Criteria: Defining outcomes',
-        back: 'How would you measure whether this was a good investment?',
-        area: 'success_criteria'
-      },
-      {
-        id: 'sales-disc-12',
-        front: 'Success Criteria: Requirements',
-        back: 'What are the must-haves vs nice-to-haves?',
-        area: 'success_criteria'
-      },
-      {
-        id: 'sales-disc-13',
-        front: 'Current State: Process understanding',
-        back: 'How do you handle access requests today?',
-        area: 'current_state'
-      },
-      {
-        id: 'sales-disc-14',
-        front: 'Current State: Existing tools',
-        back: 'What tools are you using for identity governance?',
-        area: 'current_state'
-      }
-    ]
-  },
-  technical: {
-    golden: [
-      {
-        id: 'tech-golden-1',
-        front: 'Understanding their environment',
-        back: 'Walk me through your current architecture.',
-        why: 'Opens comprehensive discussion of their environment. Shows you care about their context.',
-        unlocks: ['architecture', 'integrations', 'pain_points']
-      },
-      {
-        id: 'tech-golden-2',
-        front: 'Identifying technical pain points',
-        back: 'What limitations are you hitting with your current solution?',
-        why: 'Gets specific technical pain points without being negative about their choices.',
-        unlocks: ['pain_points', 'requirements']
-      },
-      {
-        id: 'tech-golden-3',
-        front: 'Prioritizing integrations',
-        back: 'What does your integration priority list look like?',
-        why: 'Reveals critical applications and helps prioritize the solution design.',
-        unlocks: ['integrations', 'requirements', 'timeline']
-      },
-      {
-        id: 'tech-golden-4',
-        front: 'Probing specific scenarios',
-        back: 'How do you handle [specific technical scenario] today?',
-        why: 'Gets into implementation details and reveals gaps in current approach.',
-        unlocks: ['architecture', 'pain_points', 'requirements']
-      },
-      {
-        id: 'tech-golden-5',
-        front: 'Surfacing migration concerns',
-        back: "What's your biggest concern about migration?",
-        why: "Surfaces risks and requirements that might not come up otherwise.",
-        unlocks: ['migration', 'resources', 'requirements']
-      },
-      {
-        id: 'tech-golden-6',
-        front: 'Understanding resource needs',
-        back: 'What would your team need to be successful with this?',
-        why: 'Reveals resource constraints and training needs.',
-        unlocks: ['resources', 'requirements', 'migration']
-      }
-    ],
-    discovery: [
-      {
-        id: 'tech-disc-1',
-        front: 'Architecture: Current identity systems',
-        back: 'What does your current identity architecture look like?',
-        area: 'architecture'
-      },
-      {
-        id: 'tech-disc-2',
-        front: 'Architecture: Directory structure',
-        back: 'How is your directory structure organized?',
-        area: 'architecture'
-      },
-      {
-        id: 'tech-disc-3',
-        front: 'Architecture: Cloud vs on-prem',
-        back: 'Are you primarily on-prem, cloud, or hybrid?',
-        area: 'architecture'
-      },
-      {
-        id: 'tech-disc-4',
-        front: 'Integrations: System connections',
-        back: 'What systems would need to integrate with IGA?',
-        area: 'integrations'
-      },
-      {
-        id: 'tech-disc-5',
-        front: 'Integrations: Critical applications',
-        back: 'What are your most critical applications?',
-        area: 'integrations'
-      },
-      {
-        id: 'tech-disc-6',
-        front: 'Integrations: HR system',
-        back: "What's your HR system and how does it connect to identity?",
-        area: 'integrations'
-      },
-      {
-        id: 'tech-disc-7',
-        front: 'Requirements: Must-haves',
-        back: 'What are the must-have technical requirements?',
-        area: 'requirements'
-      },
-      {
-        id: 'tech-disc-8',
-        front: 'Requirements: API strategy',
-        back: 'What does your API strategy look like?',
-        area: 'requirements'
-      },
-      {
-        id: 'tech-disc-9',
-        front: 'Compliance: Frameworks',
-        back: 'What compliance frameworks apply to your organization?',
-        area: 'compliance'
-      },
-      {
-        id: 'tech-disc-10',
-        front: 'Compliance: Data residency',
-        back: 'Are there any data residency requirements?',
-        area: 'compliance'
-      },
-      {
-        id: 'tech-disc-11',
-        front: 'Resources: Team capacity',
-        back: 'What resources are available for implementation?',
-        area: 'resources'
-      },
-      {
-        id: 'tech-disc-12',
-        front: 'Resources: Internal expertise',
-        back: 'Do you have internal expertise or need partner support?',
-        area: 'resources'
-      },
-      {
-        id: 'tech-disc-13',
-        front: 'Migration: Transition planning',
-        back: 'What would migration look like from your current solution?',
-        area: 'migration'
-      },
-      {
-        id: 'tech-disc-14',
-        front: 'Migration: Parallel systems',
-        back: 'Are there any systems that need to run in parallel?',
-        area: 'migration'
-      }
-    ]
-  },
   aiAgents: {
     golden: [
       {
@@ -458,48 +194,34 @@ export const objectionFlashcards = [
   }
 ];
 
-// Competitor handler flashcards
+// Competitor handler flashcards (AI Security focused)
 export const competitorFlashcards = {
-  sailpoint: [
+  cloudNative: [
     {
-      id: 'comp-sp-1',
-      objection: 'SailPoint is the market leader',
-      response: 'SailPoint has legacy market share, but the market is shifting to unified identity platforms. Many SailPoint customers are evaluating consolidation.',
-      differentiator: 'Okta is unified platform (IGA + Workforce Identity)'
+      id: 'comp-cloud-1',
+      objection: 'We use AWS/Azure native security',
+      response: 'That works for one cloud. What about agents accessing systems across clouds? Or using multiple LLM providers?',
+      differentiator: 'Unified identity across all clouds'
     },
     {
-      id: 'comp-sp-2',
-      objection: 'SailPoint has more features',
-      response: 'Feature depth matters, but so does time to value. Ask: How long did their implementation take? How much do they spend on PS annually?',
-      differentiator: 'Faster time to value - cloud-native from start'
+      id: 'comp-cloud-2',
+      objection: "It's included with our cloud spend",
+      response: 'Basic IAM is included. Agent-specific identity, governance, and compliance are different requirements.',
+      differentiator: 'Purpose-built agent identity management'
     }
   ],
-  saviynt: [
+  platformNative: [
     {
-      id: 'comp-sav-1',
-      objection: 'Saviynt has PAM too',
-      response: "Converged doesn't mean best-of-breed. How are they handling workforce identity? Most Saviynt customers still need separate SSO/MFA.",
-      differentiator: 'Okta has stronger workforce identity foundation'
+      id: 'comp-platform-1',
+      objection: 'Salesforce Agentforce handles security',
+      response: 'Within Salesforce, yes. But when agents need to access ServiceNow, Workday, or external APIs?',
+      differentiator: 'Cross-platform agent identity and governance'
     },
     {
-      id: 'comp-sav-2',
-      objection: 'Saviynt is cheaper',
-      response: "Compare total cost including implementation and ongoing maintenance. What's included in that price?",
-      differentiator: 'More consistent global support'
-    }
-  ],
-  microsoft: [
-    {
-      id: 'comp-ms-1',
-      objection: 'We get it free with E5',
-      response: "It's included, but is it sufficient? What about non-Microsoft apps? Salesforce, Workday, ServiceNow? Those need governance too.",
-      differentiator: 'Okta provides governance across ALL apps, not just Microsoft'
-    },
-    {
-      id: 'comp-ms-2',
-      objection: "We're standardizing on Microsoft",
-      response: 'Most enterprises have 200+ apps, majority non-Microsoft. Entra ID Governance only covers a fraction.',
-      differentiator: 'Better for heterogeneous environments'
+      id: 'comp-platform-2',
+      objection: 'Our platforms have their own security',
+      response: 'They do for their own data. But modern agents are cross-functional. How do you govern an agent that touches 5 different systems?',
+      differentiator: 'Unified audit trail across all agent actions'
     }
   ],
   diy: [
@@ -578,8 +300,6 @@ export function getFlashcardsForTrack(track) {
 // Helper function to get all flashcards
 export function getAllFlashcards() {
   return [
-    ...getFlashcardsForTrack('sales'),
-    ...getFlashcardsForTrack('technical'),
     ...getFlashcardsForTrack('aiAgents'),
     ...objectionFlashcards.map(card => ({ ...card, type: 'objection' })),
     ...mistakeFlashcards.map(card => ({ ...card, type: 'mistake' }))

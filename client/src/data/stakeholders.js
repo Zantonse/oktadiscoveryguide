@@ -1,93 +1,5 @@
-// Stakeholders organized by track, then by level
+// AI Security stakeholders organized by level
 export const stakeholdersByTrack = {
-  sales: {
-    executive: [
-      {
-        id: 'ciso',
-        title: 'CISO',
-        fullTitle: 'Chief Information Security Officer',
-        level: 'executive',
-        description: 'Security strategy and risk management',
-        avatar: 'shield'
-      },
-      {
-        id: 'cio',
-        title: 'CIO',
-        fullTitle: 'Chief Information Officer',
-        level: 'executive',
-        description: 'IT strategy and digital transformation',
-        avatar: 'monitor'
-      }
-    ],
-    management: [
-      {
-        id: 'it-director',
-        title: 'IT Director',
-        fullTitle: 'Director of IT Operations',
-        level: 'management',
-        description: 'IT teams and day-to-day operations',
-        avatar: 'clipboard'
-      }
-    ],
-    technical: [
-      {
-        id: 'iam-engineer',
-        title: 'IAM Engineer',
-        fullTitle: 'Identity & Access Management Engineer',
-        level: 'technical',
-        description: 'IAM implementation and maintenance',
-        avatar: 'key'
-      }
-    ]
-  },
-  technical: {
-    executive: [
-      {
-        id: 'ciso-tech',
-        title: 'CISO',
-        fullTitle: 'Chief Information Security Officer',
-        level: 'executive',
-        description: 'Security architecture oversight',
-        avatar: 'shield'
-      }
-    ],
-    management: [
-      {
-        id: 'it-director-tech',
-        title: 'IT Director',
-        fullTitle: 'Director of IT Infrastructure',
-        level: 'management',
-        description: 'Infrastructure and platform teams',
-        avatar: 'clipboard'
-      },
-      {
-        id: 'security-manager',
-        title: 'Security Manager',
-        fullTitle: 'Security Operations Manager',
-        level: 'management',
-        description: 'Security tools and processes',
-        avatar: 'shield'
-      }
-    ],
-    technical: [
-      {
-        id: 'iam-engineer-tech',
-        title: 'IAM Engineer',
-        fullTitle: 'Senior IAM Engineer',
-        level: 'technical',
-        description: 'IAM architecture and implementation',
-        avatar: 'key'
-      },
-      {
-        id: 'systems-architect',
-        title: 'Architect',
-        fullTitle: 'Enterprise Systems Architect',
-        level: 'technical',
-        description: 'System integration and design',
-        avatar: 'layers'
-      }
-    ]
-  },
   aiAgents: {
     executive: [
       {
@@ -154,8 +66,8 @@ export const levelLabels = {
 
 // Get stakeholders for a specific track
 export function getStakeholdersForTrack(track) {
-  return stakeholdersByTrack[track] || stakeholdersByTrack.sales;
+  return stakeholdersByTrack.aiAgents; // Always return AI stakeholders
 }
 
 // Legacy export for backwards compatibility
-export const stakeholders = stakeholdersByTrack.sales;
+export const stakeholders = stakeholdersByTrack.aiAgents;
