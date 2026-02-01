@@ -80,6 +80,13 @@
   --header-height: 60px;
   --sidebar-width: 340px;
   --bottom-panel-height: 280px;
+  --mobile-nav-height: 56px;
+
+  /* Safe area insets for notched devices */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
 
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -129,6 +136,11 @@ html, body, #root {
   width: 100%;
 }
 
+/* Prevent pull-to-refresh and overscroll bounce on mobile */
+html, body {
+  overscroll-behavior: none;
+}
+
 body {
   font-family: var(--font-family);
   font-size: var(--font-size-base);
@@ -147,8 +159,11 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  min-height: 100vh;
+  min-height: -webkit-fill-available; /* iOS Safari fix for 100vh */
   background-color: var(--bg-secondary);
   transition: background-color var(--transition-normal);
+  padding-top: var(--safe-area-top);
 }
 
 .app-body {
@@ -177,6 +192,9 @@ body {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .header-logo {
@@ -185,9 +203,11 @@ body {
   justify-content: center;
   width: 36px;
   height: 36px;
+  min-width: 36px;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
   border-radius: var(--radius-lg);
   color: white;
+  flex-shrink: 0;
 }
 
 .header-title h1 {
@@ -196,6 +216,10 @@ body {
   color: var(--text-primary);
   line-height: 1.2;
   letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
 }
 
 .header-subtitle {
@@ -208,6 +232,7 @@ body {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  flex-shrink: 0;
 }
 
 .header-icon-btn,
@@ -418,6 +443,7 @@ body {
   border-right: 1px solid var(--border-color);
   overflow-y: auto;
   flex-shrink: 0;
+  -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
 }
 
 .sidebar-content {
@@ -1882,6 +1908,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
+  -webkit-overflow-scrolling: touch; /* Smooth momentum scrolling on iOS */
 }
 
 .chat-message {
@@ -3083,6 +3110,10 @@ body {
   .sidebar {
     width: 300px;
   }
+
+  .header-view-tabs {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -3101,12 +3132,39 @@ body {
     display: none;
   }
 
+  .header-title h1 {
+    max-width: 150px;
+  }
+
+  .header-right {
+    gap: var(--spacing-xs);
+  }
+
+  .header-right .btn-secondary {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+
   .chat-message {
     max-width: 90%;
   }
+}
 
-  .header-view-tabs {
+@media (max-width: 480px) {
+  .header {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .header-title {
     display: none;
+  }
+
+  .header-right .btn-secondary span {
+    display: none;
+  }
+
+  .header-right .btn-secondary {
+    padding: var(--spacing-xs);
   }
 }
 
@@ -7155,5 +7213,242 @@ body {
   .btn-primary {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* ===================================
+   Mobile Navigation (Bottom Bar)
+   =================================== */
+
+.mobile-nav {
+  display: none; /* Hidden on desktop */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--mobile-nav-height);
+  padding-bottom: var(--safe-area-bottom);
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  z-index: 100;
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex: 1;
+  padding: var(--spacing-xs);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-width: 64px;
+  min-height: 48px; /* Minimum touch target */
+}
+
+.mobile-nav-item:active {
+  background: var(--bg-tertiary);
+}
+
+.mobile-nav-item.active {
+  color: var(--color-primary);
+}
+
+.mobile-nav-item svg {
+  flex-shrink: 0;
+}
+
+.mobile-nav-label {
+  font-weight: 500;
+}
+
+/* ===================================
+   Mobile Sidebar Toggle & Collapse
+   =================================== */
+
+.sidebar-toggle {
+  display: none; /* Hidden on desktop */
+}
+
+.sidebar-collapsed-summary {
+  display: none; /* Hidden on desktop */
+}
+
+/* ===================================
+   Mobile Responsive Styles
+   =================================== */
+
+@media (max-width: 768px) {
+  /* Show mobile navigation */
+  .mobile-nav {
+    display: flex;
+  }
+
+  /* Add bottom padding for mobile nav */
+  .app-body {
+    padding-bottom: calc(var(--mobile-nav-height) + var(--safe-area-bottom));
+  }
+
+  /* Increase touch target sizes */
+  .header-icon-btn,
+  .theme-toggle {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+
+  .send-button {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+
+  /* Fix iOS input zoom - font-size must be 16px+ */
+  .chat-input {
+    font-size: 16px;
+  }
+
+  /* Sidebar mobile styles */
+  .sidebar {
+    width: 100%;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    transition: max-height var(--transition-slow);
+  }
+
+  .sidebar.collapsed .sidebar-content {
+    display: none;
+  }
+
+  .sidebar.collapsed {
+    max-height: 60px;
+    overflow: hidden;
+  }
+
+  /* Show sidebar toggle */
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border: none;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .sidebar-toggle:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+
+  /* Show collapsed summary bar */
+  .sidebar-collapsed-summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .sidebar:not(.collapsed) .sidebar-collapsed-summary {
+    display: none;
+  }
+
+  .collapsed-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    justify-content: center;
+  }
+
+  .collapsed-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .collapsed-badge.status-low {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+  }
+
+  .collapsed-badge.status-mid {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+  }
+
+  .collapsed-badge.status-high {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+  }
+
+  /* Reduce chat message padding */
+  .chat-messages {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .chat-message {
+    max-width: 95%;
+  }
+
+  /* Compact selectors */
+  .selector-group {
+    gap: var(--spacing-sm);
+  }
+
+  /* Safe area padding for chat input */
+  .chat-input-container {
+    padding-left: calc(var(--spacing-md) + var(--safe-area-left));
+    padding-right: calc(var(--spacing-md) + var(--safe-area-right));
+  }
+}
+
+/* Extra small screens (small phones) */
+@media (max-width: 480px) {
+  /* Reduce header height */
+  .header {
+    height: 52px;
+  }
+
+  /* Smaller chat input container padding */
+  .chat-input-container {
+    padding: var(--spacing-sm);
+    padding-left: calc(var(--spacing-sm) + var(--safe-area-left));
+    padding-right: calc(var(--spacing-sm) + var(--safe-area-right));
+  }
+
+  /* Smaller buttons in header */
+  .header-right .btn-secondary {
+    padding: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+  }
+
+  /* Mobile nav smaller text */
+  .mobile-nav-label {
+    font-size: 0.625rem;
+  }
+
+  /* Reduce base font slightly for very small screens */
+  :root {
+    --font-size-base: 0.875rem;
   }
 }

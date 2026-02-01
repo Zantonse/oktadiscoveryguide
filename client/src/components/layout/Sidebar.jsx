@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IndustrySelector } from '../selectors/IndustrySelector.jsx';
 import { StakeholderSelector } from '../selectors/StakeholderSelector.jsx';
 import { ScenarioSelector } from '../selectors/ScenarioSelector.jsx';
@@ -7,6 +7,7 @@ import { useSession } from '../../contexts/SessionContext.jsx';
 import { Button } from '../common/Button.jsx';
 
 export function Sidebar() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const {
     canStartConversation,
     startConversation,
@@ -30,7 +31,30 @@ export function Sidebar() {
   const timerWarning = timeRemaining <= 10 * 60 && !timerUrgent; // 5-10 minutes
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+      {/* Mobile collapsed summary bar */}
+      <div className="sidebar-collapsed-summary">
+        <div className="collapsed-badges">
+          <span className="collapsed-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            {formatTime(timeRemaining)}
+          </span>
+          {conversationStarted && (
+            <>
+              <span className={`collapsed-badge status-${interestLevel <= 3 ? 'low' : interestLevel <= 6 ? 'mid' : 'high'}`}>
+                Interest: {interestLevel}/10
+              </span>
+              <span className="collapsed-badge">
+                Progress: {discoveryProgress}%
+              </span>
+            </>
+          )}
+        </div>
+      </div>
+
       <div className="sidebar-content">
         <IndustrySelector />
         <StakeholderSelector />
@@ -122,6 +146,25 @@ export function Sidebar() {
           </>
         )}
       </div>
+
+      {/* Mobile toggle button */}
+      <button
+        className="sidebar-toggle"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          style={{ transform: isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}
+        >
+          <polyline points="18 15 12 9 6 15"/>
+        </svg>
+      </button>
     </aside>
   );
 }

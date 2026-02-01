@@ -5,12 +5,39 @@ export function ChatInput() {
   const [inputValue, setInputValue] = useState('');
   const { sendMessage, isLoading, conversationEnded } = useSession();
   const inputRef = useRef(null);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     if (!conversationEnded) {
       inputRef.current?.focus();
     }
   }, [conversationEnded]);
+
+  // Handle iOS keyboard resize using visualViewport API
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+
+    const handleResize = () => {
+      // Calculate the keyboard height
+      const keyboardHeight = window.innerHeight - viewport.height;
+
+      // Only adjust if keyboard is visible (height > 0) and on mobile
+      if (keyboardHeight > 0 && window.innerWidth <= 768) {
+        // Scroll the input into view when keyboard appears
+        if (containerRef.current) {
+          containerRef.current.style.paddingBottom = `${keyboardHeight}px`;
+        }
+      } else {
+        if (containerRef.current) {
+          containerRef.current.style.paddingBottom = '';
+        }
+      }
+    };
+
+    viewport.addEventListener('resize', handleResize);
+    return () => viewport.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,7 +57,7 @@ export function ChatInput() {
   const isDisabled = isLoading || conversationEnded;
 
   return (
-    <form className={`chat-input-container ${conversationEnded ? 'ended' : ''}`} onSubmit={handleSubmit}>
+    <form ref={containerRef} className={`chat-input-container ${conversationEnded ? 'ended' : ''}`} onSubmit={handleSubmit}>
       {conversationEnded ? (
         <div className="conversation-ended-banner">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

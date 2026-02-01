@@ -3,6 +3,7 @@ import { SessionProvider } from './contexts/SessionContext.jsx';
 import { Header } from './components/layout/Header.jsx';
 import { Sidebar } from './components/layout/Sidebar.jsx';
 import { MainContent } from './components/layout/MainContent.jsx';
+import { MobileNav } from './components/layout/MobileNav.jsx';
 import './styles.css';
 
 // Available color themes with light and dark variants
@@ -105,6 +106,7 @@ function App() {
             {activeView === 'practice' && <Sidebar />}
             <MainContent />
           </div>
+          <MobileNav />
           {showSettings && (
             <SettingsModal onClose={() => setShowSettings(false)} />
           )}
