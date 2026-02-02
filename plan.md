@@ -15,6 +15,55 @@ A React + Node.js application that simulates AI-powered discovery conversations 
 
 ---
 
+## Recent Updates (Feb 2026)
+
+### Mobile UI Fixes [COMPLETED - Feb 2, 2026]
+**Files modified:**
+- `client/src/styles.css` - Mobile responsive improvements
+- `client/src/components/learn/LearnSection.jsx` - Auto-hide navigation
+
+**Changes made:**
+1. **Hidden Header Tabs on Mobile**
+   - Added `.header-view-tabs { display: none; }` in mobile media query (max-width: 768px)
+   - Prevents duplicate navigation (header tabs vs. bottom mobile nav bar)
+   - Users only see bottom navigation on mobile devices
+
+2. **Learn Section Mobile Improvements**
+   - Compact horizontal navigation (max-height: 85px instead of unrestricted)
+   - Auto-hide functionality: sidebar collapses after topic selection on mobile
+   - Floating "Topics" toggle button appears when navigation is hidden
+   - Smooth transitions (0.3s ease) for show/hide animations
+   - Scrollbar hidden on horizontal nav for cleaner appearance
+   - Better content scrolling with flex layout
+
+3. **LearnSection Component Enhancements**
+   - Added mobile viewport detection with resize listener
+   - State management: `sidebarVisible` and `isMobile`
+   - `handleTopicClick` function with auto-hide logic for mobile
+   - Floating toggle button with hamburger icon and "Topics" label
+   - Conditional className for collapsed state
+
+**Mobile UX improvements:**
+- Navigation starts visible as compact horizontal scrolling bar
+- After selecting a topic, navigation auto-hides to maximize content space
+- Floating button positioned below header for easy access
+- Native app-like behavior with smooth transitions
+- No redundant navigation elements
+
+**Testing checklist:**
+- ✅ Header tabs hidden on mobile (no duplicate navigation)
+- ✅ Learn section has compact horizontal navigation
+- ✅ Navigation auto-hides after topic selection
+- ✅ Floating toggle button appears and works
+- ✅ Smooth animations between visible/hidden states
+- 🔲 Verify Practice section mobile layout
+- 🔲 Verify Drill section mobile layout
+- 🔲 Verify Analyze section mobile layout
+- 🔲 Test on actual iPhone devices
+- 🔲 Test on actual Android devices
+
+---
+
 ## Recent Updates (Jan 2026)
 
 ### UI Modernization [COMPLETED]

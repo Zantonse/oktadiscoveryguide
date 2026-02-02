@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { learningTopics } from '../../data/learningContent.js';
 import { DiscoveryFundamentals } from './DiscoveryFundamentals.jsx';
 import { DiscoveryFramework } from './DiscoveryFramework.jsx';
@@ -59,7 +59,20 @@ const TopicIcon = ({ icon }) => {
 
 export function LearnSection() {
   const [activeTopic, setActiveTopic] = useState('fundamentals');
+  const [sidebarVisible, setSidebarVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const search = useLearnSearch();
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Map topic names from search results to topic IDs
   const topicNameToId = {
@@ -71,15 +84,25 @@ export function LearnSection() {
     'Scenario Playbooks': 'playbooks'
   };
 
+  // Handle topic selection with auto-hide on mobile
+  const handleTopicClick = useCallback((topicId) => {
+    setActiveTopic(topicId);
+
+    // Auto-hide sidebar on mobile after selection
+    if (isMobile) {
+      setSidebarVisible(false);
+    }
+  }, [isMobile]);
+
   const handleResultClick = useCallback((result) => {
     // Navigate to the appropriate topic
     const topicId = result.topic || topicNameToId[result.topicName];
     if (topicId) {
-      setActiveTopic(topicId);
+      handleTopicClick(topicId);
     }
     // Clear the search after navigation
     search.clearSearch();
-  }, [search]);
+  }, [search, handleTopicClick]);
 
   const renderContent = () => {
     switch (activeTopic) {
@@ -102,7 +125,23 @@ export function LearnSection() {
 
   return (
     <div className="learn-section">
-      <div className="learn-sidebar">
+      {/* Toggle button - only show when sidebar hidden on mobile */}
+      {isMobile && !sidebarVisible && (
+        <button
+          className="learn-nav-toggle"
+          onClick={() => setSidebarVisible(true)}
+          aria-label="Show navigation"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+          <span>Topics</span>
+        </button>
+      )}
+
+      <div className={`learn-sidebar ${!sidebarVisible ? 'collapsed' : ''}`}>
         <div className="learn-sidebar-header">
           <h2>Discovery Training</h2>
           <p>Master discovery conversations with these resources</p>
@@ -120,7 +159,7 @@ export function LearnSection() {
             <button
               key={topic.id}
               className={`learn-nav-item ${activeTopic === topic.id ? 'active' : ''}`}
-              onClick={() => setActiveTopic(topic.id)}
+              onClick={() => handleTopicClick(topic.id)}
             >
               <span className="learn-nav-icon">
                 <TopicIcon icon={topic.icon} />

@@ -3128,6 +3128,11 @@ body {
     border-bottom: 1px solid var(--border-color);
   }
 
+  /* Hide header view tabs - mobile nav handles this */
+  .header-view-tabs {
+    display: none;
+  }
+
   .header-subtitle {
     display: none;
   }
@@ -4502,14 +4507,24 @@ body {
 @media (max-width: 768px) {
   .learn-section {
     flex-direction: column;
+    height: 100%;
+    position: relative;
   }
 
   .learn-sidebar {
     width: 100%;
-    max-height: none;
+    max-height: 85px; /* Compact for horizontal nav */
     border-right: none;
     border-bottom: 1px solid var(--border-color);
     flex-shrink: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+
+  .learn-sidebar.collapsed {
+    max-height: 0;
+    opacity: 0;
+    border-bottom: none;
   }
 
   .learn-sidebar-header {
@@ -4523,9 +4538,15 @@ body {
   .learn-nav {
     flex-direction: row;
     overflow-x: auto;
+    overflow-y: hidden;
     padding: var(--spacing-xs) var(--spacing-sm);
     gap: var(--spacing-xs);
     -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .learn-nav::-webkit-scrollbar {
+    display: none;
   }
 
   .learn-nav-item {
@@ -4551,6 +4572,43 @@ body {
 
   .learn-nav-arrow {
     display: none;
+  }
+
+  .learn-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-md);
+  }
+
+  /* Floating toggle button for showing navigation */
+  .learn-nav-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    position: fixed;
+    top: calc(56px + var(--spacing-sm)); /* Below header */
+    left: var(--spacing-sm);
+    z-index: 50;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .learn-nav-toggle:active {
+    transform: scale(0.95);
+  }
+
+  .learn-nav-toggle svg {
+    width: 18px;
+    height: 18px;
   }
 
   .learn-track-toggle {
