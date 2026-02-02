@@ -3,7 +3,7 @@ import { discoveryFramework } from '../../data/learningContent.js';
 import { InteractiveFlow } from './InteractiveFlow.jsx';
 
 export function DiscoveryFramework() {
-  const [activeTrack, setActiveTrack] = useState('sales');
+  const [activeTrack, setActiveTrack] = useState('aiAgents');
   const [showInteractiveFlow, setShowInteractiveFlow] = useState(true);
   const track = discoveryFramework.tracks[activeTrack];
 
@@ -12,27 +12,6 @@ export function DiscoveryFramework() {
       <div className="learn-topic-header">
         <h1>{discoveryFramework.title}</h1>
         <p className="learn-topic-description">{discoveryFramework.description}</p>
-      </div>
-
-      <div className="learn-track-toggle">
-        <button
-          className={`track-btn ${activeTrack === 'sales' ? 'active' : ''}`}
-          onClick={() => setActiveTrack('sales')}
-        >
-          Sales Track
-        </button>
-        <button
-          className={`track-btn ${activeTrack === 'technical' ? 'active' : ''}`}
-          onClick={() => setActiveTrack('technical')}
-        >
-          Technical Track
-        </button>
-        <button
-          className={`track-btn ${activeTrack === 'aiAgents' ? 'active' : ''}`}
-          onClick={() => setActiveTrack('aiAgents')}
-        >
-          AI Agents Track
-        </button>
       </div>
 
       <div className="learn-track-content">
