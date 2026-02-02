@@ -4,7 +4,7 @@ import { questionTrees } from '../../data/questionTrees.js';
 import { QuestionTreeList } from './QuestionTree.jsx';
 
 export function GoldenQuestions() {
-  const [activeTrack, setActiveTrack] = useState('sales');
+  const [activeTrack, setActiveTrack] = useState('aiAgents');
   const [showTrees, setShowTrees] = useState(false);
   const trackQuestions = goldenQuestions.tracks[activeTrack];
   const trackTrees = questionTrees[activeTrack]?.trees || [];
@@ -18,27 +18,6 @@ export function GoldenQuestions() {
 
       <div className="learn-card intro-card">
         <p>{goldenQuestions.intro}</p>
-      </div>
-
-      <div className="learn-track-toggle">
-        <button
-          className={`track-btn ${activeTrack === 'sales' ? 'active' : ''}`}
-          onClick={() => setActiveTrack('sales')}
-        >
-          Sales Track
-        </button>
-        <button
-          className={`track-btn ${activeTrack === 'technical' ? 'active' : ''}`}
-          onClick={() => setActiveTrack('technical')}
-        >
-          Technical Track
-        </button>
-        <button
-          className={`track-btn ${activeTrack === 'aiAgents' ? 'active' : ''}`}
-          onClick={() => setActiveTrack('aiAgents')}
-        >
-          AI Agents Track
-        </button>
       </div>
 
       <div className="golden-section-toggle">

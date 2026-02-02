@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { scenarioPlaybooks } from '../../data/learningContent.js';
 
 export function ScenarioPlaybooks() {
-  const [activeTrack, setActiveTrack] = useState('sales');
+  const [activeTrack, setActiveTrack] = useState('aiAgents');
   const track = scenarioPlaybooks.tracks[activeTrack];
 
   return (
@@ -10,27 +10,6 @@ export function ScenarioPlaybooks() {
       <div className="learn-topic-header">
         <h1>{scenarioPlaybooks.title}</h1>
         <p className="learn-topic-description">{scenarioPlaybooks.description}</p>
-      </div>
-
-      <div className="learn-track-toggle">
-        <button
-          className={`track-btn ${activeTrack === 'sales' ? 'active' : ''}`}
-          onClick={() => setActiveTrack('sales')}
-        >
-          Sales Scenarios
-        </button>
-        <button
-          className={`track-btn ${activeTrack === 'technical' ? 'active' : ''}`}
-          onClick={() => setActiveTrack('technical')}
-        >
-          Technical Scenarios
-        </button>
-        <button
-          className={`track-btn ${activeTrack === 'aiAgents' ? 'active' : ''}`}
-          onClick={() => setActiveTrack('aiAgents')}
-        >
-          AI Agents Scenarios
-        </button>
       </div>
 
       <div className="scenarios-content">

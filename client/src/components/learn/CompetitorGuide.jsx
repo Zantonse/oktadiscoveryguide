@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { competitorGuide } from '../../data/learningContent.js';
 
 export function CompetitorGuide() {
-  const [activeCategory, setActiveCategory] = useState('iga');
+  const [activeCategory, setActiveCategory] = useState('ai');
   const category = competitorGuide.categories[activeCategory];
 
   return (
@@ -14,21 +14,6 @@ export function CompetitorGuide() {
 
       <div className="learn-card intro-card">
         <p>{competitorGuide.intro}</p>
-      </div>
-
-      <div className="learn-track-toggle">
-        <button
-          className={`track-btn ${activeCategory === 'iga' ? 'active' : ''}`}
-          onClick={() => setActiveCategory('iga')}
-        >
-          IGA Competitors
-        </button>
-        <button
-          className={`track-btn ${activeCategory === 'ai' ? 'active' : ''}`}
-          onClick={() => setActiveCategory('ai')}
-        >
-          AI/Agent Security
-        </button>
       </div>
 
       <div className="competitors-content">
