@@ -4506,23 +4506,50 @@ body {
 
   .learn-sidebar {
     width: 100%;
-    max-height: 200px;
+    max-height: none;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+
+  .learn-sidebar-header {
+    display: none;
+  }
+
+  .learn-search {
+    display: none;
   }
 
   .learn-nav {
     flex-direction: row;
     overflow-x: auto;
-    padding: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    gap: var(--spacing-xs);
+    -webkit-overflow-scrolling: touch;
   }
 
   .learn-nav-item {
     flex-shrink: 0;
+    flex-direction: column;
+    gap: var(--spacing-xs);
     padding: var(--spacing-sm);
+    min-width: 72px;
+    text-align: center;
+  }
+
+  .learn-nav-icon {
+    width: 32px;
+    height: 32px;
   }
 
   .learn-nav-text {
+    display: block;
+    font-size: 0.625rem;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .learn-nav-arrow {
     display: none;
   }
 

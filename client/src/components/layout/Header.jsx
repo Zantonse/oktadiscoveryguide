@@ -22,13 +22,14 @@ export function Header() {
         </div>
         <div className="header-view-tabs">
           <button
-            className={`view-tab ${activeView === 'practice' ? 'active' : ''}`}
-            onClick={() => setActiveView('practice')}
+            className={`view-tab ${activeView === 'learn' ? 'active' : ''}`}
+            onClick={() => setActiveView('learn')}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
             </svg>
-            Practice
+            Learn
           </button>
           <button
             className={`view-tab ${activeView === 'drill' ? 'active' : ''}`}
@@ -47,14 +48,13 @@ export function Header() {
             Drill
           </button>
           <button
-            className={`view-tab ${activeView === 'learn' ? 'active' : ''}`}
-            onClick={() => setActiveView('learn')}
+            className={`view-tab ${activeView === 'practice' ? 'active' : ''}`}
+            onClick={() => setActiveView('practice')}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
             </svg>
-            Learn
+            Practice
           </button>
           <button
             className={`view-tab ${activeView === 'analyze' ? 'active' : ''}`}
