@@ -188,6 +188,40 @@ export const discoveryFramework = {
             'What\'s working and what\'s not?'
           ],
           signals: ['Describes current state', 'Names existing tools', 'Identifies gaps']
+        },
+        {
+          id: 'product_fit',
+          name: 'Product Fit (Okta vs Auth0)',
+          description: 'Determine which products fit their use cases',
+          questions: [
+            'Who are the users of your AI applications - employees or customers?',
+            'Are you building internal AI tools for your workforce, or customer-facing AI products, or both?',
+            'Do you have existing Okta Workforce Identity deployed today?',
+            'What\'s more important to you - governance and compliance, or developer speed and flexibility?',
+            'How are you thinking about multi-cloud vs single-cloud for AI deployments?'
+          ],
+          signals: ['Identifies workforce vs customer use cases', 'Mentions existing identity infrastructure', 'Describes budget and decision criteria'],
+          productGuidance: {
+            oktaIndicators: [
+              'Employees using AI tools (ChatGPT Enterprise, Copilot)',
+              'Shadow AI discovery needs',
+              'Compliance and governance focus (CISO-driven)',
+              'Existing Okta Workforce Identity deployment',
+              'Enterprise with formal procurement process'
+            ],
+            auth0Indicators: [
+              'Customer-facing AI applications (B2C, B2B2C)',
+              'Developer-led AI product development',
+              'Need for Token Vault (agent credential storage)',
+              'RAG pipeline security requirements (Auth0 FGA)',
+              'Fast-moving startups or product teams'
+            ],
+            bothIndicators: [
+              'Large enterprise with both workforce and customer AI',
+              'Internal AI governance + customer-facing AI products',
+              'Different buyers (CISO for Okta, CTO for Auth0)'
+            ]
+          }
         }
       ],
       flow: [
@@ -198,8 +232,9 @@ export const discoveryFramework = {
         { step: 5, area: 'mcp_tool_access', goal: 'Understand tool patterns' },
         { step: 6, area: 'shadow_ai', goal: 'Assess visibility' },
         { step: 7, area: 'governance_needs', goal: 'Define compliance needs' },
-        { step: 8, area: 'timeline', goal: 'Establish urgency' },
-        { step: 9, area: 'decision_process', goal: 'Map stakeholders' }
+        { step: 8, area: 'product_fit', goal: 'Determine Okta vs Auth0 fit' },
+        { step: 9, area: 'timeline', goal: 'Establish urgency' },
+        { step: 10, area: 'decision_process', goal: 'Map stakeholders' }
       ]
     }
   }
@@ -207,40 +242,64 @@ export const discoveryFramework = {
 
 export const goldenQuestions = {
   title: 'Golden Questions',
-  description: 'High-impact questions that unlock multiple discovery areas',
-  intro: 'Golden questions are open-ended questions that encourage stakeholders to share context, reveal priorities, and open new conversation threads. They work because they show genuine curiosity and give stakeholders control over what to share.',
+  description: 'High-impact questions that unlock multiple discovery areas and lead to product recommendations',
+  intro: 'Golden questions are open-ended questions that encourage stakeholders to share context, reveal priorities, and open new conversation threads. They work because they show genuine curiosity and give stakeholders control over what to share. The best questions naturally lead to Okta or Auth0 product fit.',
   tracks: {
     aiAgents: {
       questions: [
         {
           question: 'Where is AI in your technology roadmap?',
           why: 'Reveals strategic priority and leadership buy-in. Shows if AI is a priority or experiment.',
-          unlocks: ['ai_initiatives', 'timeline', 'decision_process']
+          unlocks: ['ai_initiatives', 'timeline', 'decision_process'],
+          productHint: 'Early stage → Okta ISPM for shadow AI. Advanced stage → Okta Agent Identity or Auth0 Token Vault.'
+        },
+        {
+          question: 'Who are the users of your AI applications - your employees or your customers?',
+          why: 'Critical for product selection. Workforce = Okta, Customers = Auth0, Both = Both products.',
+          unlocks: ['agent_use_cases', 'product_fit', 'decision_process'],
+          productHint: 'Employees → Okta Workforce Identity for AI. Customers → Auth0 for GenAI Applications. Both → Recommend both products.'
         },
         {
           question: 'What specific agent use cases are you exploring?',
-          why: 'Gets concrete examples instead of abstract discussions. Reveals maturity level.',
-          unlocks: ['agent_use_cases', 'security_concerns', 'current_approach']
+          why: 'Gets concrete examples instead of abstract discussions. Reveals maturity level and product fit.',
+          unlocks: ['agent_use_cases', 'security_concerns', 'current_approach', 'product_fit'],
+          productHint: 'Internal agents → Okta. Customer-facing agents → Auth0. Autonomous agents → Either (depends on governance vs developer focus).'
         },
         {
           question: 'What keeps you up at night about AI security?',
           why: 'Reveals their specific fears and priorities. Shows what to address first.',
-          unlocks: ['security_concerns', 'governance_needs', 'shadow_ai']
+          unlocks: ['security_concerns', 'governance_needs', 'shadow_ai'],
+          productHint: 'Shadow AI → Okta ISPM. Data exposure → Auth0 FGA. Credential management → Auth0 Token Vault.'
         },
         {
           question: 'How are your agents accessing tools and data today?',
           why: 'Gets into technical implementation. Reveals MCP usage and credential patterns.',
-          unlocks: ['mcp_tool_access', 'current_approach', 'security_concerns']
+          unlocks: ['mcp_tool_access', 'current_approach', 'security_concerns'],
+          productHint: 'Hardcoded credentials → Auth0 Token Vault. DIY OAuth → Okta Agent Identity. MCP servers → Auth0 XAA.'
         },
         {
           question: 'Do you have visibility into all AI tools in your organization?',
           why: 'Opens shadow AI discussion. Usually reveals gaps they\'re concerned about.',
-          unlocks: ['shadow_ai', 'governance_needs', 'security_concerns']
+          unlocks: ['shadow_ai', 'governance_needs', 'security_concerns'],
+          productHint: 'No visibility → Okta ISPM for AI (OAuth grant monitoring). Clear Okta product fit.'
         },
         {
           question: 'What happens when an agent needs to access something it shouldn\'t?',
           why: 'Tests their thinking about agent governance. Reveals maturity of approach.',
-          unlocks: ['security_concerns', 'governance_needs', 'current_approach']
+          unlocks: ['security_concerns', 'governance_needs', 'current_approach'],
+          productHint: 'Need policy engine → Okta AI Governance. Need fine-grained permissions → Auth0 FGA.'
+        },
+        {
+          question: 'Are you building this AI application for internal use or as a product feature for your customers?',
+          why: 'Direct product selection question. Internal = Okta territory, Product = Auth0 territory.',
+          unlocks: ['agent_use_cases', 'product_fit', 'decision_process'],
+          productHint: 'Internal → Okta Workforce Identity + ISPM. Product → Auth0 for GenAI + Token Vault + FGA.'
+        },
+        {
+          question: 'Do you already have Okta Workforce Identity or another enterprise identity platform?',
+          why: 'Existing Okta deployment makes Okta AI products easier to justify (extend existing investment).',
+          unlocks: ['current_approach', 'product_fit', 'decision_process'],
+          productHint: 'Existing Okta → Easy upsell for Okta AI products. No Okta → Consider Auth0 for developer-friendly approach.'
         }
       ]
     }
@@ -473,13 +532,146 @@ export const stakeholderPsychology = {
 
 export const competitorGuide = {
   title: 'Competitive Intelligence',
-  description: 'Know your competition and how to differentiate',
-  intro: 'Understanding competitors helps you anticipate objections and position Okta effectively. Never badmouth competitors - acknowledge them professionally and differentiate on your strengths.',
+  description: 'Know your competition and how to differentiate Okta & Auth0',
+  intro: 'Understanding competitors helps you anticipate objections and position Okta and Auth0 effectively. Never badmouth competitors - acknowledge them professionally and differentiate on your strengths. Know when to recommend Okta (workforce/governance) vs Auth0 (CIAM/developer) vs both.',
   categories: {
     ai: {
       name: 'AI/Agent Security Competitors',
       description: 'Competitors in the AI and agentic identity space',
       competitors: [
+        {
+          name: 'Microsoft Entra ID (Azure AD)',
+          type: 'Enterprise Identity Platform',
+          strengths: [
+            'Microsoft 365 integration',
+            'Conditional Access policies',
+            'Existing enterprise licensing',
+            'Familiar to IT teams'
+          ],
+          weaknesses: [
+            'No AI-specific features (no agent identity, no shadow AI discovery)',
+            'Limited CIAM capabilities (not for customer-facing AI apps)',
+            'Complex to configure for agentic workflows',
+            'Microsoft ecosystem lock-in'
+          ],
+          oktaAdvantages: [
+            'Okta ISPM for AI - purpose-built shadow AI discovery (OAuth grant monitoring)',
+            'Okta Agent Identity - machine identity management for autonomous agents',
+            'Cloud-agnostic (works across AWS, Azure, GCP)',
+            'Better for multi-cloud AI deployments'
+          ],
+          auth0Advantages: [
+            'Auth0 for customer-facing AI apps (B2C, B2B2C) - Entra is workforce-focused',
+            'Auth0 Token Vault - purpose-built for AI agent credentials',
+            'Auth0 FGA - fine-grained authorization for RAG pipelines',
+            'Developer-friendly (Entra has steep learning curve)'
+          ],
+          handlers: {
+            'We already have Microsoft Entra': 'Entra is great for workforce identity. But does it discover shadow AI usage? Does it have purpose-built agent identity? Does it handle customer-facing AI apps?',
+            'Entra is included with Microsoft 365': 'Workforce identity is included. AI-specific features like shadow AI discovery, agent credential management, and CIAM for AI apps are different requirements.',
+            'We\'re a Microsoft shop': 'Okta integrates with Microsoft 365. Auth0 complements Entra for customer-facing AI. You can have both - Entra for employees, Okta/Auth0 for AI.'
+          }
+        },
+        {
+          name: 'AWS IAM + Cognito',
+          type: 'Cloud Platform Security',
+          strengths: [
+            'Native AWS integration',
+            'No additional vendor required',
+            'Included in cloud spend',
+            'Familiar to AWS teams'
+          ],
+          weaknesses: [
+            'AWS-only (no cross-cloud support)',
+            'Not purpose-built for AI agents',
+            'Cognito is complex for developers',
+            'No shadow AI discovery or governance'
+          ],
+          oktaAdvantages: [
+            'Cross-cloud support (AWS, Azure, GCP)',
+            'Okta Agent Identity works with any cloud provider',
+            'Okta ISPM discovers shadow AI across all environments',
+            'Unified governance across multi-cloud AI deployments'
+          ],
+          auth0Advantages: [
+            'Auth0 is cloud-agnostic (not locked to AWS)',
+            'Auth0 Token Vault - better developer experience than AWS Secrets Manager',
+            'Auth0 for customer-facing AI apps - Cognito is complex and limited',
+            'Auth0 FGA for RAG security - purpose-built for AI, not generic IAM'
+          ],
+          handlers: {
+            'We use AWS IAM for everything': 'That works for AWS resources. But what about agents accessing Azure, GCP, or on-prem systems? What about customer-facing AI apps?',
+            'Cognito handles user auth': 'Cognito is for user authentication. Auth0 is purpose-built for AI agent workflows - Token Vault, async auth, agent delegation.',
+            'We don\'t want another vendor': 'Fair concern. But AWS IAM isn\'t designed for agentic workflows. What\'s the cost of building custom solutions vs using purpose-built tools?'
+          }
+        },
+        {
+          name: 'Ping Identity',
+          type: 'Legacy IAM Vendor',
+          strengths: [
+            'Established enterprise vendor',
+            'On-prem deployment options',
+            'Federal compliance (FedRAMP)'
+          ],
+          weaknesses: [
+            'Legacy architecture (not cloud-native)',
+            'No AI-specific features',
+            'Poor developer experience',
+            'Slow innovation cycle',
+            'Complex and expensive'
+          ],
+          oktaAdvantages: [
+            'Modern, cloud-native architecture',
+            'Purpose-built AI features (ISPM, Agent Identity, AI Governance)',
+            'Faster innovation cycle (quarterly releases)',
+            'Better user experience for admins and developers'
+          ],
+          auth0Advantages: [
+            'Developer-first approach (Ping is IT-admin focused)',
+            'Auth0 Token Vault and FGA don\'t exist in Ping',
+            'Modern APIs and SDKs (Ping is legacy)',
+            'Purpose-built for customer-facing AI apps'
+          ],
+          handlers: {
+            'We\'re a Ping customer already': 'Ping is solid for traditional IAM. But does it have shadow AI discovery? Agent identity? Token Vault? You can complement Ping with Okta/Auth0 for AI.',
+            'Ping is FedRAMP certified': 'Okta is also FedRAMP authorized. Auth0 is for commercial/CIAM use cases. Which AI workloads need FedRAMP vs commercial security?',
+            'We don\'t want to switch vendors': 'You don\'t have to. Okta/Auth0 can complement Ping for AI-specific use cases. Keep Ping for legacy, add Okta/Auth0 for AI.'
+          }
+        },
+        {
+          name: 'Pangea (API Security Startup)',
+          type: 'AI Security Startup',
+          strengths: [
+            'Developer-friendly APIs',
+            'Purpose-built for AI',
+            'Fast integration',
+            'AI Guard feature (prompt injection protection)'
+          ],
+          weaknesses: [
+            'Small startup (funding risk, longevity unclear)',
+            'Limited enterprise governance features',
+            'No workforce identity (only CIAM)',
+            'Point solution (not full identity platform)',
+            'Limited compliance certifications'
+          ],
+          oktaAdvantages: [
+            'Enterprise-grade platform with proven scale',
+            'Comprehensive AI governance (not just API security)',
+            'Okta Workforce Identity for employee AI tools (Pangea doesn\'t have)',
+            'SOC2, ISO 27001, FedRAMP certified'
+          ],
+          auth0Advantages: [
+            'Auth0 is Okta-owned (enterprise backing, not startup risk)',
+            'More comprehensive CIAM platform (not just AI)',
+            'Better ecosystem (integrations, marketplace)',
+            'Proven at scale (thousands of production customers)'
+          ],
+          handlers: {
+            'Pangea is purpose-built for AI': 'So is Auth0 Token Vault and Okta Agent Identity. But Pangea is a point solution. What about workforce identity? Shadow AI discovery? Audit compliance?',
+            'Pangea has AI Guard for prompt injection': 'That\'s application security, not identity security. Different layers. Auth0/Okta handle identity, authentication, authorization.',
+            'Pangea is cheaper': 'Lower cost upfront, but is it enterprise-ready? What\'s the risk of a startup pivot or shutdown? What about compliance certifications?'
+          }
+        },
         {
           name: 'Cloud Provider Native (AWS/Azure/GCP)',
           type: 'Platform Security',
@@ -495,11 +687,17 @@ export const competitorGuide = {
             'No purpose-built agent security',
             'Doesn\'t handle multi-cloud or hybrid'
           ],
-          differentiators: [
+          oktaAdvantages: [
             'Unified identity across all clouds',
             'Purpose-built agent identity management',
             'Cross-cloud visibility and governance',
             'Works with any LLM provider'
+          ],
+          auth0Advantages: [
+            'Auth0 is cloud-agnostic',
+            'Better for customer-facing AI apps (AWS Cognito is complex)',
+            'Auth0 Token Vault - purpose-built for agents',
+            'Developer-friendly vs cloud-native IAM complexity'
           ],
           handlers: {
             'We use AWS/Azure native security': 'That works for one cloud. What about agents accessing systems across clouds? Or using multiple LLM providers?',
@@ -521,11 +719,16 @@ export const competitorGuide = {
             'Limited visibility into agent actions',
             'Can\'t handle multi-platform agents'
           ],
-          differentiators: [
+          oktaAdvantages: [
             'Agents don\'t stay within platform boundaries',
             'Cross-platform agent identity and governance',
             'Unified audit trail across all agent actions',
             'Handle agent-to-agent trust relationships'
+          ],
+          auth0Advantages: [
+            'Auth0 for customer-facing agents (Salesforce is internal-only)',
+            'Auth0 Token Vault for agents accessing multiple platforms',
+            'Auth0 XAA for cross-app agent delegation'
           ],
           handlers: {
             'Salesforce Agentforce handles security': 'Within Salesforce, yes. But when agents need to access ServiceNow, Workday, or external APIs?',
@@ -545,18 +748,100 @@ export const competitorGuide = {
             'No governance or compliance',
             'Maintenance overhead',
             'No audit trail',
-            'Inconsistent implementation'
+            'Inconsistent implementation',
+            'Risk of credential exposure'
           ],
-          differentiators: [
+          oktaAdvantages: [
             'Don\'t reinvent the wheel on security',
             'Enterprise-grade from day one',
             'Compliance and audit built-in',
-            'Let devs focus on AI, not auth'
+            'Okta Agent Identity - proven at scale'
+          ],
+          auth0Advantages: [
+            'Auth0 Token Vault - purpose-built for agent credentials',
+            'Let devs focus on AI, not auth plumbing',
+            'Auth0 FGA - don\'t build custom authorization logic',
+            'Developer-friendly but enterprise-secure'
           ],
           handlers: {
             'We\'ll build it ourselves': 'You can, but should you? Your devs should focus on AI capabilities, not reinventing identity. What\'s the TCO of DIY auth long-term?',
-            'LangChain handles auth': 'LangChain provides patterns, not enterprise identity management. Who manages credentials? Who audits access?'
+            'LangChain handles auth': 'LangChain provides patterns, not enterprise identity management. Who manages credentials? Who audits access? Auth0 Token Vault integrates with LangChain.',
+            'We don\'t want vendor lock-in': 'Fair. But building custom auth creates technical debt. Auth0 uses OAuth standards - you can migrate if needed. DIY auth is harder to migrate.'
           }
+        }
+      ]
+    },
+    oktaVsAuth0: {
+      name: 'Okta vs Auth0: When to Use Which',
+      description: 'Guide to positioning Okta and Auth0 products for different use cases',
+      positioning: [
+        {
+          scenario: 'Workforce AI Tools (Internal)',
+          description: 'Employees using ChatGPT Enterprise, Copilot, internal AI assistants',
+          recommendation: 'Okta',
+          products: [
+            'Okta Workforce Identity for AI - SSO for employee AI tools',
+            'Okta ISPM for AI - Shadow AI discovery (OAuth grant monitoring)',
+            'Okta AI Governance - Audit and compliance for internal AI'
+          ],
+          reasoning: 'Okta is purpose-built for workforce identity. Extends existing Okta deployment. Focused on governance and compliance.',
+          buyer: 'CISO, VP of IT, Compliance Officer'
+        },
+        {
+          scenario: 'Customer-Facing AI Applications',
+          description: 'AI chatbots, customer service agents, B2C/B2B2C AI products',
+          recommendation: 'Auth0',
+          products: [
+            'Auth0 for GenAI Applications - User authentication for AI apps',
+            'Auth0 Token Vault - Secure agent credentials for customer data access',
+            'Auth0 FGA - Fine-grained authorization for multi-tenant AI'
+          ],
+          reasoning: 'Auth0 is purpose-built for CIAM (Customer Identity and Access Management). Developer-friendly, fast integration, scales for consumer apps.',
+          buyer: 'CTO, VP Engineering, Product Manager, CAIO'
+        },
+        {
+          scenario: 'Autonomous AI Agents (Machine Identity)',
+          description: 'Production agents with their own identity, agent-to-service auth',
+          recommendation: 'Okta or Auth0',
+          products: [
+            'Okta Identity for AI Agents - Enterprise-grade machine identity, governance',
+            'Auth0 Token Vault + XAA - Developer-friendly agent credentials and delegation'
+          ],
+          reasoning: 'Choose Okta for enterprise governance focus. Choose Auth0 for developer experience focus. Both support machine identity for agents.',
+          buyer: 'CTO, Platform Engineer, AI Platform Lead'
+        },
+        {
+          scenario: 'Hybrid: Internal + Customer AI',
+          description: 'Enterprise with both employee AI tools AND customer-facing AI products',
+          recommendation: 'Both Okta and Auth0',
+          products: [
+            'Okta Workforce Identity + ISPM for internal AI governance',
+            'Auth0 for GenAI + Token Vault + FGA for customer-facing AI'
+          ],
+          reasoning: 'Large enterprises often need both. Okta for workforce, Auth0 for customers. Two distinct identity domains.',
+          buyer: 'CISO + CTO + CAIO (cross-functional decision)'
+        },
+        {
+          scenario: 'RAG Pipeline Security',
+          description: 'Secure retrieval augmented generation with permission-aware filtering',
+          recommendation: 'Auth0',
+          products: [
+            'Auth0 FGA (Fine-Grained Authorization) - Relationship-based access control',
+            'Auth0 Token Vault - Secure agent access to vector databases'
+          ],
+          reasoning: 'Auth0 FGA is purpose-built for dynamic, relationship-based permissions. ReBAC model handles "show user only documents they can access."',
+          buyer: 'Data Science Manager, AI Platform Lead, ML Engineer'
+        },
+        {
+          scenario: 'Shadow AI Discovery',
+          description: 'Find out what AI tools employees are using without IT approval',
+          recommendation: 'Okta',
+          products: [
+            'Okta ISPM for AI - Browser OAuth grant monitoring',
+            'Okta Workforce Identity - Enforce SSO for approved AI tools'
+          ],
+          reasoning: 'Okta ISPM discovers shadow AI through OAuth grant visibility. Then enforce governance with Okta Workforce Identity.',
+          buyer: 'CISO, VP of IT, Compliance Officer'
         }
       ]
     }

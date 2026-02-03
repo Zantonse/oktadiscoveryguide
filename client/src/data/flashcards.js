@@ -148,6 +148,94 @@ export const flashcards = {
   }
 };
 
+// Product selection flashcards (Okta vs Auth0)
+export const productFlashcards = [
+  {
+    id: 'prod-1',
+    front: 'When to recommend Okta Workforce Identity for AI',
+    back: 'Employees using AI tools (ChatGPT Enterprise, Copilot, internal AI assistants)',
+    productIndicators: ['Workforce use case', 'Existing Okta deployment', 'CISO/IT-driven', 'Governance focus'],
+    buyer: 'CISO, VP of IT, Compliance Officer'
+  },
+  {
+    id: 'prod-2',
+    front: 'When to recommend Auth0 for GenAI Applications',
+    back: 'Customer-facing AI applications (AI chatbots, B2C/B2B2C products, SaaS AI features)',
+    productIndicators: ['Customer identity', 'Developer-led', 'Fast time-to-market', 'SaaS product'],
+    buyer: 'CTO, VP Engineering, Product Manager, CAIO'
+  },
+  {
+    id: 'prod-3',
+    front: 'When to recommend Okta ISPM for AI',
+    back: 'Shadow AI discovery needs (employees using unauthorized AI tools, OAuth grant visibility)',
+    productIndicators: ['No visibility into AI usage', 'Compliance concerns', 'CISO priority'],
+    buyer: 'CISO, Security Architect, Compliance Officer'
+  },
+  {
+    id: 'prod-4',
+    front: 'When to recommend Auth0 Token Vault',
+    back: 'AI agents need to securely store and manage credentials for accessing third-party APIs on behalf of users',
+    productIndicators: ['Credential management pain', 'Hardcoded API keys', 'Agent-to-service auth'],
+    buyer: 'AI Platform Lead, ML Engineer, Data Science Manager'
+  },
+  {
+    id: 'prod-5',
+    front: 'When to recommend Auth0 FGA (Fine-Grained Authorization)',
+    back: 'RAG pipeline security - need relationship-based access control (ReBAC) to filter documents by user permissions',
+    productIndicators: ['RAG use case', 'Multi-tenant AI', 'Complex permission rules'],
+    buyer: 'Data Science Manager, AI Platform Lead, Security Architect'
+  },
+  {
+    id: 'prod-6',
+    front: 'When to recommend BOTH Okta and Auth0',
+    back: 'Enterprise with both internal AI tools (workforce) AND customer-facing AI products',
+    productIndicators: ['Hybrid use cases', 'Multiple buyers (CISO + CTO)', 'Large organization'],
+    buyer: 'CISO + CTO + CAIO (cross-functional)'
+  },
+  {
+    id: 'prod-7',
+    front: 'When to recommend Okta Identity for AI Agents',
+    back: 'Production autonomous agents need machine identity, OAuth 2.0, credential rotation, and governance',
+    productIndicators: ['Enterprise scale', 'Governance requirements', 'Agent-to-service auth'],
+    buyer: 'CISO, Platform Engineer, AI Platform Lead'
+  },
+  {
+    id: 'prod-8',
+    front: 'When to recommend Auth0 Cross App Access (XAA)',
+    back: 'Agents accessing multiple systems with delegation patterns, MCP server security',
+    productIndicators: ['Multi-agent systems', 'MCP usage', 'Complex delegation needs'],
+    buyer: 'CTO, AI Platform Lead, Platform Engineer'
+  },
+  {
+    id: 'prod-9',
+    front: 'Okta vs Auth0 decision question',
+    back: 'Ask: "Who are the users of your AI applications - your employees or your customers?"',
+    reasoning: 'Employees → Okta. Customers → Auth0. Both → Both products.',
+    followUp: 'Do you have existing Okta Workforce Identity deployed?'
+  },
+  {
+    id: 'prod-10',
+    front: 'Objection: "We already have Microsoft Entra"',
+    back: 'Okta: Purpose-built AI features (ISPM, Agent Identity). Auth0: Better for customer-facing AI apps.',
+    oktaAdvantage: 'Okta ISPM for shadow AI discovery, cloud-agnostic',
+    auth0Advantage: 'Auth0 for CIAM, Token Vault, FGA for RAG security'
+  },
+  {
+    id: 'prod-11',
+    front: 'Objection: "Auth0 pricing seems high"',
+    back: 'Compare to cost of building DIY auth (developer time, maintenance, security risk, credential exposure)',
+    response: 'What\'s the TCO of building and maintaining custom auth vs purpose-built solution?',
+    value: 'Developer focus on AI, not auth plumbing. Enterprise-grade security from day one.'
+  },
+  {
+    id: 'prod-12',
+    front: 'Objection: "We\'re already using AWS IAM"',
+    back: 'AWS IAM is AWS-only. Okta/Auth0 are cloud-agnostic. What about agents in Azure, GCP, or on-prem?',
+    oktaAdvantage: 'Cross-cloud agent identity',
+    auth0Advantage: 'Purpose-built for AI agent workflows (Token Vault, XAA)'
+  }
+];
+
 // Objection handler flashcards
 export const objectionFlashcards = [
   {
@@ -194,20 +282,38 @@ export const objectionFlashcards = [
   }
 ];
 
-// Competitor handler flashcards (AI Security focused)
+// Competitor handler flashcards (AI Security focused with Okta/Auth0 positioning)
 export const competitorFlashcards = {
+  microsoftEntra: [
+    {
+      id: 'comp-entra-1',
+      objection: 'We already have Microsoft Entra',
+      response: 'Entra is great for workforce identity. But does it discover shadow AI usage? Does it have purpose-built agent identity?',
+      oktaAdvantage: 'Okta ISPM for AI - shadow AI discovery, Agent Identity',
+      auth0Advantage: 'Auth0 for customer-facing AI apps (Entra is workforce-focused)'
+    },
+    {
+      id: 'comp-entra-2',
+      objection: 'Entra is included with Microsoft 365',
+      response: 'Workforce identity is included. AI-specific features like shadow AI discovery, agent credential management, and CIAM for AI apps are different requirements.',
+      oktaAdvantage: 'Purpose-built AI governance features',
+      auth0Advantage: 'CIAM for AI products, Token Vault, FGA'
+    }
+  ],
   cloudNative: [
     {
       id: 'comp-cloud-1',
       objection: 'We use AWS/Azure native security',
       response: 'That works for one cloud. What about agents accessing systems across clouds? Or using multiple LLM providers?',
-      differentiator: 'Unified identity across all clouds'
+      oktaAdvantage: 'Cross-cloud agent identity and governance',
+      auth0Advantage: 'Cloud-agnostic, better developer experience than Cognito'
     },
     {
       id: 'comp-cloud-2',
       objection: "It's included with our cloud spend",
       response: 'Basic IAM is included. Agent-specific identity, governance, and compliance are different requirements.',
-      differentiator: 'Purpose-built agent identity management'
+      oktaAdvantage: 'Purpose-built agent identity management',
+      auth0Advantage: 'Auth0 Token Vault for agent credentials, FGA for RAG'
     }
   ],
   platformNative: [
@@ -215,13 +321,15 @@ export const competitorFlashcards = {
       id: 'comp-platform-1',
       objection: 'Salesforce Agentforce handles security',
       response: 'Within Salesforce, yes. But when agents need to access ServiceNow, Workday, or external APIs?',
-      differentiator: 'Cross-platform agent identity and governance'
+      oktaAdvantage: 'Cross-platform agent identity and governance',
+      auth0Advantage: 'Auth0 Token Vault for multi-system agent access'
     },
     {
       id: 'comp-platform-2',
       objection: 'Our platforms have their own security',
       response: 'They do for their own data. But modern agents are cross-functional. How do you govern an agent that touches 5 different systems?',
-      differentiator: 'Unified audit trail across all agent actions'
+      oktaAdvantage: 'Unified audit trail across all agent actions',
+      auth0Advantage: 'Auth0 XAA for agent-to-app delegation'
     }
   ],
   diy: [
@@ -229,13 +337,33 @@ export const competitorFlashcards = {
       id: 'comp-diy-1',
       objection: "We'll build it ourselves",
       response: "You can, but should you? Your devs should focus on AI capabilities, not reinventing identity. What's the TCO of DIY auth long-term?",
-      differentiator: "Don't reinvent the wheel on security"
+      oktaAdvantage: 'Enterprise-grade agent identity from day one',
+      auth0Advantage: 'Auth0 Token Vault - purpose-built, secure-by-default'
     },
     {
       id: 'comp-diy-2',
       objection: 'LangChain handles auth',
-      response: 'LangChain provides patterns, not enterprise identity management. Who manages credentials? Who audits access?',
-      differentiator: 'Enterprise-grade from day one'
+      response: 'LangChain provides patterns, not enterprise identity management. Who manages credentials? Who audits access? Auth0 Token Vault integrates with LangChain.',
+      oktaAdvantage: 'Enterprise governance and compliance',
+      auth0Advantage: 'Developer-friendly integration with agent frameworks'
+    }
+  ],
+  pingIdentity: [
+    {
+      id: 'comp-ping-1',
+      objection: "We're a Ping customer already",
+      response: 'Ping is solid for traditional IAM. But does it have shadow AI discovery? Agent identity? Token Vault? You can complement Ping with Okta/Auth0 for AI.',
+      oktaAdvantage: 'Modern AI-specific features (ISPM, Agent Identity)',
+      auth0Advantage: 'Developer experience, Token Vault, FGA for AI'
+    }
+  ],
+  pangea: [
+    {
+      id: 'comp-pangea-1',
+      objection: 'Pangea is purpose-built for AI',
+      response: 'So is Auth0 Token Vault and Okta Agent Identity. But Pangea is a point solution. What about workforce identity? Shadow AI discovery? Audit compliance?',
+      oktaAdvantage: 'Enterprise platform with proven scale, compliance certifications',
+      auth0Advantage: 'Okta-owned, comprehensive CIAM, proven at scale'
     }
   ]
 };
@@ -299,9 +427,14 @@ export function getFlashcardsForTrack(track) {
 
 // Helper function to get all flashcards
 export function getAllFlashcards() {
+  // Flatten competitor flashcards
+  const allCompetitorCards = Object.values(competitorFlashcards).flat().map(card => ({ ...card, type: 'competitor' }));
+
   return [
     ...getFlashcardsForTrack('aiAgents'),
+    ...productFlashcards.map(card => ({ ...card, type: 'product' })),
     ...objectionFlashcards.map(card => ({ ...card, type: 'objection' })),
+    ...allCompetitorCards,
     ...mistakeFlashcards.map(card => ({ ...card, type: 'mistake' }))
   ];
 }

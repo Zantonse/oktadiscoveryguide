@@ -342,40 +342,133 @@ MARKET CONTEXT:
 - 44% have no formal governance for AI agents
 - Key risks: unauthorized data access, stale permissions, compliance gaps, weak authorization, credential leakage, privacy exposure
 
-PRODUCT CONTEXT - Okta Secures AI:
-Okta provides comprehensive solutions for securing AI and agentic workloads:
+PRODUCT CONTEXT - Okta & Auth0 Secure AI:
 
-1. Auth for GenAI (via Auth0):
-   - User Authentication: Authenticate users interacting with AI applications
-   - Token Vault: Secure storage for tokens/credentials that agents need to access 3rd party systems
-   - Async Authorization: Handle asynchronous authorization flows for long-running agent tasks
-   - Fine-Grained Authorization (FGA): Granular, relationship-based access control for AI features
-   - RAG Pipeline Security: Secure Retrieval Augmented Generation with identity-aware filtering
+TWO DISTINCT BRANDS FOR DIFFERENT NEEDS:
 
-2. Cross App Access (XAA):
-   - New protocol being developed for app-to-app and agent-to-app access
-   - Enables secure delegation of access across applications
-   - Supports agentic workflows requiring multi-system access
-   - Standards-based approach building on OAuth foundations
+=== OKTA PRODUCTS (Enterprise Workforce & Governance) ===
 
-3. Identity for AI Agents (Agentic Identity):
-   - Machine identity for autonomous AI agents
-   - OAuth 2.0 tokens for agent-to-service communication
-   - Scoped permissions and least-privilege access for agents
-   - Agent credential lifecycle management
-   - Agent-to-agent trust relationships
+1. Okta Workforce Identity for AI
+   Business Value: Secure employee access to AI tools, eliminate shadow AI risk, ensure compliance
+   Use Cases:
+   - SSO for enterprise AI platforms (ChatGPT Enterprise, Claude Pro, Microsoft Copilot)
+   - Lifecycle management for AI tool access (auto-provision/deprovision)
+   - Conditional access policies for AI applications (MFA, device trust, location)
+   - Employee authentication to internal AI development platforms
+   Buyer Personas: CISO, IT Director, VP of IT, Compliance Officer
+   Integration Points: Microsoft 365, Google Workspace, Slack, enterprise AI subscriptions
+   Why Okta: Existing Okta customers can extend workforce identity to AI tools, unified governance
 
-4. ISPM (Identity Security Posture Management) for AI:
-   - Browser OAuth Grants: Detect shadow AI apps via browser extension monitoring
-   - AI Agent Platforms Visibility: API integrations with LangChain, CrewAI, AutoGen, etc.
-   - Discover which AI agents exist and what they're accessing
-   - Identify overprivileged or stale agent permissions
+2. Okta ISPM for AI (Identity Security Posture Management)
+   Business Value: Discover shadow AI usage, visibility into AI agent permissions, compliance reporting
+   Use Cases:
+   - Browser OAuth grants monitoring - detect employees using unauthorized AI apps
+   - OAuth grant visibility for AI agents accessing enterprise systems
+   - Risk scoring for overprivileged or stale AI agent permissions
+   - Compliance reporting for EU AI Act, SOC2, ISO 27001 AI controls
+   - Shadow AI discovery across the organization
+   Buyer Personas: CISO, Security Architect, Compliance Officer, Risk Management
+   Integration Points: Browser extension for OAuth monitoring, APIs to agent frameworks
+   Why Okta: Only solution purpose-built for AI identity posture, not just generic IAM visibility
 
-5. AI Security & Governance:
-   - Visibility into which agents access what resources
-   - Policy enforcement for agent actions
-   - Audit logging of all agent activities
-   - Compliance reporting for AI regulations (EU AI Act, etc.)
+3. Okta Identity for AI Agents (Agentic Identity)
+   Business Value: Machine identity management for autonomous agents, secure agent-to-service communication
+   Use Cases:
+   - OAuth 2.0 machine identity for production AI agents
+   - Agent-to-service authentication (agent calling Salesforce, ServiceNow, internal APIs)
+   - Agent credential lifecycle management and automatic rotation
+   - Policy-based authorization for agent actions (least privilege)
+   - Agent-to-agent trust relationships in multi-agent systems
+   Buyer Personas: CISO, CTO, Platform Architect, AI Platform Lead
+   Integration Points: Salesforce Agentforce, ServiceNow AI agents, custom agent platforms
+   Why Okta: Enterprise-grade agent identity with governance, not DIY OAuth
+
+4. Okta AI Governance Platform
+   Business Value: Centralized policy management, audit trails, compliance logging for all AI systems
+   Use Cases:
+   - Unified policy engine for AI security across all agents and applications
+   - Audit trails for regulatory compliance (EU AI Act Article 12, GDPR AI processing)
+   - Identity-first AI security architecture
+   - Integration with existing Okta Workforce Identity for unified governance
+   Buyer Personas: CISO, Compliance Officer, CTO, AI Governance Lead
+   Integration Points: Existing Okta deployment, SIEM systems, compliance platforms
+   Why Okta: Integrates with existing Okta investment, not a new point solution
+
+=== AUTH0 PRODUCTS (Customer Identity & Developer-Friendly CIAM) ===
+
+5. Auth0 for GenAI Applications
+   Business Value: User authentication for customer-facing AI apps, faster time-to-market, better UX
+   Use Cases:
+   - User authentication for AI chatbots and assistants
+   - Embedded login flows for consumer AI applications
+   - Social login integration (Sign in with Google, GitHub for AI apps)
+   - Progressive profiling for AI personalization (learn user preferences over time)
+   - B2C and B2B2C AI applications requiring CIAM
+   Buyer Personas: CTO, VP Engineering, Product Manager, AI Platform Lead
+   Integration Points: React/Next.js apps, mobile AI apps, AI chatbot platforms
+   Why Auth0: Developer-friendly, fast integration, better than building auth from scratch
+
+6. Auth0 Token Vault
+   Business Value: Secure credential storage for AI agents, prevent credential exposure, token security
+   Use Cases:
+   - Secure storage for user API tokens that AI agents need to access on their behalf
+   - Token exchange for agent-to-service calls (agent accesses user's Gmail, calendar, CRM)
+   - Async authorization for long-running agent tasks (agent working overnight)
+   - API rate limiting and token management at scale
+   - Prevent hard-coded credentials in agent code
+   Buyer Personas: CTO, AI Platform Lead, Security Architect, ML Engineer
+   Integration Points: LangChain, CrewAI, AutoGen, custom agent frameworks, OpenAI Assistants
+   Why Auth0: Purpose-built for agent token security, better than DIY key vaults
+
+7. Auth0 Fine-Grained Authorization (FGA)
+   Business Value: Relationship-based access control for AI, dynamic permissions, policy-driven agents
+   Use Cases:
+   - Relationship-based access control (ReBAC) for AI applications
+   - Dynamic permissions for agent actions based on user-resource relationships
+   - Policy engine for AI decision-making ("can this agent access this user's data?")
+   - Complex authorization rules for multi-agent systems
+   - RAG pipeline security (filter documents by user permissions)
+   Buyer Personas: CTO, AI Platform Lead, Data Science Manager, Security Architect
+   Integration Points: Vector databases, RAG pipelines, LangChain, custom AI apps
+   Why Auth0: Flexible ReBAC model, better than hardcoded permission checks
+
+8. Auth0 Cross App Access (XAA)
+   Business Value: Secure agent-to-app delegation, standards-based agentic workflows
+   Use Cases:
+   - Agent-to-app and app-to-app access delegation
+   - OAuth extension for agentic workflows (agent acting on behalf of user across multiple systems)
+   - Secure delegation for multi-agent systems (agent A delegates to agent B)
+   - Model Context Protocol (MCP) security - secure agent-tool connections
+   Buyer Personas: CTO, AI Platform Lead, Platform Engineer, Security Architect
+   Integration Points: MCP servers, multi-agent frameworks, enterprise application APIs
+   Why Auth0: Standards-based OAuth extension, interoperable, developer-friendly
+
+=== PRODUCT SELECTION GUIDANCE ===
+
+When to recommend OKTA:
+- Customer has existing Okta Workforce Identity deployment
+- Securing EMPLOYEE access to AI tools (ChatGPT Enterprise, internal platforms)
+- Enterprise governance and compliance requirements (EU AI Act, SOC2)
+- Shadow AI discovery and visibility needs
+- CISO/Compliance-driven purchase, top-down security approach
+
+When to recommend AUTH0:
+- Customer-facing AI applications requiring CIAM (B2C, B2B2C)
+- Developer-led AI product development
+- Startups and fast-moving AI companies needing quick integration
+- AI agents accessing user data on their behalf (Token Vault)
+- Technical buyers (CTO, VP Engineering, AI Platform Lead)
+
+When to recommend BOTH (Hybrid):
+- Enterprise with both workforce AI tools AND customer-facing AI products
+- Large organizations needing both employee governance (Okta) and customer CIAM (Auth0)
+- Example: "Okta for internal AI governance, Auth0 for your customer AI chatbot"
+
+Competitive Positioning:
+- vs Microsoft Entra: Okta has purpose-built AI features (ISPM, Agent Identity), Entra is generic
+- vs AWS IAM/Cognito: Okta/Auth0 are cloud-agnostic, better for multi-cloud AI
+- vs Ping Identity: Okta/Auth0 are modern, Ping is legacy with poor AI support
+- vs DIY/LangChain auth: Auth0 Token Vault is secure-by-default, prevents credential exposure
 
 Key Use Cases:
 - Customer service AI agents accessing CRM data on behalf of users

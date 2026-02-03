@@ -201,37 +201,68 @@ function buildSearchIndex() {
 
   // Index Competitor Guide
   Object.entries(competitorGuide.categories).forEach(([categoryKey, category]) => {
-    category.competitors.forEach((competitor) => {
-      // Main competitor entry
-      index.push({
-        id: `competitor-${categoryKey}-${competitor.name}`,
-        type: 'competitor',
-        topic: 'competitors',
-        topicName: 'Competitive Intelligence',
-        category: categoryKey,
-        categoryName: category.name,
-        title: competitor.name,
-        competitorType: competitor.type,
-        content: `Strengths: ${competitor.strengths.join(', ')}. Weaknesses: ${competitor.weaknesses.join(', ')}`,
-        differentiators: competitor.differentiators,
-        searchText: `${competitor.name} ${competitor.type} ${competitor.strengths.join(' ')} ${competitor.weaknesses.join(' ')} ${competitor.differentiators.join(' ')}`.toLowerCase()
-      });
+    // Handle categories with competitors (like 'ai')
+    if (category.competitors) {
+      category.competitors.forEach((competitor) => {
+        // Build differentiators text from oktaAdvantages and auth0Advantages
+        const oktaAdvantagesText = competitor.oktaAdvantages ? competitor.oktaAdvantages.join(' ') : '';
+        const auth0AdvantagesText = competitor.auth0Advantages ? competitor.auth0Advantages.join(' ') : '';
+        const differentiatorsText = competitor.differentiators ? competitor.differentiators.join(' ') : '';
+        const allAdvantages = `${oktaAdvantagesText} ${auth0AdvantagesText} ${differentiatorsText}`;
 
-      // Handlers
-      Object.entries(competitor.handlers).forEach(([objection, response], idx) => {
+        // Main competitor entry
         index.push({
-          id: `competitor-${categoryKey}-${competitor.name}-handler-${idx}`,
-          type: 'competitor-handler',
+          id: `competitor-${categoryKey}-${competitor.name}`,
+          type: 'competitor',
           topic: 'competitors',
           topicName: 'Competitive Intelligence',
           category: categoryKey,
-          competitorName: competitor.name,
-          title: objection,
-          content: response,
-          searchText: `${competitor.name} ${objection} ${response}`.toLowerCase()
+          categoryName: category.name,
+          title: competitor.name,
+          competitorType: competitor.type,
+          content: `Strengths: ${competitor.strengths.join(', ')}. Weaknesses: ${competitor.weaknesses.join(', ')}`,
+          oktaAdvantages: competitor.oktaAdvantages,
+          auth0Advantages: competitor.auth0Advantages,
+          searchText: `${competitor.name} ${competitor.type} ${competitor.strengths.join(' ')} ${competitor.weaknesses.join(' ')} ${allAdvantages}`.toLowerCase()
+        });
+
+        // Handlers
+        Object.entries(competitor.handlers).forEach(([objection, response], idx) => {
+          index.push({
+            id: `competitor-${categoryKey}-${competitor.name}-handler-${idx}`,
+            type: 'competitor-handler',
+            topic: 'competitors',
+            topicName: 'Competitive Intelligence',
+            category: categoryKey,
+            competitorName: competitor.name,
+            title: objection,
+            content: response,
+            searchText: `${competitor.name} ${objection} ${response}`.toLowerCase()
+          });
         });
       });
-    });
+    }
+
+    // Handle categories with positioning scenarios (like 'oktaVsAuth0')
+    if (category.positioning) {
+      category.positioning.forEach((scenario, idx) => {
+        index.push({
+          id: `positioning-${categoryKey}-${idx}`,
+          type: 'positioning',
+          topic: 'competitors',
+          topicName: 'Competitive Intelligence',
+          category: categoryKey,
+          categoryName: category.name,
+          title: scenario.scenario,
+          content: scenario.description,
+          recommendation: scenario.recommendation,
+          products: scenario.products,
+          reasoning: scenario.reasoning,
+          buyer: scenario.buyer,
+          searchText: `${scenario.scenario} ${scenario.description} ${scenario.recommendation} ${scenario.products.join(' ')} ${scenario.reasoning} ${scenario.buyer}`.toLowerCase()
+        });
+      });
+    }
   });
 
   // Index Scenario Playbooks
