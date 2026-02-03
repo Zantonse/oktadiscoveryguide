@@ -60,7 +60,7 @@ export function ChatInput() {
     <form ref={containerRef} className={`chat-input-container ${conversationEnded ? 'ended' : ''}`} onSubmit={handleSubmit}>
       {conversationEnded ? (
         <div className="conversation-ended-banner">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
@@ -78,20 +78,23 @@ export function ChatInput() {
               placeholder="Type your message..."
               rows={1}
               disabled={isDisabled}
+              aria-label="Message input"
             />
             <button
               type="submit"
               className="send-button"
               disabled={!inputValue.trim() || isDisabled}
+              aria-label="Send message"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13"/>
                 <polygon points="22 2 15 22 11 13 2 9 22 2"/>
               </svg>
             </button>
           </div>
           <div className="input-hint">
-            Press Enter to send, Shift+Enter for new line
+            <span className="input-hint-desktop">Press Enter to send, Shift+Enter for new line</span>
+            <span className="input-hint-mobile">Tap send button to send message</span>
           </div>
         </>
       )}

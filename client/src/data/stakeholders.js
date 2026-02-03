@@ -17,6 +17,22 @@ export const stakeholdersByTrack = {
         level: 'executive',
         description: 'AI strategy and innovation',
         avatar: 'cpu'
+      },
+      {
+        id: 'caio-product',
+        title: 'CAIO (Product)',
+        fullTitle: 'Chief AI Officer - Product',
+        level: 'executive',
+        description: 'Product AI strategy and customer-facing AI',
+        avatar: 'cpu'
+      },
+      {
+        id: 'vp-it-internal',
+        title: 'VP of IT',
+        fullTitle: 'VP of IT - Internal Operations',
+        level: 'executive',
+        description: 'Internal AI security and employee tools',
+        avatar: 'shield'
       }
     ],
     management: [
@@ -64,10 +80,7 @@ export const levelLabels = {
   technical: 'Technical Level'
 };
 
-// Get stakeholders for a specific track
-export function getStakeholdersForTrack(track) {
-  return stakeholdersByTrack.aiAgents; // Always return AI stakeholders
+// Get all AI agent stakeholders
+export function getStakeholdersForTrack() {
+  return stakeholdersByTrack.aiAgents;
 }
-
-// Legacy export for backwards compatibility
-export const stakeholders = stakeholdersByTrack.aiAgents;

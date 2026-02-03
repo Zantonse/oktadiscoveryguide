@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Avatar } from '../common/Avatar.jsx';
 
-export function ChatMessage({ message, stakeholder }) {
-  const [showTimestamp, setShowTimestamp] = useState(false);
+export function ChatMessage({ message, stakeholder, isStreaming }) {
   const isUser = message.role === 'user';
 
   const formatTime = (timestamp) => {
@@ -13,11 +12,7 @@ export function ChatMessage({ message, stakeholder }) {
   };
 
   return (
-    <div
-      className={`chat-message ${isUser ? 'user' : 'assistant'}`}
-      onMouseEnter={() => setShowTimestamp(true)}
-      onMouseLeave={() => setShowTimestamp(false)}
-    >
+    <div className={`chat-message ${isUser ? 'user' : 'assistant'} ${isStreaming ? 'streaming' : ''}`}>
       {!isUser && (
         <div className="message-avatar">
           <Avatar icon={stakeholder?.avatar || 'user'} size="small" />
@@ -28,14 +23,20 @@ export function ChatMessage({ message, stakeholder }) {
         {!isUser && (
           <div className="message-header">
             <span className="message-sender">{stakeholder?.title || 'Stakeholder'}</span>
+            {message.timestamp && (
+              <span className="message-timestamp">{formatTime(message.timestamp)}</span>
+            )}
           </div>
         )}
 
         <div className="message-bubble">
           <p>{message.content}</p>
+          {isStreaming && (
+            <span className="streaming-cursor" aria-label="AI is typing">▋</span>
+          )}
         </div>
 
-        {showTimestamp && message.timestamp && (
+        {isUser && message.timestamp && (
           <div className="message-timestamp">
             {formatTime(message.timestamp)}
           </div>

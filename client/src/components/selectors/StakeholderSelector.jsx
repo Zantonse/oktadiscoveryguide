@@ -87,9 +87,9 @@ const avatarIcons = {
 export function StakeholderSelector() {
   const { selectedStakeholder, setSelectedStakeholder, selectedTrack, conversationStarted } = useSession();
 
-  // Get stakeholders based on selected track
+  // Get all available stakeholders
   const trackStakeholders = useMemo(() => {
-    const stakeholders = getStakeholdersForTrack(selectedTrack);
+    const stakeholders = getStakeholdersForTrack();
     return Object.entries(stakeholders).flatMap(([level, personas]) =>
       personas.map(persona => ({
         ...persona,
@@ -98,7 +98,7 @@ export function StakeholderSelector() {
         levelLabel: levelLabels[level]
       }))
     );
-  }, [selectedTrack]);
+  }, []);
 
   const renderOption = (stakeholder) => (
     <div className="stakeholder-option">

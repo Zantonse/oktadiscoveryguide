@@ -5,6 +5,7 @@ import { Sidebar } from './components/layout/Sidebar.jsx';
 import { MainContent } from './components/layout/MainContent.jsx';
 import { MobileNav } from './components/layout/MobileNav.jsx';
 import './styles.css';
+import './mobile-first-enhancements.css';
 
 // Available color themes with light and dark variants
 export const colorThemes = {

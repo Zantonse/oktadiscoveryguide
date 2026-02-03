@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IndustrySelector } from '../selectors/IndustrySelector.jsx';
 import { StakeholderSelector } from '../selectors/StakeholderSelector.jsx';
 import { ScenarioSelector } from '../selectors/ScenarioSelector.jsx';
@@ -7,7 +7,11 @@ import { useSession } from '../../contexts/SessionContext.jsx';
 import { Button } from '../common/Button.jsx';
 
 export function Sidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  // Load collapse state from localStorage, default to false
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    const saved = localStorage.getItem('sidebarCollapsed');
+    return saved === 'true';
+  });
   const {
     canStartConversation,
     startConversation,
@@ -30,30 +34,57 @@ export function Sidebar() {
   const timerUrgent = timeRemaining <= 5 * 60; // Last 5 minutes
   const timerWarning = timeRemaining <= 10 * 60 && !timerUrgent; // 5-10 minutes
 
+  // Save collapse state to localStorage
+  useEffect(() => {
+    localStorage.setItem('sidebarCollapsed', isCollapsed.toString());
+  }, [isCollapsed]);
+
+  // Toggle sidebar collapse
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  // Close sidebar when clicking overlay on mobile
+  const handleOverlayClick = () => {
+    if (window.innerWidth <= 768) {
+      setIsCollapsed(true);
+    }
+  };
+
   return (
-    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
-      {/* Mobile collapsed summary bar */}
-      <div className="sidebar-collapsed-summary">
-        <div className="collapsed-badges">
-          <span className="collapsed-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            {formatTime(timeRemaining)}
-          </span>
-          {conversationStarted && (
-            <>
-              <span className={`collapsed-badge status-${interestLevel <= 3 ? 'low' : interestLevel <= 6 ? 'mid' : 'high'}`}>
-                Interest: {interestLevel}/10
-              </span>
-              <span className="collapsed-badge">
-                Progress: {discoveryProgress}%
-              </span>
-            </>
-          )}
+    <>
+      {/* Mobile drawer overlay */}
+      {!isCollapsed && (
+        <div
+          className="sidebar-overlay"
+          onClick={handleOverlayClick}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+        {/* Mobile collapsed summary bar */}
+        <div className="sidebar-collapsed-summary">
+          <div className="collapsed-badges">
+            <span className="collapsed-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              {formatTime(timeRemaining)}
+            </span>
+            {conversationStarted && (
+              <>
+                <span className={`collapsed-badge status-${interestLevel <= 3 ? 'low' : interestLevel <= 6 ? 'mid' : 'high'}`}>
+                  Interest: {interestLevel}/10
+                </span>
+                <span className="collapsed-badge">
+                  Progress: {discoveryProgress}%
+                </span>
+              </>
+            )}
+          </div>
         </div>
-      </div>
 
       <div className="sidebar-content">
         <IndustrySelector />
@@ -147,24 +178,27 @@ export function Sidebar() {
         )}
       </div>
 
-      {/* Mobile toggle button */}
-      <button
-        className="sidebar-toggle"
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          style={{ transform: isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}
+        {/* Mobile toggle button */}
+        <button
+          className="sidebar-toggle"
+          onClick={toggleSidebar}
+          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-expanded={!isCollapsed}
         >
-          <polyline points="18 15 12 9 6 15"/>
-        </svg>
-      </button>
-    </aside>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="18 15 12 9 6 15"/>
+          </svg>
+        </button>
+      </aside>
+    </>
   );
 }
