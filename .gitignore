@@ -30,3 +30,6 @@ npm-debug.log*
 
 # Vercel
 .vercel/
+
+# Worktrees
+.worktrees/
