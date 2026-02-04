@@ -430,8 +430,11 @@ export function getAllFlashcards() {
   // Flatten competitor flashcards
   const allCompetitorCards = Object.values(competitorFlashcards).flat().map(card => ({ ...card, type: 'competitor' }));
 
+  // Get flashcards from all tracks dynamically
+  const allTrackCards = Object.keys(flashcards).flatMap(trackKey => getFlashcardsForTrack(trackKey));
+
   return [
-    ...getFlashcardsForTrack('aiAgents'),
+    ...allTrackCards,
     ...productFlashcards.map(card => ({ ...card, type: 'product' })),
     ...objectionFlashcards.map(card => ({ ...card, type: 'objection' })),
     ...allCompetitorCards,

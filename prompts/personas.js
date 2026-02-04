@@ -450,7 +450,7 @@ Why You'd Choose Auth0:
   ]
 };
 
-function findPersona(personaId) {
+export function getPersonaById(personaId) {
   for (const level of Object.values(personas)) {
     const persona = level.find(p => p.id === personaId);
     if (persona) return persona;
@@ -458,12 +458,8 @@ function findPersona(personaId) {
   return null;
 }
 
-export function getPersonaById(personaId) {
-  return findPersona(personaId);
-}
-
 export function getPersonaContext(personaId) {
-  const persona = findPersona(personaId);
+  const persona = getPersonaById(personaId);
   return persona ? persona.context : '';
 }
 

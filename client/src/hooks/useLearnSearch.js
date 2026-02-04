@@ -325,7 +325,19 @@ export function useLearnSearch() {
   // Build search index once
   const searchIndex = useMemo(() => buildSearchIndex(), []);
 
-  // Perform search
+  /**
+   * Perform full-text search across all learning content with relevance scoring.
+   *
+   * Scoring Algorithm:
+   * - Exact match in title: +100 points (highest priority - user likely looking for this specific topic)
+   * - Exact phrase match in content: +50 points (full query appears together in content)
+   * - Individual term in title: +20 points per term (title matches are more relevant than body)
+   * - Individual term in content: +10 points per term (baseline relevance)
+   * - Type boosts: Golden questions (x1.2), objections (x1.1), competitor handlers (x1.1)
+   *
+   * The scoring prioritizes exact matches and title matches to surface the most relevant content first.
+   * Multiple term matches accumulate points, so content matching more query terms ranks higher.
+   */
   const results = useMemo(() => {
     if (!debouncedQuery || debouncedQuery.length < 2) {
       return [];
@@ -339,28 +351,34 @@ export function useLearnSearch() {
       .map(item => {
         let score = 0;
 
-        // Exact match in title (highest priority)
+        // Exact match in title (highest priority - +100 points)
+        // User likely searching for this specific topic or section
         if (item.title.toLowerCase().includes(queryLower)) {
           score += 100;
         }
 
-        // Exact phrase match in content
+        // Exact phrase match in content (+50 points)
+        // Full query appears together, indicating strong relevance
         if (item.searchText.includes(queryLower)) {
           score += 50;
         }
 
-        // Individual term matches
+        // Individual term matches (accumulate across all terms)
         queryTerms.forEach(term => {
+          // Term in title: +20 points (titles are more important than body text)
           if (item.title.toLowerCase().includes(term)) {
             score += 20;
           }
+          // Term in content: +10 points (baseline relevance)
           if (item.searchText.includes(term)) {
             score += 10;
           }
         });
 
-        // Boost certain types
+        // Boost high-value content types
+        // Golden questions are critical learning content
         if (item.type === 'golden-question') score *= 1.2;
+        // Objections and competitor handlers are practical, immediately actionable
         if (item.type === 'psychology-objection') score *= 1.1;
         if (item.type === 'competitor-handler') score *= 1.1;
 
@@ -368,7 +386,7 @@ export function useLearnSearch() {
       })
       .filter(item => item.score > 0)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 15);
+      .slice(0, 15); // Limit to top 15 results for performance and UI clarity
 
     // Add highlighted content
     return scored.map(item => ({
