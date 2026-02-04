@@ -5,6 +5,55 @@ import { getPhasePrompt, buildSystemPrompt } from '../prompts/systemPrompt.js';
 
 const MODEL_NAME = process.env.OPENAI_MODEL || 'gpt-5.2';
 
+// Map discovery areas to relevant Okta products for coaching hints
+const areaToProductMap = {
+  security_concerns: ['Token Vault', 'Agent Identity'],
+  shadow_ai: ['ISPM'],
+  mcp_tool_access: ['MCP Security', 'XAA'],
+  agent_use_cases: ['Auth for GenAI', 'Agent Identity'],
+  governance_needs: ['ISPM', 'Token Vault'],
+  current_approach: ['Token Vault', 'Agent Identity'],
+  ai_initiatives: ['Auth for GenAI'],
+  timeline: [],
+  decision_process: []
+};
+
+// Get products relevant to discovered areas
+function getProductHints(discoveredAreas) {
+  const products = new Set();
+  for (const area of discoveredAreas) {
+    const areaProducts = areaToProductMap[area] || [];
+    areaProducts.forEach(p => products.add(p));
+  }
+  return Array.from(products);
+}
+
+// Parse interest level, progress, discovered areas from response
+function parseInterestLevel(rawMessage) {
+  const interestMatch = rawMessage.match(/\[INTEREST:(\d+)\]/);
+  const progressMatch = rawMessage.match(/\[PROGRESS:(\d+)\]/);
+  const discoveredMatch = rawMessage.match(/\[DISCOVERED:([^\]]*)\]/);
+  const interestLevel = interestMatch ? parseInt(interestMatch[1], 10) : 5;
+  const discoveryProgress = progressMatch ? parseInt(progressMatch[1], 10) : 0;
+  const discoveredAreas = discoveredMatch
+    ? discoveredMatch[1].split(',').map(s => s.trim()).filter(Boolean)
+    : [];
+  const conversationEnded = rawMessage.includes('[CONVERSATION_ENDED]');
+  const message = rawMessage
+    .replace(/\n?\[INTEREST:\d+\]/, '')
+    .replace(/\n?\[PROGRESS:\d+\]/, '')
+    .replace(/\n?\[DISCOVERED:[^\]]*\]/, '')
+    .replace(/\n?\[CONVERSATION_ENDED\]/, '')
+    .trim();
+  return {
+    message,
+    interestLevel: Math.min(10, Math.max(1, interestLevel)),
+    discoveryProgress: Math.min(100, Math.max(0, discoveryProgress)),
+    discoveredAreas,
+    conversationEnded
+  };
+}
+
 function getOpenAIClient() {
   if (!process.env.OPENAI_API_KEY) {
     return null;
@@ -32,6 +81,10 @@ function generateDemoResponse(messages, config) {
   return {
     success: true,
     message: responses[personaId] || responses.default,
+    interestLevel: 5,
+    discoveryProgress: 10,
+    discoveredAreas: [],
+    conversationEnded: false,
     demo: true
   };
 }
@@ -99,9 +152,20 @@ export default async function handler(req, res) {
       frequency_penalty: 0.1
     });
 
+    const rawMessage = response.choices[0].message.content;
+    const { message, interestLevel, discoveryProgress, discoveredAreas, conversationEnded } = parseInterestLevel(rawMessage);
+
+    // Generate product hints based on discovered areas
+    const productHints = getProductHints(discoveredAreas);
+
     return res.json({
       success: true,
-      message: response.choices[0].message.content,
+      message,
+      interestLevel,
+      discoveryProgress,
+      discoveredAreas,
+      conversationEnded,
+      productHints,
       usage: response.usage
     });
   } catch (error) {

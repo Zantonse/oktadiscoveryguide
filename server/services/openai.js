@@ -9,6 +9,29 @@ let openai = null;
 // Model configuration - uses gpt-5.2-pro via LiteLLM
 const MODEL_NAME = process.env.OPENAI_MODEL || 'gpt-5.2';
 
+// Map discovery areas to relevant Okta products for coaching hints
+const areaToProductMap = {
+  security_concerns: ['Token Vault', 'Agent Identity'],
+  shadow_ai: ['ISPM'],
+  mcp_tool_access: ['MCP Security', 'XAA'],
+  agent_use_cases: ['Auth for GenAI', 'Agent Identity'],
+  governance_needs: ['ISPM', 'Token Vault'],
+  current_approach: ['Token Vault', 'Agent Identity'],
+  ai_initiatives: ['Auth for GenAI'],
+  timeline: [],
+  decision_process: []
+};
+
+// Get products relevant to discovered areas
+function getProductHints(discoveredAreas) {
+  const products = new Set();
+  for (const area of discoveredAreas) {
+    const areaProducts = areaToProductMap[area] || [];
+    areaProducts.forEach(p => products.add(p));
+  }
+  return Array.from(products);
+}
+
 // Discovery area dependencies - some areas should naturally follow others
 const discoveryDependencies = {
   aiAgents: {
@@ -204,6 +227,9 @@ export async function generateResponse(messages, config) {
     // Generate coaching hint for the salesperson
     const coachingHint = await generateCoachingHint(messages, stakeholderMessage, config);
 
+    // Generate product hints based on discovered areas
+    const productHints = getProductHints(discoveredAreas);
+
     // Generate report card if conversation ended
     let reportCard = null;
     if (conversationEnded) {
@@ -219,6 +245,7 @@ export async function generateResponse(messages, config) {
       conversationEnded,
       reportCard,
       coachingHint,
+      productHints,
       usage: response.usage
     };
   } catch (error) {
@@ -287,13 +314,16 @@ export async function* generateResponseStream(messages, config) {
     const { message: cleanMessage, interestLevel, discoveryProgress, discoveredAreas, conversationEnded } = parseInterestLevel(fullMessage);
     const coachingHint = await generateCoachingHint(messages, cleanMessage, config);
 
+    // Generate product hints based on discovered areas
+    const productHints = getProductHints(discoveredAreas);
+
     // Generate report card if conversation ended
     let reportCard = null;
     if (conversationEnded) {
       reportCard = await generateReportCard(messages, config, interestLevel, discoveredAreas);
     }
 
-    yield { type: 'done', coachingHint, interestLevel, discoveryProgress, discoveredAreas, cleanMessage, conversationEnded, reportCard };
+    yield { type: 'done', coachingHint, interestLevel, discoveryProgress, discoveredAreas, cleanMessage, conversationEnded, reportCard, productHints };
 
   } catch (error) {
     console.error('OpenAI Streaming Error:', error);
@@ -302,9 +332,38 @@ export async function* generateResponseStream(messages, config) {
 }
 
 async function generateCoachingHint(messages, lastResponse, config) {
-  const { track, phaseId, personaId } = config;
+  const { track, phaseId, personaId, phase } = config;
 
-  const coachingPrompt = `Sales coach for Okta IGA discovery practice.
+  // Different coaching prompt for bridge phase
+  const isBridgePhase = phase === 'bridge' || phaseId === 'bridge';
+
+  const coachingPrompt = isBridgePhase
+    ? `Sales coach for Okta AI security solution positioning.
+
+Stakeholder (${personaId}) just said: "${lastResponse.slice(0, 300)}"
+
+The salesperson has completed discovery and is now positioning Okta products.
+
+Give ONE punchy coaching tip (max 15 words) on how to POSITION SOLUTIONS effectively.
+
+Focus on:
+- Connecting discovered pain points to specific Okta products
+- Using the stakeholder's own language
+- Avoiding generic pitches
+- Handling objections or skepticism
+
+Format: Direct action, no fluff. Start with a verb.
+
+Good examples:
+- "Connect their 'credential sprawl' concern to Token Vault - use their words."
+- "They seem skeptical - ask what would make this relevant for them."
+- "Good connection! Now ask how they'd measure success."
+- "Don't pitch ISPM yet - they didn't mention shadow AI concerns."
+
+Bad examples (too generic):
+- "Tell them about Okta's great features..."
+- "You might want to mention the product benefits..."`
+    : `Sales coach for Okta IGA discovery practice.
 
 Stakeholder (${personaId}) just said: "${lastResponse.slice(0, 300)}"
 
@@ -352,6 +411,10 @@ function getDefaultCoachingHint(track, phaseId) {
       'pain-points': "Get specific examples and stories. Quantify the impact where possible.",
       'use-cases': "Prioritize use cases together. Understand dependencies and quick wins.",
       'architecture': "Discuss implementation approach, timeline expectations, and resource requirements."
+    },
+    aiAgents: {
+      'ai-discovery': "Explore their AI initiatives, agent use cases, and security concerns. Listen for identity pain points.",
+      'bridge': "Connect their pain points to Okta products. Use their language - reference what they told you."
     }
   };
 
@@ -999,6 +1062,9 @@ function generateDemoResponse(messages, config) {
     success: true,
     message: responses[personaId] || responses.default,
     interestLevel: 5,
+    discoveryProgress: 10,
+    discoveredAreas: [],
+    conversationEnded: false,
     demo: true
   };
 }

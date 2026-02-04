@@ -6,6 +6,29 @@ import { getPhasePrompt, buildSystemPrompt } from '../../prompts/systemPrompt.js
 
 const MODEL_NAME = process.env.OPENAI_MODEL || 'gpt-5.2';
 
+// Map discovery areas to relevant Okta products for coaching hints
+const areaToProductMap = {
+  security_concerns: ['Token Vault', 'Agent Identity'],
+  shadow_ai: ['ISPM'],
+  mcp_tool_access: ['MCP Security', 'XAA'],
+  agent_use_cases: ['Auth for GenAI', 'Agent Identity'],
+  governance_needs: ['ISPM', 'Token Vault'],
+  current_approach: ['Token Vault', 'Agent Identity'],
+  ai_initiatives: ['Auth for GenAI'],
+  timeline: [],
+  decision_process: []
+};
+
+// Get products relevant to discovered areas
+function getProductHints(discoveredAreas) {
+  const products = new Set();
+  for (const area of discoveredAreas) {
+    const areaProducts = areaToProductMap[area] || [];
+    areaProducts.forEach(p => products.add(p));
+  }
+  return Array.from(products);
+}
+
 function getOpenAIClient() {
   if (!process.env.OPENAI_API_KEY) {
     return null;
@@ -161,6 +184,7 @@ export default async function handler(req, res) {
   if (!openai) {
     const demo = generateDemoResponse(messages, config);
     const coachingHint = getDefaultCoachingHint(config.track, config.phaseId);
+    const productHints = getProductHints(demo.discoveredAreas);
     return res.json({
       success: true,
       message: demo.message,
@@ -169,6 +193,7 @@ export default async function handler(req, res) {
       discoveredAreas: demo.discoveredAreas,
       conversationEnded: demo.conversationEnded,
       coachingHint,
+      productHints,
       nonStreaming: true,
       demo: true
     });
@@ -210,6 +235,9 @@ export default async function handler(req, res) {
 
     const coachingHint = await generateCoachingHint(openai, message, config);
 
+    // Generate product hints based on discovered areas
+    const productHints = getProductHints(discoveredAreas);
+
     return res.json({
       success: true,
       message,
@@ -218,6 +246,7 @@ export default async function handler(req, res) {
       discoveredAreas,
       conversationEnded,
       coachingHint,
+      productHints,
       nonStreaming: true,
       usage: response.usage
     });

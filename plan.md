@@ -1,326 +1,226 @@
-# Okta/Auth0 AI Agent Security Discovery - Content Refocus Plan
+# Stakeholder Prompt Improvement Plan
 
-## Overview
-Refocus the Discovery Guide app to explicitly position **Okta AI Agent Security products** and **Auth0 for AI Agents** as the solutions for AI security discovery conversations. This involves enhancing product positioning, clarifying brand lines, and improving discovery question flows to lead to specific product recommendations.
+## Current Rating: 82/100 → **90/100** (after fixes 1-5)
 
-## Current State Analysis
+## Priority Fixes
 
-**Content Structure:**
-- AI security discovery content already exists covering AI agents, MCP, GenAI auth
-- Product references scattered across multiple files (prompts, learning content, personas)
-- 8 AI-focused personas (CISO, CTO, CAIO, VP IT, AI Platform Lead, Data Science Manager, ML Engineer, Platform Engineer)
-- 12 industry verticals with AI security context
-- 9 discovery areas: ai_initiatives, agent_use_cases, current_approach, security_concerns, mcp_tool_access, shadow_ai, governance_needs, timeline, decision_process
+### 1. HIGH IMPACT, LOW EFFORT
 
-**Current Product References:**
-1. **Auth for GenAI (via Auth0)** - User auth, Token Vault, Async Auth, FGA, RAG security
-2. **Cross App Access (XAA)** - App-to-app/agent-to-app protocol
-3. **Identity for AI Agents** - Machine identity for autonomous agents
-4. **ISPM for AI** - Posture management, OAuth grants detection
-5. **AI Security & Governance** - Visibility, policy, audit
+#### Add Explicit Starting Interest Level
+**File:** `server/prompts/systemPrompt.js`
+**Location:** After line 163 (interest score format)
 
-**Pain Points Identified:**
-1. **Unclear Brand Lines**: "Auth for GenAI (via Auth0)" - unclear if Auth0 is brand or container
-2. **Generic Product Names**: Products described technically, not as Okta/Auth0 branded solutions
-3. **Missing Product Positioning**: No SKU names, pricing tiers, or package definitions
-4. **Weak Competitive Context**: Competitors mentioned but not clearly differentiated from Okta/Auth0
-5. **Discovery Doesn't Lead to Products**: Questions explore problems but don't guide to specific product recommendations
-6. **Inconsistent Terminology**: Token Vault, MCP, Agent Identity used inconsistently across personas
-7. **No Auth0-Specific Content**: Auth0 treated as part of Okta, not as distinct brand
-8. **Missing Business Value**: Technical features listed without clear business outcomes
-
----
-
-## Product Line Definition (FIRST PRIORITY)
-
-Define clear product branding and positioning for implementation:
-
-### Okta-Branded Products (Enterprise Identity Platform)
-
-**1. Okta Workforce Identity for AI**
-- Employee/workforce authentication to AI applications
-- SSO for AI platforms (ChatGPT Enterprise, Claude Pro, Copilot)
-- Lifecycle management for AI tool access
-- Conditional access policies for AI applications
-
-**2. Okta ISPM for AI (Identity Security Posture Management)**
-- Discover shadow AI usage across the organization
-- OAuth grant visibility for AI agents
-- Risk scoring for AI access patterns
-- Compliance reporting for AI governance
-
-**3. Okta Identity for AI Agents (Agentic Identity)**
-- Machine identity management for autonomous agents
-- OAuth 2.0 tokens for agent-to-service communication
-- Agent lifecycle and credential rotation
-- Policy-based agent authorization
-
-**4. Okta AI Governance Platform**
-- Centralized policy management for AI security
-- Audit trails and compliance logging
-- Identity-first AI security architecture
-- Integration with existing Okta Workforce Identity
-
-### Auth0-Branded Products (Developer-Friendly CIAM)
-
-**1. Auth0 for GenAI Applications**
-- User authentication for customer-facing AI apps
-- Embedded login flows for AI chatbots
-- Social login integration (Sign in with Google for AI apps)
-- Progressive profiling for AI personalization
-
-**2. Auth0 Token Vault**
-- Secure credential storage for AI agents accessing user data
-- Token exchange for agent-to-service calls
-- Async authorization for long-running agents
-- API rate limiting and token management
-
-**3. Auth0 Fine-Grained Authorization (FGA)**
-- Relationship-based access control for AI applications
-- Dynamic permissions for agent actions
-- Policy engine for AI decision-making
-- ReBAC (Relationship-Based Access Control) for complex AI workflows
-
-**4. Auth0 Cross App Access (XAA)**
-- New protocol for agent-to-app and app-to-app access
-- OAuth extension for agentic workflows
-- Secure delegation for multi-agent systems
-- Developer-friendly APIs and SDKs
-
----
-
-## Implementation Scope
-
-**Executing Phases 1-3:**
-1. Phase 1: Update System Prompts & Product Knowledge
-2. Phase 2: Update Persona Product Knowledge
-3. Phase 3: Enhance Competitive Positioning
-
-**Product Accuracy:**
-- Yes, verify product names/descriptions match official Okta marketing materials
-- Ensure technical accuracy for both Okta and Auth0 brands
-- Keep business value statements realistic and verifiable
-
-**Testing:**
-- Will test after implementation of Phases 1-3
-- No need to set up local environment during implementation
-
----
-
-## Phase 1: Update System Prompts & Product Knowledge (HIGH PRIORITY)
-
-**File:** `prompts/systemPrompt.js` (Lines 345-393)
-
-**Changes Needed:**
-1. Replace "PRODUCT CONTEXT - Okta Secures AI" section with clear brand separation:
-   - **Okta Products** (Workforce, Enterprise, Governance focus)
-   - **Auth0 Products** (CIAM, Developer, Customer-facing focus)
-
-2. Update product descriptions to include:
-   - SKU/offering names (e.g., "Okta Workforce Identity for AI")
-   - Business value statements (not just technical features)
-   - Integration points (What systems do they connect to?)
-   - Pricing/packaging hints (Enterprise vs Developer tiers)
-
-3. Add product selection guidance:
-   - When to recommend Okta vs Auth0
-   - Workforce vs Customer identity use cases
-   - Enterprise vs SMB/Startup fit
-
-**Example Refactored Section:**
-```javascript
-// Okta Products (Enterprise-focused)
-1. Okta Workforce Identity for AI
-   - Business Value: Secure employee access to AI tools, reduce shadow AI risk
-   - Use Case: SSO for ChatGPT Enterprise, Copilot, internal AI platforms
-   - Buyer: CISO, IT Director, VP of IT
-
-2. Okta ISPM for AI
-   - Business Value: Discover and govern shadow AI, compliance reporting
-   - Use Case: OAuth grant visibility, AI risk scoring, audit trails
-   - Buyer: CISO, Compliance Officer, Security Architect
+Add:
+```
+Your interest level STARTS at 5 for every new conversation.
+Adjust from there based on the first question quality.
 ```
 
 ---
 
-## Phase 2: Update Persona Product Knowledge (HIGH PRIORITY)
+### 2. HIGH IMPACT, MEDIUM EFFORT
 
-**Files:**
-- `prompts/personas.js` (All 8 personas)
-- `server/prompts/personas.js` (Mirror copy)
+#### Add Persona-Specific Behavioral Modifiers
+**File:** `server/prompts/systemPrompt.js`
+**Location:** New section after CONVERSATION GUIDELINES (line 22)
 
-**Changes Needed:**
-1. **Executive Personas** - Add product-specific concerns:
-   - CISO: Prefers Okta ISPM + Workforce Identity for governance
-   - CTO: Evaluates Okta vs Auth0 based on use case (workforce vs customer)
-   - CAIO: Leans Auth0 for customer-facing AI, Okta for internal AI governance
-   - VP IT: Concerned with Okta licensing costs, Auth0 developer friction
+Add:
+```
+PERSONA-SPECIFIC BEHAVIORS:
 
-2. **Management Personas** - Add product implementation experience:
-   - AI Platform Lead: Has used Auth0 Token Vault, interested in XAA protocol
-   - Data Science Manager: Evaluating Auth0 FGA for RAG pipelines
+CISO / Security Leadership:
+- Primary focus: Risk reduction, compliance posture, board-level reporting
+- Skeptical of new vendors - "we've been burned before"
+- Wants to understand worst-case scenarios
+- Asks about breach notification, audit trails, certifications
+- Time-pressured, delegates technical details to team
+- Phrases: "What's our exposure?", "How do I explain this to the board?", "Who else in our industry uses this?"
 
-3. **Technical Personas** - Add hands-on product knowledge:
-   - ML Engineer: Implemented Auth0 Token Vault, struggling with async auth
-   - Platform Engineer: Considering Okta Agent Identity vs DIY OAuth
+CTO / Technical Leadership:
+- Primary focus: Architecture fit, technical debt, integration complexity
+- Wants to understand how it fits the existing stack
+- Concerned about vendor lock-in and migration paths
+- Asks about APIs, SDKs, performance, scalability
+- May test technical depth of the salesperson
+- Phrases: "Walk me through the architecture", "What's the integration like?", "How does this scale?"
 
-**Example Persona Enhancement:**
-```javascript
-// CISO-AI persona
-productAwareness: {
-  oktaWorkforceIdentity: "Knows about SSO for AI tools, interested in conditional access",
-  oktaISPM: "Excited about shadow AI discovery, wants OAuth grant visibility",
-  auth0: "Aware of Auth0 but thinks it's only for consumer apps",
-  competitorKnowledge: "Comparing Okta ISPM to Microsoft Entra for AI governance"
-}
+AI Platform Lead / Data Science Manager:
+- Primary focus: Developer experience, time-to-value, team productivity
+- Wants to unblock their team, reduce friction
+- Concerned about adding process overhead
+- Asks about documentation, SDK quality, support responsiveness
+- May have already evaluated alternatives
+- Phrases: "My team is stretched thin", "How long to get this working?", "What's the learning curve?"
+
+IT Director / Operations:
+- Primary focus: Resource requirements, support burden, operational stability
+- Worried about adding another tool to manage
+- Concerned about training, change management, rollout
+- Asks about implementation timeline, support model, SLAs
+- May need to justify headcount or budget
+- Phrases: "Who's going to manage this?", "What does support look like?", "How disruptive is the rollout?"
+
+ML Engineer / Platform Engineer:
+- Primary focus: API quality, documentation, developer experience
+- Wants to see code examples, not slides
+- Skeptical of marketing claims, wants proof
+- Asks about edge cases, error handling, debugging
+- May have already built something custom
+- Phrases: "Show me the API", "What happens when X fails?", "Can I see the docs?"
+
+Compliance Officer:
+- Primary focus: Regulatory requirements, audit readiness, documentation
+- Wants to check boxes, reduce audit findings
+- Concerned about EU AI Act, SOC2, HIPAA implications
+- Asks about certifications, audit logs, data residency
+- May have specific compliance frameworks to satisfy
+- Phrases: "How does this help with [framework]?", "What's in the audit log?", "Where is data stored?"
 ```
 
 ---
 
-## Phase 3: Enhance Competitive Positioning (MEDIUM PRIORITY)
+### 3. MEDIUM IMPACT, LOW EFFORT
 
-**File:** `client/src/data/learningContent.js` (Lines 474-564)
+#### Add Memory/Continuity Guidance
+**File:** `server/prompts/systemPrompt.js`
+**Location:** In GUARDRAILS section, after "Stay Consistent" (line 302)
 
-**Changes Needed:**
-1. **Expand Competitor Section** with Okta/Auth0 positioning:
-   - Microsoft Entra ID (Azure AD) - When Okta wins, when they win
-   - AWS IAM + Cognito - Okta/Auth0 advantages
-   - Ping Identity - Legacy vs modern comparison
-   - DIY/LangChain - When Auth0 Token Vault is better
+Expand to:
+```
+2. Stay Consistent:
+   - Remember what you've already shared
+   - Don't contradict yourself
+   - Reference previous parts of the conversation
+   - Your concerns should stay consistent throughout
 
-2. **Add Okta vs Auth0 Positioning**:
-   - When to recommend Okta (Workforce, Enterprise, Compliance)
-   - When to recommend Auth0 (CIAM, Developer, Customer-facing)
-   - When to recommend both (Hybrid scenarios)
-
-3. **Competitive Battlecards**:
-   - Feature comparison tables
-   - "Why Okta Wins" vs each competitor
-   - "Why Auth0 Wins" vs each competitor
-   - Common objections and responses
-
-**Example Competitive Section:**
-```javascript
-{
-  competitor: "Microsoft Entra ID",
-  strengths: ["Microsoft 365 integration", "Conditional Access", "Enterprise licensing"],
-  weaknesses: ["No AI-specific features", "Limited CIAM", "Complex to configure"],
-  oktaAdvantage: "Purpose-built AI agent identity, better cross-cloud support",
-  auth0Advantage: "Developer-friendly CIAM, better for customer-facing AI apps"
-}
+   Before each response, mentally review:
+   - What specific pain points have I revealed?
+   - What objections or concerns have I raised?
+   - What internal stakeholders have I mentioned by name?
+   - What timeline or budget constraints have I shared?
+   Reference these naturally to create continuity and reward good listening.
 ```
 
 ---
 
-## Implementation Files Summary
+### 4. MEDIUM IMPACT, MEDIUM EFFORT
 
-### Critical Files (Phases 1-3)
-1. `prompts/systemPrompt.js` - Product definitions and positioning
-2. `prompts/personas.js` - Persona product knowledge
-3. `server/prompts/systemPrompt.js` - Mirror of prompts/systemPrompt.js
-4. `server/prompts/personas.js` - Mirror of prompts/personas.js
-5. `client/src/data/learningContent.js` - Competitive positioning
+#### Add Emotional Arc Context
+**File:** `server/prompts/systemPrompt.js`
+**Location:** New section after REALISTIC MEETING DYNAMICS (line 276)
 
----
+Add:
+```
+EMOTIONAL UNDERCURRENTS:
+Your responses should be colored by underlying emotions common to stakeholders in your position:
 
-## Pre-Implementation: Safety Commit
+FRUSTRATION sources (use when relevant):
+- Manual processes that don't scale
+- Shadow AI deployments you can't control
+- Security team stretched too thin
+- Audit findings you're still addressing
+- Pressure from leadership to "move faster on AI"
 
-**FIRST STEP - Before Any Content Changes:**
+FEAR sources (use sparingly but authentically):
+- A security incident making headlines
+- Failing an audit or compliance review
+- Falling behind competitors on AI adoption
+- Making a bad vendor decision
+- Getting blamed for something going wrong
 
-Create a git commit to preserve the current working state before the large content refactor:
+HOPE sources (reveal as trust builds):
+- Finding a solution that actually works
+- Reducing operational burden, not adding to it
+- Getting ahead of the AI security problem
+- Looking good to leadership by solving this
+- Having a vendor who actually understands your situation
 
-```bash
-git add -A
-git commit -m "Pre-refactor: Save current state before Okta/Auth0 product focus
-
-- Current state: Generic AI security discovery content
-- About to refactor: Add explicit Okta/Auth0 product positioning
-- Files to be modified: systemPrompt.js, personas.js, learningContent.js
-- This commit allows easy rollback if needed"
+Let these emotions inform your tone without being melodramatic. A CISO might show frustration through clipped responses; an IT Director might show fear through excessive caution.
 ```
 
-This ensures we can rollback to the current working state if needed.
+---
+
+### 5. MEDIUM IMPACT, HIGH EFFORT
+
+#### Fix Bridge Phase Product Name Alignment
+**File:** `server/prompts/systemPrompt.js`
+**Location:** Bridge phase PRODUCT KNOWLEDGE section (lines 549-556)
+
+Replace with:
+```
+PRODUCT KNOWLEDGE (for realistic reactions):
+You are aware of these Okta/Auth0 AI security products but are not an expert:
+
+Okta Products (Workforce/Enterprise):
+- Okta Workforce Identity for AI: SSO/MFA for enterprise AI tools (ChatGPT Enterprise, Copilot)
+- Okta ISPM for AI: Shadow AI discovery, OAuth grant monitoring, compliance reporting
+- Okta Identity for AI Agents: Machine identity for autonomous agents, agent-to-service auth
+
+Auth0 Products (Developer/Customer-facing):
+- Auth0 for GenAI Applications: User auth for customer-facing AI apps, social login
+- Auth0 Token Vault: Secure credential storage for agents accessing user data
+- Auth0 Fine-Grained Authorization (FGA): Relationship-based access control for AI
+- Auth0 Cross App Access (XAA): Agent-to-app delegation, MCP security
+
+When they mention a product, react based on whether it matches your discovered pain points.
+```
 
 ---
 
-## Implementation Steps
+### 6. LOW IMPACT, HIGH EFFORT (Future Consideration)
 
-**After Safety Commit:**
+#### Restructure Prompt into Tiered Sections
+**File:** `server/prompts/systemPrompt.js`
+**Scope:** Full refactor
 
-1. **Phase 1: Update systemPrompt.js**
-   - Replace product context section with clear Okta vs Auth0 branding
-   - Add business value statements
-   - Verify product accuracy against official materials
+Reorganize into:
+```
+=== CRITICAL (Always Follow) ===
+- Role definition
+- Strict boundaries
+- Interest level mechanics
+- Response format
 
-2. **Phase 2: Update all 8 personas**
-   - Add product-specific knowledge and preferences
-   - Include objection handling
-   - Mirror changes to server/prompts/personas.js
+=== GUIDELINES (Apply Contextually) ===
+- Persona behaviors
+- Competitor mentions
+- Objection triggers
+- Meeting dynamics
 
-3. **Phase 3: Enhance competitive positioning**
-   - Expand learningContent.js with Okta/Auth0 context
-   - Add competitive battlecards
-   - Create selection guidance
+=== REFERENCE (Consult When Relevant) ===
+- Product catalog
+- Competitor details
+- Discovery areas
+- Example phrases
+```
 
----
-
-## Verification Plan (Post-Implementation)
-
-### Product Knowledge Testing
-1. **Stakeholder Conversations:**
-   - Start conversation with CISO
-   - Ask: "What AI security tools are you evaluating?"
-   - Verify: Stakeholder mentions Microsoft Entra, asks about Okta ISPM
-
-2. **Product Recommendation:**
-   - Ask: "We have internal AI tools and customer-facing chatbots"
-   - Verify: Response recommends both Okta (workforce) and Auth0 (CIAM)
-
-3. **Competitive Positioning:**
-   - Say: "We're already using Azure AD"
-   - Verify: Response explains Okta advantages for AI-specific features
-
-### Learn Section Testing
-4. **Navigate to Competitive Intelligence**
-   - Verify: Microsoft Entra, AWS, Ping Identity sections
-   - Verify: Each competitor has "Why Okta Wins" and "Why Auth0 Wins"
-
-5. **Golden Questions**
-   - Verify: Questions lead to product discovery
-   - Verify: Product selection guidance included
+This would reduce cognitive load on the LLM and improve instruction following.
 
 ---
 
-## Success Criteria (Phases 1-3)
+## Implementation Checklist
 
-### Must Have
-- [x] Clear Okta vs Auth0 product lines defined
-- [ ] systemPrompt.js has branded product definitions
-- [ ] All 8 personas have product-specific knowledge
-- [ ] Competitive positioning includes Okta/Auth0 differentiation
-
-### Nice to Have
-- [ ] Product pricing/packaging hints
-- [ ] Integration point examples
-- [ ] ROI and business value statements
+- [x] 1. Add explicit starting interest level (5 min) - DONE
+- [x] 2. Add persona-specific behavioral modifiers (30 min) - DONE
+- [x] 3. Expand memory/continuity guidance (10 min) - DONE
+- [x] 4. Add emotional arc context (20 min) - DONE
+- [x] 5. Fix bridge phase product names (15 min) - DONE
+- [ ] 6. Restructure into tiered sections (2+ hours, future sprint)
 
 ---
 
-## Risk Assessment
+## Expected Impact
 
-**LOW RISK** - Content-only changes:
-- No code/component changes
-- Only data files and prompts
-- Can test iteratively
-- Easy to rollback (safety commit in place)
+After implementing fixes 1-5:
+- **Projected Rating:** 90-92/100
+- **Key Improvements:**
+  - More consistent persona behavior
+  - Better conversation continuity
+  - More emotionally authentic responses
+  - Correct product positioning in bridge mode
 
-**Challenges:**
-- Product positioning must be accurate (verify with product/marketing)
-- Competitor info needs validation
-- Need to avoid over-selling in simulations
+## Notes
 
-**Mitigation:**
-- Start with conservative product claims
-- Focus on discovery, not pitching
-- Include "check with team" language for pricing
-- Keep technical accuracy over sales hype
+- Test each change individually before combining
+- Monitor for prompt length impact on response quality
+- Consider A/B testing with users to validate improvements

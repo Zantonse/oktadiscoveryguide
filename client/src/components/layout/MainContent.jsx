@@ -2,6 +2,7 @@ import React from 'react';
 import { ChatContainer } from '../chat/ChatContainer.jsx';
 import { BottomPanel } from './BottomPanel.jsx';
 import { ReportCard } from '../features/ReportCard.jsx';
+import { ProductPanel } from '../features/ProductPanel.jsx';
 import { LearnSection } from '../learn/LearnSection.jsx';
 import { DrillMode } from '../drill/DrillMode.jsx';
 import { AnalyzeSection } from '../analyze/AnalyzeSection.jsx';
@@ -43,7 +44,10 @@ export function MainContent() {
     <main className="main-content">
       {conversationStarted ? (
         <>
-          <ChatContainer />
+          <div className="practice-view-with-panel">
+            <ChatContainer />
+            <ProductPanel />
+          </div>
           <BottomPanel />
           {conversationEnded && <ReportCard />}
         </>

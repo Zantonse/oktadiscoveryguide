@@ -47,6 +47,7 @@ export function SessionProvider({ children }) {
   const [sessionNotes, setSessionNotes] = useState('');
   const [suggestedQuestions, setSuggestedQuestions] = useState([]);
   const [coachingHint, setCoachingHint] = useState(null);
+  const [productHints, setProductHints] = useState([]);
   const [interestLevel, setInterestLevel] = useState(5);
   const [discoveredAreas, setDiscoveredAreas] = useState([]);
   const [conversationEnded, setConversationEnded] = useState(false);
@@ -54,6 +55,7 @@ export function SessionProvider({ children }) {
   const [timerExpired, setTimerExpired] = useState(false);
   const [discoveryStage, setDiscoveryStage] = useState('opening');
   const [nextPriorityAreas, setNextPriorityAreas] = useState([]);
+  const [phase, setPhase] = useState('discovery'); // 'discovery' or 'bridge'
 
   // Timer effect - counts down when started
   useEffect(() => {
@@ -96,10 +98,11 @@ export function SessionProvider({ children }) {
       industryId: selectedIndustry?.id,
       personaId: selectedStakeholder?.id,
       track: 'aiAgents',
-      phaseId: 'ai-discovery',
-      scenarioId: selectedScenario?.id
+      phaseId: phase === 'bridge' ? 'bridge' : 'ai-discovery',
+      scenarioId: selectedScenario?.id,
+      phase
     };
-  }, [selectedIndustry, selectedStakeholder, selectedScenario]);
+  }, [selectedIndustry, selectedStakeholder, selectedScenario, phase]);
 
   // Add a message to the conversation
   const addMessage = useCallback((role, content) => {
@@ -184,6 +187,9 @@ export function SessionProvider({ children }) {
           if (data.coachingHint) {
             setCoachingHint(data.coachingHint);
           }
+          if (data.productHints && data.productHints.length > 0) {
+            setProductHints(data.productHints);
+          }
           if (data.interestLevel) {
             setInterestLevel(data.interestLevel);
           }
@@ -234,6 +240,9 @@ export function SessionProvider({ children }) {
                   addMessage('assistant', data.cleanMessage || fullMessage);
                   if (data.coachingHint) {
                     setCoachingHint(data.coachingHint);
+                  }
+                  if (data.productHints && data.productHints.length > 0) {
+                    setProductHints(data.productHints);
                   }
                   if (data.interestLevel) {
                     setInterestLevel(data.interestLevel);
@@ -346,6 +355,12 @@ export function SessionProvider({ children }) {
     endConversationRef.current = endConversation;
   }, [endConversation]);
 
+  // Enter bridge mode (transition from discovery to solution positioning)
+  const enterBridgeMode = useCallback(() => {
+    setPhase('bridge');
+    setCoachingHint("Now connect their pain points to Okta products. Use their language, reference what they told you.");
+  }, []);
+
   // Reset session
   const resetSession = useCallback(() => {
     setSelectedIndustry(null);
@@ -357,6 +372,7 @@ export function SessionProvider({ children }) {
     setSessionNotes('');
     setSuggestedQuestions([]);
     setCoachingHint(null);
+    setProductHints([]);
     setStreamingMessage(null);
     setInterestLevel(5);
     setDiscoveredAreas([]);
@@ -367,6 +383,7 @@ export function SessionProvider({ children }) {
     setTimerExpired(false);
     setDiscoveryStage('opening');
     setNextPriorityAreas([]);
+    setPhase('discovery');
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
@@ -419,6 +436,7 @@ export function SessionProvider({ children }) {
     setSessionNotes,
     suggestedQuestions,
     coachingHint,
+    productHints,
     interestLevel,
     discoveredAreas,
     conversationEnded,
@@ -432,6 +450,10 @@ export function SessionProvider({ children }) {
     // Discovery stage
     discoveryStage,
     nextPriorityAreas,
+
+    // Phase (discovery or bridge)
+    phase,
+    enterBridgeMode,
 
     // Actions
     startConversation,
