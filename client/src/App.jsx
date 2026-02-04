@@ -7,37 +7,37 @@ import { MobileNav } from './components/layout/MobileNav.jsx';
 import './styles.css';
 import './mobile-first-enhancements.css';
 
-// Available color themes with light and dark variants
+// Available color themes with light and dark variants - Warm Professional palette
 export const colorThemes = {
-  indigo: {
-    name: 'Indigo',
-    light: { primary: '#6366f1', primaryHover: '#4f46e5' },
-    dark: { primary: '#818cf8', primaryHover: '#a5b4fc' }
-  },
-  blue: {
-    name: 'Blue',
-    light: { primary: '#3b82f6', primaryHover: '#2563eb' },
-    dark: { primary: '#60a5fa', primaryHover: '#93c5fd' }
-  },
-  emerald: {
-    name: 'Emerald',
-    light: { primary: '#10b981', primaryHover: '#059669' },
-    dark: { primary: '#34d399', primaryHover: '#6ee7b7' }
-  },
-  rose: {
-    name: 'Rose',
-    light: { primary: '#f43f5e', primaryHover: '#e11d48' },
-    dark: { primary: '#fb7185', primaryHover: '#fda4af' }
-  },
   amber: {
     name: 'Amber',
-    light: { primary: '#f59e0b', primaryHover: '#d97706' },
-    dark: { primary: '#fbbf24', primaryHover: '#fcd34d' }
+    light: { primary: '#D97706', primaryHover: '#B45309' },
+    dark: { primary: '#FBBF24', primaryHover: '#F59E0B' }
+  },
+  teal: {
+    name: 'Teal',
+    light: { primary: '#0F766E', primaryHover: '#0D9488' },
+    dark: { primary: '#2DD4BF', primaryHover: '#5EEAD4' }
   },
   violet: {
     name: 'Violet',
-    light: { primary: '#8b5cf6', primaryHover: '#7c3aed' },
-    dark: { primary: '#a78bfa', primaryHover: '#c4b5fd' }
+    light: { primary: '#7C3AED', primaryHover: '#6D28D9' },
+    dark: { primary: '#A78BFA', primaryHover: '#C4B5FD' }
+  },
+  rose: {
+    name: 'Rose',
+    light: { primary: '#E11D48', primaryHover: '#BE123C' },
+    dark: { primary: '#FB7185', primaryHover: '#FDA4AF' }
+  },
+  indigo: {
+    name: 'Indigo',
+    light: { primary: '#4F46E5', primaryHover: '#4338CA' },
+    dark: { primary: '#818CF8', primaryHover: '#A5B4FC' }
+  },
+  emerald: {
+    name: 'Emerald',
+    light: { primary: '#059669', primaryHover: '#047857' },
+    dark: { primary: '#34D399', primaryHover: '#6EE7B7' }
   }
 };
 
@@ -56,7 +56,7 @@ function App() {
 
   const [colorTheme, setColorTheme] = useState(() => {
     const saved = localStorage.getItem('discovery-guide-color');
-    return saved || 'indigo';
+    return saved || 'amber';
   });
 
   const [showSettings, setShowSettings] = useState(false);

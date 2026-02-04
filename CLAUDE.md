@@ -155,5 +155,55 @@ All personas understand Okta's AI security portfolio:
 
 ### Theming
 - Light/dark mode toggle stored in localStorage
-- 6 color themes (indigo, blue, emerald, rose, amber, violet) with light/dark variants
+- 6 color themes (amber, teal, violet, rose, indigo, emerald) with light/dark variants
 - CSS variables applied dynamically via `useEffect` in App.jsx
+- Default theme is now "amber" (warm professional design)
+
+## Known Issues & Fixes (READ THIS BEFORE MAKING CHANGES)
+
+### CRITICAL: Both Servers Must Be Running for Practice Section
+The Practice section requires the backend server to be running. Without it:
+- Industries/Stakeholders won't load
+- Scenarios dropdown will be empty
+- Chat/conversation will not work
+- Console will show errors like `Failed to fetch scenarios`
+
+**Fix:** Always run BOTH servers:
+```bash
+# Terminal 1: Start backend server
+cd server && npm run dev  # Runs on port 3002
+
+# Terminal 2: Start frontend
+cd client && npm run dev  # Runs on port 5173, proxies /api to :3002
+```
+
+### Competitive Intelligence Page - Data Property Names
+**Issue:** The `CompetitorGuide.jsx` component must match the data structure in `learningContent.js`.
+
+**Data structure in `learningContent.js`:**
+```javascript
+competitor: {
+  name: "...",
+  type: "...",
+  strengths: [...],
+  weaknesses: [...],
+  oktaAdvantages: [...],    // NOT "differentiators"
+  auth0Advantages: [...],   // Separate from Okta advantages
+  handlers: {...}
+}
+```
+
+**DO NOT** use `competitor.differentiators` - this property does not exist.
+**DO** use `competitor.oktaAdvantages` and `competitor.auth0Advantages`.
+
+### Data/Component Sync Issues
+When modifying data files (`learningContent.js`, `flashcards.js`, etc.), always verify:
+1. Property names in components match the data structure exactly
+2. Check for `undefined` errors in browser console
+3. Test the affected Learn section pages after any data changes
+
+### Common Debugging Steps
+1. **Page crashes/blank screen:** Check browser console for "Cannot read properties of undefined"
+2. **API errors (404, fetch failed):** Ensure backend server is running on port 3002
+3. **Dropdowns empty:** Check if the corresponding API endpoint is responding
+4. **Styles not applying:** Clear browser cache, check CSS variable names match
