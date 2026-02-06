@@ -140,7 +140,11 @@ export const areaToProductMap = {
   current_approach: ['Token Vault', 'Agent Identity'],
   ai_initiatives: ['Auth for GenAI'],
   timeline: [],
-  decision_process: []
+  decision_process: [],
+  // New discovery areas based on real customer needs (Robinhood transcript)
+  token_exchange_patterns: ['XAA', 'Token Vault', 'Agent Identity'],
+  multi_agent_architecture: ['Agent Identity', 'XAA', 'MCP Security'],
+  third_party_integrations: ['MCP Security', 'XAA', 'ISPM']
 };
 
 // Get products relevant to discovered areas

@@ -45,6 +45,35 @@ export const flashcards = {
         back: "What happens when an agent needs to access something it shouldn't?",
         why: 'Tests their thinking about agent governance. Reveals maturity of approach.',
         unlocks: ['security_concerns', 'governance_needs', 'current_approach']
+      },
+      // New golden questions based on Robinhood transcript
+      {
+        id: 'ai-golden-7',
+        front: 'Understanding token exchange needs',
+        back: 'How do you handle token exchange when an agent needs to access a downstream service on behalf of a user?',
+        why: 'Reveals their token exchange sophistication. Most teams struggle with OBO flows.',
+        unlocks: ['token_exchange_patterns', 'current_approach', 'security_concerns']
+      },
+      {
+        id: 'ai-golden-8',
+        front: 'Understanding multi-agent trust',
+        back: 'What happens when one agent needs to call another agent - how do you establish trust?',
+        why: 'Multi-agent architectures are common but agent-to-agent auth is often overlooked.',
+        unlocks: ['multi_agent_architecture', 'security_concerns', 'agent_use_cases']
+      },
+      {
+        id: 'ai-golden-9',
+        front: 'Understanding third-party MCP governance',
+        back: 'What third-party MCP servers are you integrating with, and how do you govern that access?',
+        why: 'External tools like Atlassian, PagerDuty MCP servers need governance.',
+        unlocks: ['third_party_integrations', 'mcp_tool_access', 'governance_needs']
+      },
+      {
+        id: 'ai-golden-10',
+        front: 'Understanding step-up auth needs',
+        back: 'Are there scenarios where your agent needs human approval before proceeding with a sensitive operation?',
+        why: 'Step-up auth for AI is an emerging need. CIBA enables out-of-band approval.',
+        unlocks: ['token_exchange_patterns', 'security_concerns', 'governance_needs']
       }
     ],
     discovery: [
@@ -143,6 +172,61 @@ export const flashcards = {
         front: 'Current Approach: Build vs Buy',
         back: 'Are you building custom auth or using existing solutions?',
         area: 'current_approach'
+      },
+      // New discovery cards based on Robinhood transcript
+      {
+        id: 'ai-disc-17',
+        front: 'Token Exchange: Agent-to-service access',
+        back: 'How do agents get tokens to access downstream services?',
+        area: 'token_exchange_patterns'
+      },
+      {
+        id: 'ai-disc-18',
+        front: 'Token Exchange: User context preservation',
+        back: 'Do you need to preserve user context when services call other services?',
+        area: 'token_exchange_patterns'
+      },
+      {
+        id: 'ai-disc-19',
+        front: 'Token Exchange: Step-up auth',
+        back: 'Are there scenarios where you need step-up authentication for sensitive operations?',
+        area: 'token_exchange_patterns'
+      },
+      {
+        id: 'ai-disc-20',
+        front: 'Multi-Agent: Agent-to-agent calls',
+        back: 'Do you have agents that need to call other agents?',
+        area: 'multi_agent_architecture'
+      },
+      {
+        id: 'ai-disc-21',
+        front: 'Multi-Agent: Trust establishment',
+        back: 'How do agents verify other agents are legitimate before trusting them?',
+        area: 'multi_agent_architecture'
+      },
+      {
+        id: 'ai-disc-22',
+        front: 'Multi-Agent: Framework usage',
+        back: 'Are you using any agent frameworks like LangGraph, CrewAI, or AutoGen?',
+        area: 'multi_agent_architecture'
+      },
+      {
+        id: 'ai-disc-23',
+        front: 'Third-Party MCP: External servers',
+        back: 'What third-party MCP servers are your agents connecting to?',
+        area: 'third_party_integrations'
+      },
+      {
+        id: 'ai-disc-24',
+        front: 'Third-Party MCP: ACL translation',
+        back: 'How do you translate your internal ACLs to third-party permission models?',
+        area: 'third_party_integrations'
+      },
+      {
+        id: 'ai-disc-25',
+        front: 'Third-Party MCP: Governance',
+        back: 'How do you govern what external tools agents can access?',
+        area: 'third_party_integrations'
       }
     ]
   }
@@ -233,6 +317,52 @@ export const productFlashcards = [
     back: 'AWS IAM is AWS-only. Okta/Auth0 are cloud-agnostic. What about agents in Azure, GCP, or on-prem?',
     oktaAdvantage: 'Cross-cloud agent identity',
     auth0Advantage: 'Purpose-built for AI agent workflows (Token Vault, XAA)'
+  },
+  // Token Exchange Pattern flashcards (from Okta documentation)
+  {
+    id: 'tech-1',
+    front: 'What is ID-JAG (Identity Assertion JWT)?',
+    back: 'Short-lived, one-time token for AI agent token exchange via Cross App Access (XAA). Agent uses client credentials + ID-JAG to get access tokens for downstream services.',
+    useCase: 'Agent needs to access a resource on behalf of itself (workload identity)',
+    flow: 'Agent → Okta (client credentials + ID-JAG) → Access token for downstream service',
+    productFit: 'XAA'
+  },
+  {
+    id: 'tech-2',
+    front: 'What is On-Behalf-Of (OBO) Token Exchange?',
+    back: 'Retain user context when service-to-service calls occur. The downstream service knows WHO originally requested the action.',
+    useCase: 'Microservice architecture where user identity must flow through the chain',
+    flow: 'User token → Service A → OBO exchange → Service B (with user context preserved)',
+    productFit: 'Token Vault'
+  },
+  {
+    id: 'tech-3',
+    front: 'What is CIBA (Client-Initiated Backchannel Authentication)?',
+    back: 'Step-up authentication requiring human approval on separate device. Agent pauses and waits for user to approve before proceeding with sensitive operation.',
+    useCase: 'Sensitive operations (PII access, financial transactions) requiring out-of-band approval',
+    flow: 'Agent requests sensitive op → CIBA push to user device → User approves → Agent proceeds',
+    productFit: 'Auth for GenAI'
+  },
+  {
+    id: 'tech-4',
+    front: 'What is a Workload Principle?',
+    back: 'Each AI agent has its own identity (client_id in tokens). This is the Workload Principle - treating agents as first-class identity citizens.',
+    useCase: 'Agents need their own identity for audit, access control, and trust establishment',
+    productFit: 'Agent Identity'
+  },
+  {
+    id: 'tech-5',
+    front: 'What are Managed Connections?',
+    back: 'IT admin defines which resources each agent can access. Three resource types: Authorization server (OAuth scopes), Secret (API keys), Service account (impersonation).',
+    useCase: 'IT governance over what agents can access without blocking developer velocity',
+    productFit: 'XAA'
+  },
+  {
+    id: 'tech-6',
+    front: 'When to use ID-JAG vs OBO vs CIBA?',
+    back: 'ID-JAG: Agent acting as itself. OBO: Preserving user context through service chain. CIBA: Step-up auth for sensitive operations.',
+    decisionTree: 'Agent identity needed → ID-JAG. User context needed → OBO. Human approval needed → CIBA.',
+    productFit: 'XAA + Token Vault'
   }
 ];
 

@@ -222,6 +222,78 @@ export const discoveryFramework = {
               'Different buyers (CISO for Okta, CTO for Auth0)'
             ]
           }
+        },
+        // New discovery areas based on Robinhood transcript analysis
+        {
+          id: 'token_exchange_patterns',
+          name: 'Token Exchange Patterns',
+          description: 'Understand their token exchange needs (ID-JAG, OBO, CIBA)',
+          questions: [
+            'How are you handling token exchange when agents access APIs on behalf of users?',
+            'Do you need to preserve user context when services call other services?',
+            'Are there scenarios where you need step-up authentication for sensitive operations?',
+            'How do agents get tokens to access downstream services?',
+            'What happens when an agent needs to act on behalf of a user who initiated the request?'
+          ],
+          signals: ['Mentions OBO flows', 'Describes token exchange needs', 'Asks about user context preservation', 'Needs step-up auth for sensitive ops'],
+          technicalContext: {
+            idJag: {
+              name: 'ID-JAG (Identity Assertion JWT)',
+              description: 'Short-lived, one-time token for AI agent token exchange via Cross App Access (XAA)',
+              useCase: 'Agent needs to access a resource on behalf of itself (workload identity)',
+              flow: 'Agent → Okta (client credentials + ID-JAG) → Access token for downstream service'
+            },
+            obo: {
+              name: 'On-Behalf-Of Token Exchange',
+              description: 'Retain user context when service-to-service calls occur',
+              useCase: 'Microservice architecture where user identity must flow through the chain',
+              flow: 'User token → Service A → OBO exchange → Service B (with user context preserved)'
+            },
+            ciba: {
+              name: 'CIBA (Client-Initiated Backchannel Authentication)',
+              description: 'Step-up authentication requiring human approval on separate device',
+              useCase: 'Sensitive operations (PII access, financial transactions) requiring out-of-band approval',
+              flow: 'Agent requests sensitive op → CIBA push to user device → User approves → Agent proceeds'
+            }
+          }
+        },
+        {
+          id: 'multi_agent_architecture',
+          name: 'Multi-Agent Architecture',
+          description: 'Understand their agent-to-agent patterns',
+          questions: [
+            'Do you have agents that need to call other agents?',
+            'How do agents verify other agents are legitimate before trusting them?',
+            'What\'s your orchestration layer for multi-agent workflows?',
+            'How do you handle chain-of-custody for requests that flow through multiple agents?',
+            'Are you using any agent frameworks like LangGraph, CrewAI, or AutoGen?'
+          ],
+          signals: ['Describes multi-agent patterns', 'Asks about agent-to-agent trust', 'Mentions orchestration challenges', 'Uses agent frameworks'],
+          technicalContext: {
+            workloadPrinciple: 'Each agent has its own identity (client_id in tokens) - the Workload Principle',
+            managedConnections: 'IT admin defines which resources each agent can access via Managed Connections',
+            resourceTypes: ['Authorization server (OAuth scopes)', 'Secret (API keys)', 'Service account (impersonation)'],
+            trustPatterns: ['Agent verifies calling agent\'s client_id', 'Scope-based authorization', 'Audit trail of agent chain']
+          }
+        },
+        {
+          id: 'third_party_integrations',
+          name: 'Third-Party MCP Integrations',
+          description: 'Understand governance needs for external tool access',
+          questions: [
+            'What third-party MCP servers are your agents connecting to?',
+            'How do you govern what external tools agents can access?',
+            'Are vendors like Atlassian, PagerDuty, or Slack providing MCP servers you need to integrate?',
+            'How do you translate your internal ACLs to third-party permission models?',
+            'What happens when a third-party MCP server returns data the user shouldn\'t see?'
+          ],
+          signals: ['Names third-party MCP providers', 'Describes ACL translation challenges', 'Worried about data leakage', 'Needs external tool governance'],
+          technicalContext: {
+            challenge: 'Third-party MCP servers may not respect your internal permission model',
+            solution: 'Use XAA to control what resources agents can access, regardless of MCP server',
+            aclTranslation: 'Map internal roles/permissions to third-party-specific scopes',
+            auditNeeds: 'Log all third-party tool access for compliance and incident response'
+          }
         }
       ],
       flow: [
@@ -230,11 +302,14 @@ export const discoveryFramework = {
         { step: 3, area: 'current_approach', goal: 'Map current state' },
         { step: 4, area: 'security_concerns', goal: 'Uncover worries' },
         { step: 5, area: 'mcp_tool_access', goal: 'Understand tool patterns' },
-        { step: 6, area: 'shadow_ai', goal: 'Assess visibility' },
-        { step: 7, area: 'governance_needs', goal: 'Define compliance needs' },
-        { step: 8, area: 'product_fit', goal: 'Determine Okta vs Auth0 fit' },
-        { step: 9, area: 'timeline', goal: 'Establish urgency' },
-        { step: 10, area: 'decision_process', goal: 'Map stakeholders' }
+        { step: 6, area: 'token_exchange_patterns', goal: 'Understand token exchange needs' },
+        { step: 7, area: 'multi_agent_architecture', goal: 'Map agent-to-agent patterns' },
+        { step: 8, area: 'third_party_integrations', goal: 'Assess external tool governance' },
+        { step: 9, area: 'shadow_ai', goal: 'Assess visibility' },
+        { step: 10, area: 'governance_needs', goal: 'Define compliance needs' },
+        { step: 11, area: 'product_fit', goal: 'Determine Okta vs Auth0 fit' },
+        { step: 12, area: 'timeline', goal: 'Establish urgency' },
+        { step: 13, area: 'decision_process', goal: 'Map stakeholders' }
       ]
     }
   }
@@ -300,6 +375,31 @@ export const goldenQuestions = {
           why: 'Existing Okta deployment makes Okta AI products easier to justify (extend existing investment).',
           unlocks: ['current_approach', 'product_fit', 'decision_process'],
           productHint: 'Existing Okta → Easy upsell for Okta AI products. No Okta → Consider Auth0 for developer-friendly approach.'
+        },
+        // New golden questions based on Robinhood transcript
+        {
+          question: 'How do you handle token exchange when an agent needs to access a downstream service on behalf of a user?',
+          why: 'Reveals their token exchange sophistication. Most teams struggle with OBO flows and preserving user context.',
+          unlocks: ['token_exchange_patterns', 'current_approach', 'security_concerns'],
+          productHint: 'Custom DIY → XAA with ID-JAG. User context needed → OBO Token Exchange. Sensitive ops → CIBA for step-up auth.'
+        },
+        {
+          question: 'What happens when one agent needs to call another agent - how do you establish trust?',
+          why: 'Multi-agent architectures are common but agent-to-agent auth is often overlooked. Opens product conversations.',
+          unlocks: ['multi_agent_architecture', 'security_concerns', 'agent_use_cases'],
+          productHint: 'No agent-to-agent trust → Agent Identity for each workload. Orchestrator patterns → XAA for delegation.'
+        },
+        {
+          question: 'What third-party MCP servers are you integrating with, and how do you govern that access?',
+          why: 'External tools like Atlassian, PagerDuty MCP servers need governance. Often reveals compliance gaps.',
+          unlocks: ['third_party_integrations', 'mcp_tool_access', 'governance_needs'],
+          productHint: 'No governance → ISPM for visibility. ACL translation challenges → XAA for controlled access.'
+        },
+        {
+          question: 'Are there scenarios where your agent needs human approval before proceeding with a sensitive operation?',
+          why: 'Step-up auth for AI is an emerging need. CIBA enables out-of-band approval without blocking the agent.',
+          unlocks: ['token_exchange_patterns', 'security_concerns', 'governance_needs'],
+          productHint: 'Sensitive ops need approval → CIBA for transactional verification. Audit requirements → Agent Identity with logging.'
         }
       ]
     }
