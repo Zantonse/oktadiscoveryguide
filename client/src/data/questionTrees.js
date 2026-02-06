@@ -22,16 +22,16 @@ export const questionTrees = {
                 responseLabel: 'Access Control Issues',
                 example: '"We couldn\'t demonstrate proper access reviews..."',
                 followUp: 'How are you handling access reviews today?',
-                insight: 'Strong pain point - they have a compliance deadline'
+                insight: 'Strong pain point - they have a compliance deadline',
               },
               {
                 responseType: 'segregation',
                 responseLabel: 'Segregation of Duties',
                 example: '"We have SOD conflicts we can\'t easily track..."',
                 followUp: 'Which applications have the most critical SOD requirements?',
-                insight: 'Good opportunity for policy automation'
-              }
-            ]
+                insight: 'Good opportunity for policy automation',
+              },
+            ],
           },
           {
             responseType: 'growing-pains',
@@ -45,16 +45,16 @@ export const questionTrees = {
                 responseLabel: 'Access Request Backlog',
                 example: '"It takes days to get new employees set up..."',
                 followUp: 'How many access requests do you process per month?',
-                insight: 'Quantify the pain - time and productivity impact'
+                insight: 'Quantify the pain - time and productivity impact',
               },
               {
                 responseType: 'visibility',
                 responseLabel: 'Visibility Issues',
                 example: '"We don\'t really know who has access to what..."',
                 followUp: 'When was the last time you did a full access review?',
-                insight: 'Risk angle - unknown exposure'
-              }
-            ]
+                insight: 'Risk angle - unknown exposure',
+              },
+            ],
           },
           {
             responseType: 'leadership',
@@ -68,16 +68,16 @@ export const questionTrees = {
                 responseLabel: 'After a Security Incident',
                 example: '"We had a breach related to excessive access..."',
                 followUp: 'What changes came out of that incident review?',
-                insight: 'High urgency - they have executive attention'
+                insight: 'High urgency - they have executive attention',
               },
               {
                 responseType: 'strategic-initiative',
                 responseLabel: 'Strategic Initiative',
                 example: '"It\'s part of our Zero Trust roadmap..."',
                 followUp: 'Where does IGA fit in that roadmap?',
-                insight: 'Align to their broader vision'
-              }
-            ]
+                insight: 'Align to their broader vision',
+              },
+            ],
           },
           {
             responseType: 'vague',
@@ -91,18 +91,18 @@ export const questionTrees = {
                 responseLabel: 'Opens Up',
                 example: '"Well, honestly we\'ve been struggling with..."',
                 followUp: 'Tell me more about that challenge.',
-                insight: 'They were testing you - now engage deeply'
+                insight: 'They were testing you - now engage deeply',
               },
               {
                 responseType: 'stays-closed',
                 responseLabel: 'Stays Guarded',
                 example: '"We\'re still figuring that out..."',
                 followUp: 'What would need to be true for this to become a priority?',
-                insight: 'Low priority - try to understand what would change that'
-              }
-            ]
-          }
-        ]
+                insight: 'Low priority - try to understand what would change that',
+              },
+            ],
+          },
+        ],
       },
       {
         id: 'sales-success',
@@ -121,25 +121,25 @@ export const questionTrees = {
                 responseLabel: 'Names Specific Controls',
                 example: '"Access certifications and user provisioning..."',
                 followUp: 'How are you handling those controls today?',
-                insight: 'They know their pain points - dig into current gaps'
-              }
-            ]
+                insight: 'They know their pain points - dig into current gaps',
+              },
+            ],
           },
           {
             responseType: 'efficiency',
             responseLabel: 'Operational Efficiency',
             example: '"We want to cut down access request time..."',
             sentiment: 'positive',
-            followUp: 'What\'s the current turnaround time?',
+            followUp: "What's the current turnaround time?",
             nextBranches: [
               {
                 responseType: 'numbers',
                 responseLabel: 'Provides Metrics',
                 example: '"It takes about 3-5 days on average..."',
                 followUp: 'What do you think it should be?',
-                insight: 'Build the business case with their numbers'
-              }
-            ]
+                insight: 'Build the business case with their numbers',
+              },
+            ],
           },
           {
             responseType: 'visibility',
@@ -153,13 +153,13 @@ export const questionTrees = {
                 responseLabel: 'Risk Reduction',
                 example: '"We could identify and remove excessive access..."',
                 followUp: 'What applications have the most sensitive access?',
-                insight: 'Security-focused buyer - lead with risk reduction'
-              }
-            ]
-          }
-        ]
-      }
-    ]
+                insight: 'Security-focused buyer - lead with risk reduction',
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
   technical: {
     name: 'Technical Discovery',
@@ -181,64 +181,64 @@ export const questionTrees = {
                 responseLabel: 'Using Cloud IAM',
                 example: '"We use AWS IAM roles and Azure AD..."',
                 followUp: 'How do you handle cross-cloud access governance?',
-                insight: 'Multi-cloud complexity is an opportunity'
+                insight: 'Multi-cloud complexity is an opportunity',
               },
               {
                 responseType: 'centralized',
                 responseLabel: 'Centralized Identity',
                 example: '"Everything goes through Okta/Azure AD..."',
                 followUp: 'How are you handling access reviews and certifications?',
-                insight: 'Already have IdP - IGA is the natural next step'
-              }
-            ]
+                insight: 'Already have IdP - IGA is the natural next step',
+              },
+            ],
           },
           {
             responseType: 'hybrid',
             responseLabel: 'Hybrid Environment',
             example: '"We have on-prem AD but are moving to cloud..."',
             sentiment: 'neutral',
-            followUp: 'What\'s driving the migration timeline?',
+            followUp: "What's driving the migration timeline?",
             nextBranches: [
               {
                 responseType: 'migration-in-progress',
                 responseLabel: 'Active Migration',
                 example: '"We\'re moving workloads over the next year..."',
                 followUp: 'How are you handling identity during the transition?',
-                insight: 'Good timing - can help with migration'
+                insight: 'Good timing - can help with migration',
               },
               {
                 responseType: 'hybrid-long-term',
                 responseLabel: 'Hybrid Long-Term',
                 example: '"Some things will stay on-prem..."',
                 followUp: 'Which workloads need to stay on-prem?',
-                insight: 'Need solution that works across both'
-              }
-            ]
+                insight: 'Need solution that works across both',
+              },
+            ],
           },
           {
             responseType: 'legacy',
             responseLabel: 'Mostly On-Prem',
             example: '"We\'re still primarily on-premises..."',
             sentiment: 'neutral',
-            followUp: 'What\'s your cloud strategy looking like?',
+            followUp: "What's your cloud strategy looking like?",
             nextBranches: [
               {
                 responseType: 'cloud-curious',
                 responseLabel: 'Planning Cloud Move',
                 example: '"We\'re starting to look at cloud options..."',
-                followUp: 'What\'s driving the interest in cloud?',
-                insight: 'Position IGA as part of their modernization'
+                followUp: "What's driving the interest in cloud?",
+                insight: 'Position IGA as part of their modernization',
               },
               {
                 responseType: 'staying-on-prem',
                 responseLabel: 'Committed to On-Prem',
                 example: '"We have regulatory requirements to stay on-prem..."',
                 followUp: 'What compliance frameworks are driving that?',
-                insight: 'Need to address their specific constraints'
-              }
-            ]
-          }
-        ]
+                insight: 'Need to address their specific constraints',
+              },
+            ],
+          },
+        ],
       },
       {
         id: 'tech-limitations',
@@ -257,16 +257,16 @@ export const questionTrees = {
                 responseLabel: 'Custom Applications',
                 example: '"Our internal apps don\'t have standard APIs..."',
                 followUp: 'How are you managing access to those apps today?',
-                insight: 'Good opportunity for custom connector discussion'
+                insight: 'Good opportunity for custom connector discussion',
               },
               {
                 responseType: 'saas-apps',
                 responseLabel: 'SaaS Applications',
                 example: '"Some of our SaaS tools aren\'t supported..."',
                 followUp: 'Which SaaS apps are the highest priority?',
-                insight: 'Check connector availability - may have good news'
-              }
-            ]
+                insight: 'Check connector availability - may have good news',
+              },
+            ],
           },
           {
             responseType: 'performance',
@@ -280,29 +280,29 @@ export const questionTrees = {
                 responseLabel: 'Scale Issues',
                 example: '"We have 50k users across 200 apps..."',
                 followUp: 'How long does a typical access review take?',
-                insight: 'Opportunity to differentiate on performance'
-              }
-            ]
+                insight: 'Opportunity to differentiate on performance',
+              },
+            ],
           },
           {
             responseType: 'complexity',
             responseLabel: 'Too Complex',
             example: '"It takes too long to configure policies..."',
             sentiment: 'negative',
-            followUp: 'What\'s the most frustrating part of the configuration?',
+            followUp: "What's the most frustrating part of the configuration?",
             nextBranches: [
               {
                 responseType: 'ps-dependency',
                 responseLabel: 'PS Dependency',
                 example: '"We need professional services for everything..."',
                 followUp: 'How much are you spending on PS annually?',
-                insight: 'TCO angle - compare to self-service model'
-              }
-            ]
-          }
-        ]
-      }
-    ]
+                insight: 'TCO angle - compare to self-service model',
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
   aiAgents: {
     name: 'AI Agents Discovery',
@@ -325,17 +325,18 @@ export const questionTrees = {
                 example: '"Customer service chatbots with system access..."',
                 followUp: 'How are you controlling what those agents can access?',
                 insight: 'Auth0 for GenAI Applications + Token Vault for customer-facing agents',
-                productRecommendation: 'Auth0 for GenAI + Token Vault'
+                productRecommendation: 'Auth0 for GenAI + Token Vault',
               },
               {
                 responseType: 'internal',
                 responseLabel: 'Internal Automation',
                 example: '"Internal process automation agents..."',
                 followUp: 'What systems do they need to interact with?',
-                insight: 'Okta Workforce Identity or Okta Agent Identity depending on user vs machine identity',
-                productRecommendation: 'Okta Workforce Identity / Agent Identity'
-              }
-            ]
+                insight:
+                  'Okta Workforce Identity or Okta Agent Identity depending on user vs machine identity',
+                productRecommendation: 'Okta Workforce Identity / Agent Identity',
+              },
+            ],
           },
           {
             responseType: 'piloting',
@@ -349,9 +350,9 @@ export const questionTrees = {
                 responseLabel: 'Planning to Expand',
                 example: '"We want to roll out more broadly..."',
                 followUp: 'What needs to be true before you can scale?',
-                insight: 'Position security as enabler, not blocker'
-              }
-            ]
+                insight: 'Position security as enabler, not blocker',
+              },
+            ],
           },
           {
             responseType: 'exploring',
@@ -365,9 +366,9 @@ export const questionTrees = {
                 responseLabel: 'Shows Interest',
                 example: '"We\'re looking at automating our help desk..."',
                 followUp: 'What systems would that agent need to access?',
-                insight: 'Help them think through the security implications early'
-              }
-            ]
+                insight: 'Help them think through the security implications early',
+              },
+            ],
           },
           {
             responseType: 'cautious',
@@ -381,22 +382,23 @@ export const questionTrees = {
                 responseLabel: 'Security Worries',
                 example: '"We\'re worried about data exposure..."',
                 followUp: 'How are you thinking about controlling agent access?',
-                insight: 'Lead with governance and control'
+                insight: 'Lead with governance and control',
               },
               {
                 responseType: 'regulatory',
                 responseLabel: 'Regulatory Concerns',
                 example: '"We\'re waiting to see how regulations develop..."',
                 followUp: 'Are you tracking the EU AI Act?',
-                insight: 'Position as compliance enabler'
-              }
-            ]
-          }
-        ]
+                insight: 'Position as compliance enabler',
+              },
+            ],
+          },
+        ],
       },
       {
         id: 'product-selection',
-        rootQuestion: 'Who are the users of your AI applications - your employees or your customers?',
+        rootQuestion:
+          'Who are the users of your AI applications - your employees or your customers?',
         description: 'Determining Okta vs Auth0 product fit',
         branches: [
           {
@@ -414,7 +416,7 @@ export const questionTrees = {
                 example: '"Yes, we use Okta for employee SSO..."',
                 followUp: 'Are you concerned about shadow AI usage by employees?',
                 insight: 'Easy upsell - extend existing Okta deployment',
-                productRecommendation: 'Okta Workforce Identity + ISPM for AI'
+                productRecommendation: 'Okta Workforce Identity + ISPM for AI',
               },
               {
                 responseType: 'no-okta',
@@ -422,9 +424,9 @@ export const questionTrees = {
                 example: '"No, we use Microsoft Entra / Azure AD..."',
                 followUp: 'Do you have visibility into what AI tools employees are using?',
                 insight: 'Position Okta ISPM for shadow AI discovery',
-                productRecommendation: 'Okta ISPM for AI (shadow AI discovery)'
-              }
-            ]
+                productRecommendation: 'Okta ISPM for AI (shadow AI discovery)',
+              },
+            ],
           },
           {
             responseType: 'customers',
@@ -441,7 +443,7 @@ export const questionTrees = {
                 example: '"It\'s part of our SaaS product..."',
                 followUp: 'How are your AI agents accessing customer data securely?',
                 insight: 'Auth0 Token Vault for agent credential storage',
-                productRecommendation: 'Auth0 for GenAI + Token Vault + FGA'
+                productRecommendation: 'Auth0 for GenAI + Token Vault + FGA',
               },
               {
                 responseType: 'rag-pipeline',
@@ -449,16 +451,17 @@ export const questionTrees = {
                 example: '"We have a RAG system that needs permission-aware filtering..."',
                 followUp: 'How do you ensure users only see documents they have access to?',
                 insight: 'Auth0 FGA (Fine-Grained Authorization) for ReBAC',
-                productRecommendation: 'Auth0 FGA + Token Vault'
-              }
-            ]
+                productRecommendation: 'Auth0 FGA + Token Vault',
+              },
+            ],
           },
           {
             responseType: 'both',
             responseLabel: 'Both Employees and Customers',
             example: '"We have internal AI tools AND customer-facing AI in our product..."',
             sentiment: 'positive',
-            followUp: 'Who owns the budget for each - CISO for internal, or CTO for customer-facing?',
+            followUp:
+              'Who owns the budget for each - CISO for internal, or CTO for customer-facing?',
             productRecommendation: 'Both Okta and Auth0',
             products: ['Okta Workforce Identity + ISPM', 'Auth0 for GenAI + Token Vault'],
             nextBranches: [
@@ -468,16 +471,16 @@ export const questionTrees = {
                 example: '"IT budget for internal, Product budget for customer-facing..."',
                 followUp: 'Should we have separate conversations with each team?',
                 insight: 'Dual sale - Okta to CISO/IT, Auth0 to CTO/Product',
-                productRecommendation: 'Okta (workforce) + Auth0 (customer)'
-              }
-            ]
+                productRecommendation: 'Okta (workforce) + Auth0 (customer)',
+              },
+            ],
           },
           {
             responseType: 'autonomous-agents',
             responseLabel: 'Autonomous Agents / Machine Identity',
             example: '"We have production agents that run autonomously..."',
             sentiment: 'neutral',
-            followUp: 'What\'s more important - governance and compliance, or developer speed?',
+            followUp: "What's more important - governance and compliance, or developer speed?",
             productRecommendation: 'Okta or Auth0 (depends on priority)',
             products: ['Okta Identity for AI Agents', 'Auth0 Token Vault + XAA'],
             nextBranches: [
@@ -487,7 +490,7 @@ export const questionTrees = {
                 example: '"We need audit trails and policy enforcement..."',
                 followUp: 'How are you handling agent credential rotation today?',
                 insight: 'Okta Identity for AI Agents (enterprise governance)',
-                productRecommendation: 'Okta Identity for AI Agents'
+                productRecommendation: 'Okta Identity for AI Agents',
               },
               {
                 responseType: 'developer-focus',
@@ -495,11 +498,11 @@ export const questionTrees = {
                 example: '"We need something developer-friendly and fast..."',
                 followUp: 'Are you using LangChain, CrewAI, or custom frameworks?',
                 insight: 'Auth0 Token Vault + XAA (developer experience)',
-                productRecommendation: 'Auth0 Token Vault + XAA'
-              }
-            ]
-          }
-        ]
+                productRecommendation: 'Auth0 Token Vault + XAA',
+              },
+            ],
+          },
+        ],
       },
       {
         id: 'ai-security',
@@ -518,9 +521,9 @@ export const questionTrees = {
                 responseLabel: 'Ad-Hoc Controls',
                 example: '"We\'re doing it manually or case by case..."',
                 followUp: 'How do you audit what agents have accessed?',
-                insight: 'Clear need for systematic governance'
-              }
-            ]
+                insight: 'Clear need for systematic governance',
+              },
+            ],
           },
           {
             responseType: 'shadow-ai',
@@ -536,9 +539,9 @@ export const questionTrees = {
                 example: '"Honestly, very little..."',
                 followUp: 'How are you discovering new AI deployments?',
                 insight: 'Okta ISPM for AI - shadow AI discovery via OAuth grant monitoring',
-                productRecommendation: 'Okta ISPM for AI'
-              }
-            ]
+                productRecommendation: 'Okta ISPM for AI',
+              },
+            ],
           },
           {
             responseType: 'agent-behavior',
@@ -552,22 +555,22 @@ export const questionTrees = {
                 responseLabel: 'Wants Guardrails',
                 example: '"We need to limit what agents can do..."',
                 followUp: 'How do you envision setting those limits?',
-                insight: 'Policy-based access control is the answer'
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-};
+                insight: 'Policy-based access control is the answer',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+}
 
 export function getTreesForTrack(track) {
-  return questionTrees[track]?.trees || [];
+  return questionTrees[track]?.trees || []
 }
 
 export function getAllTrees() {
   return Object.entries(questionTrees).flatMap(([track, data]) =>
-    data.trees.map(tree => ({ ...tree, track, trackName: data.name }))
-  );
+    data.trees.map((tree) => ({ ...tree, track, trackName: data.name }))
+  )
 }

@@ -1,9 +1,9 @@
-import React from 'react';
-import { ObjectionCard } from './ObjectionCard.jsx';
+import React from 'react'
+import { ObjectionCard } from './ObjectionCard.jsx'
 
 export function ObjectionHandler({ objections }) {
   if (!objections || objections.length === 0) {
-    return null;
+    return null
   }
 
   return (
@@ -18,5 +18,5 @@ export function ObjectionHandler({ objections }) {
         ))}
       </div>
     </div>
-  );
+  )
 }

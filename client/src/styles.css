@@ -5,39 +5,39 @@
 /* CSS Custom Properties - Light Mode (default) */
 :root {
   /* Warm Professional Color Palette - Light Mode */
-  --color-primary: #D97706;
-  --color-primary-hover: #B45309;
+  --color-primary: #d97706;
+  --color-primary-hover: #b45309;
   --color-primary-light: rgba(217, 119, 6, 0.1);
   --color-primary-glow: rgba(217, 119, 6, 0.25);
-  --color-secondary: #0F766E;
-  --color-secondary-hover: #0D9488;
-  --color-accent: #7C3AED;
-  --color-accent-light: rgba(124, 58, 237, 0.1);
-  --color-accent-glow: rgba(124, 58, 237, 0.25);
+  --color-secondary: #0f766e;
+  --color-secondary-hover: #0d9488;
+  --color-accent: #3b82f6;
+  --color-accent-light: rgba(59, 130, 246, 0.1);
+  --color-accent-glow: rgba(59, 130, 246, 0.25);
   --color-success: #059669;
   --color-success-light: rgba(5, 150, 105, 0.1);
-  --color-warning: #D97706;
+  --color-warning: #d97706;
   --color-warning-light: rgba(217, 119, 6, 0.1);
-  --color-danger: #DC2626;
+  --color-danger: #dc2626;
   --color-danger-light: rgba(220, 38, 38, 0.1);
 
   /* Warm Foundations - Light Mode */
-  --bg-canvas: #FDFBF7;
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #FDFBF7;
-  --bg-tertiary: #F7F4EF;
-  --bg-card: #FFFFFF;
-  --bg-elevated: #F7F4EF;
-  --bg-hover: #EDE9E1;
+  --bg-canvas: #fdfbf7;
+  --bg-primary: #ffffff;
+  --bg-secondary: #fdfbf7;
+  --bg-tertiary: #f7f4ef;
+  --bg-card: #ffffff;
+  --bg-elevated: #f7f4ef;
+  --bg-hover: #ede9e1;
   --bg-active: rgba(217, 119, 6, 0.08);
-  --bg-muted: #EDE9E1;
+  --bg-muted: #ede9e1;
 
   /* Text Hierarchy - Light Mode */
-  --text-primary: #1A1A2E;
-  --text-secondary: #4A4A5E;
-  --text-tertiary: #7A7A8E;
-  --text-inverse: #FDFBF7;
-  --text-on-primary: #FFFFFF;
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a5e;
+  --text-tertiary: #7a7a8e;
+  --text-inverse: #fdfbf7;
+  --text-on-primary: #ffffff;
 
   /* Borders - Light Mode */
   --border-color: rgba(26, 26, 46, 0.08);
@@ -56,10 +56,10 @@
   --shadow-card-hover: 0 4px 12px rgba(26, 26, 46, 0.08), 0 8px 24px rgba(26, 26, 46, 0.06);
 
   /* Chat specific - Light Mode */
-  --chat-user-bg: linear-gradient(135deg, #D97706 0%, #B45309 100%);
-  --chat-user-text: #FFFFFF;
-  --chat-assistant-bg: #FFFFFF;
-  --chat-assistant-text: #1A1A2E;
+  --chat-user-bg: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  --chat-user-text: #ffffff;
+  --chat-assistant-bg: #ffffff;
+  --chat-assistant-text: #1a1a2e;
   --chat-assistant-border: rgba(26, 26, 46, 0.08);
 
   /* Spacing */
@@ -127,32 +127,32 @@
 /* Dark Mode - Deep blue-black with warm amber accents */
 .app.dark {
   /* Warm Professional Color Palette - Dark Mode */
-  --color-primary: #FBBF24;
-  --color-primary-hover: #F59E0B;
+  --color-primary: #fbbf24;
+  --color-primary-hover: #f59e0b;
   --color-primary-light: rgba(251, 191, 36, 0.12);
   --color-primary-glow: rgba(251, 191, 36, 0.3);
-  --color-secondary: #2DD4BF;
-  --color-secondary-hover: #5EEAD4;
-  --color-accent: #A78BFA;
-  --color-accent-light: rgba(167, 139, 250, 0.12);
+  --color-secondary: #2dd4bf;
+  --color-secondary-hover: #5eead4;
+  --color-accent: #60a5fa;
+  --color-accent-light: rgba(96, 165, 250, 0.12);
 
   /* Dark Foundations */
-  --bg-canvas: #0F0F14;
-  --bg-primary: #1A1A24;
-  --bg-secondary: #0F0F14;
+  --bg-canvas: #0f0f14;
+  --bg-primary: #1a1a24;
+  --bg-secondary: #0f0f14;
   --bg-tertiary: #252532;
-  --bg-card: #1A1A24;
+  --bg-card: #1a1a24;
   --bg-elevated: #252532;
-  --bg-hover: #2F2F40;
+  --bg-hover: #2f2f40;
   --bg-active: rgba(251, 191, 36, 0.1);
-  --bg-muted: #2F2F40;
+  --bg-muted: #2f2f40;
 
   /* Text Hierarchy - Dark Mode */
-  --text-primary: #F5F5F7;
-  --text-secondary: #A0A0B0;
-  --text-tertiary: #6B6B7B;
-  --text-inverse: #0F0F14;
-  --text-on-primary: #0F0F14;
+  --text-primary: #f5f5f7;
+  --text-secondary: #a0a0b0;
+  --text-tertiary: #6b6b7b;
+  --text-inverse: #0f0f14;
+  --text-on-primary: #0f0f14;
 
   /* Borders - Dark Mode */
   --border-color: rgba(245, 245, 247, 0.08);
@@ -171,10 +171,10 @@
   --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.2);
 
   /* Chat specific - Dark Mode */
-  --chat-user-bg: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
-  --chat-user-text: #0F0F14;
+  --chat-user-bg: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  --chat-user-text: #0f0f14;
   --chat-assistant-bg: #252532;
-  --chat-assistant-text: #F5F5F7;
+  --chat-assistant-text: #f5f5f7;
   --chat-assistant-border: rgba(245, 245, 247, 0.08);
 
   /* Focus ring - Dark Mode */
@@ -185,19 +185,24 @@
    Base Styles
    =================================== */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   width: 100%;
 }
 
 /* Prevent pull-to-refresh and overscroll bounce on mobile */
-html, body {
+html,
+body {
   overscroll-behavior: none;
 }
 
@@ -281,7 +286,9 @@ body {
   color: var(--text-on-primary);
   flex-shrink: 0;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .header-logo:hover {
@@ -375,8 +382,12 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .settings-modal {
@@ -601,9 +612,15 @@ body {
   font-weight: 700;
 }
 
-.status-low { color: #ef4444; }
-.status-mid { color: #f59e0b; }
-.status-high { color: #10b981; }
+.status-low {
+  color: #ef4444;
+}
+.status-mid {
+  color: #f59e0b;
+}
+.status-high {
+  color: #10b981;
+}
 
 .interest-bar-large,
 .progress-bar-large {
@@ -642,8 +659,13 @@ body {
 }
 
 @keyframes pulse-urgent {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
 }
 
 .timer-value {
@@ -1925,7 +1947,8 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -2026,7 +2049,9 @@ body {
 .interest-fill {
   height: 100%;
   border-radius: var(--radius-full);
-  transition: width 0.5s ease, background 0.3s ease;
+  transition:
+    width 0.5s ease,
+    background 0.3s ease;
 }
 
 .interest-level-low {
@@ -2204,7 +2229,9 @@ body {
 }
 
 @keyframes typing-pulse {
-  0%, 60%, 100% {
+  0%,
+  60%,
+  100% {
     transform: scale(1);
     opacity: 0.4;
   }
@@ -3003,11 +3030,13 @@ body {
   color: #f59e0b;
 }
 
-.flow-issues, .flow-good {
+.flow-issues,
+.flow-good {
   font-size: var(--font-size-sm);
 }
 
-.issues-label, .good-label {
+.issues-label,
+.good-label {
   font-weight: 500;
   color: var(--text-secondary);
   display: block;
@@ -3526,8 +3555,12 @@ body {
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .search-results {
@@ -3834,7 +3867,9 @@ body {
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   box-shadow: var(--shadow-card);
-  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+  transition:
+    box-shadow var(--transition-normal),
+    transform var(--transition-normal);
 }
 
 .learn-card:hover {
@@ -4771,7 +4806,9 @@ body {
     border-bottom: 1px solid var(--border-color);
     flex-shrink: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+    transition:
+      max-height 0.3s ease,
+      opacity 0.3s ease;
   }
 
   .learn-sidebar.collapsed {
@@ -5088,7 +5125,9 @@ body {
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-2xl);
-  box-shadow: var(--shadow-card), 0 8px 32px rgba(26, 26, 46, 0.08);
+  box-shadow:
+    var(--shadow-card),
+    0 8px 32px rgba(26, 26, 46, 0.08);
   overflow: hidden;
 }
 
@@ -7825,7 +7864,9 @@ body {
   border-left: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  transition: width var(--transition-normal), min-width var(--transition-normal);
+  transition:
+    width var(--transition-normal),
+    min-width var(--transition-normal);
   overflow: hidden;
 }
 

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { discoveryFramework } from '../../data/learningContent.js';
-import { InteractiveFlow } from './InteractiveFlow.jsx';
+import React, { useState } from 'react'
+import { discoveryFramework } from '../../data/learningContent.js'
+import { InteractiveFlow } from './InteractiveFlow.jsx'
 
 export function DiscoveryFramework() {
-  const [activeTrack, setActiveTrack] = useState('aiAgents');
-  const [showInteractiveFlow, setShowInteractiveFlow] = useState(true);
-  const track = discoveryFramework.tracks[activeTrack];
+  const [activeTrack, setActiveTrack] = useState('aiAgents')
+  const [showInteractiveFlow, setShowInteractiveFlow] = useState(true)
+  const track = discoveryFramework.tracks[activeTrack]
 
   return (
     <div className="learn-topic">
@@ -39,7 +39,7 @@ export function DiscoveryFramework() {
           ) : (
             <div className="discovery-flow">
               {track.flow.map((step, index) => {
-                const area = track.areas.find(a => a.id === step.area);
+                const area = track.areas.find((a) => a.id === step.area)
                 return (
                   <div key={step.step} className="flow-step-item">
                     <div className="flow-step-number">{step.step}</div>
@@ -48,13 +48,21 @@ export function DiscoveryFramework() {
                       <span className="flow-step-goal">{step.goal}</span>
                     </div>
                     {index < track.flow.length - 1 && (
-                      <svg className="flow-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <line x1="12" y1="5" x2="12" y2="19"/>
-                        <polyline points="19 12 12 19 5 12"/>
+                      <svg
+                        className="flow-arrow"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <polyline points="19 12 12 19 5 12" />
                       </svg>
                     )}
                   </div>
-                );
+                )
               })}
             </div>
           )}
@@ -72,10 +80,17 @@ export function DiscoveryFramework() {
 
               <div className="area-questions">
                 <h5>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
                   </svg>
                   Suggested Questions
                 </h5>
@@ -89,8 +104,15 @@ export function DiscoveryFramework() {
               {area.signals && (
                 <div className="area-signals">
                   <h5>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                     </svg>
                     Positive Signals
                   </h5>
@@ -106,5 +128,5 @@ export function DiscoveryFramework() {
         </div>
       </div>
     </div>
-  );
+  )
 }

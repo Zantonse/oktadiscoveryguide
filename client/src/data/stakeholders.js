@@ -8,7 +8,7 @@ export const stakeholdersByTrack = {
         fullTitle: 'Chief Information Security Officer',
         level: 'executive',
         description: 'AI security and risk governance',
-        avatar: 'shield'
+        avatar: 'shield',
       },
       {
         id: 'cto',
@@ -16,7 +16,7 @@ export const stakeholdersByTrack = {
         fullTitle: 'Chief Technology Officer',
         level: 'executive',
         description: 'AI strategy and innovation',
-        avatar: 'cpu'
+        avatar: 'cpu',
       },
       {
         id: 'caio-product',
@@ -24,7 +24,7 @@ export const stakeholdersByTrack = {
         fullTitle: 'Chief AI Officer - Product',
         level: 'executive',
         description: 'Product AI strategy and customer-facing AI',
-        avatar: 'cpu'
+        avatar: 'cpu',
       },
       {
         id: 'vp-it-internal',
@@ -32,8 +32,8 @@ export const stakeholdersByTrack = {
         fullTitle: 'VP of IT - Internal Operations',
         level: 'executive',
         description: 'Internal AI security and employee tools',
-        avatar: 'shield'
-      }
+        avatar: 'shield',
+      },
     ],
     management: [
       {
@@ -42,7 +42,7 @@ export const stakeholdersByTrack = {
         fullTitle: 'Director of AI Platform',
         level: 'management',
         description: 'AI infrastructure and operations',
-        avatar: 'bot'
+        avatar: 'bot',
       },
       {
         id: 'data-science-manager',
@@ -50,8 +50,8 @@ export const stakeholdersByTrack = {
         fullTitle: 'Data Science Manager',
         level: 'management',
         description: 'ML/AI team and model deployment',
-        avatar: 'chart'
-      }
+        avatar: 'chart',
+      },
     ],
     technical: [
       {
@@ -60,7 +60,7 @@ export const stakeholdersByTrack = {
         fullTitle: 'Machine Learning Engineer',
         level: 'technical',
         description: 'Model development and deployment',
-        avatar: 'code'
+        avatar: 'code',
       },
       {
         id: 'platform-engineer',
@@ -68,19 +68,19 @@ export const stakeholdersByTrack = {
         fullTitle: 'AI Platform Engineer',
         level: 'technical',
         description: 'AI infrastructure and agent systems',
-        avatar: 'server'
-      }
-    ]
-  }
-};
+        avatar: 'server',
+      },
+    ],
+  },
+}
 
 export const levelLabels = {
   executive: 'Executive Level',
   management: 'Management Level',
-  technical: 'Technical Level'
-};
+  technical: 'Technical Level',
+}
 
 // Get all AI agent stakeholders
 export function getStakeholdersForTrack() {
-  return stakeholdersByTrack.aiAgents;
+  return stakeholdersByTrack.aiAgents
 }

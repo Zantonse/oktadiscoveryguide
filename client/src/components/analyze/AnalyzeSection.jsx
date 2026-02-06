@@ -1,53 +1,53 @@
-import React, { useState } from 'react';
-import { TranscriptInput } from './TranscriptInput.jsx';
-import { RoleMapper } from './RoleMapper.jsx';
-import { TranscriptPreview } from './TranscriptPreview.jsx';
-import { AnalysisReport } from './AnalysisReport.jsx';
-import { parseAndAnalyze, swapRoles, assignSpeakerRole } from '../../utils/transcriptParser.js';
+import React, { useState } from 'react'
+import { TranscriptInput } from './TranscriptInput.jsx'
+import { RoleMapper } from './RoleMapper.jsx'
+import { TranscriptPreview } from './TranscriptPreview.jsx'
+import { AnalysisReport } from './AnalysisReport.jsx'
+import { parseAndAnalyze, swapRoles, assignSpeakerRole } from '../../utils/transcriptParser.js'
 
 export function AnalyzeSection() {
   // View state: 'input' | 'mapping' | 'analyzing' | 'results'
-  const [viewState, setViewState] = useState('input');
-  const [analysisType] = useState('aiAgents'); // Fixed to AI Security
-  const [rawTranscript, setRawTranscript] = useState('');
-  const [parseResult, setParseResult] = useState(null);
-  const [analysisResult, setAnalysisResult] = useState(null);
-  const [error, setError] = useState(null);
+  const [viewState, setViewState] = useState('input')
+  const [analysisType] = useState('aiAgents') // Fixed to AI Security
+  const [rawTranscript, setRawTranscript] = useState('')
+  const [parseResult, setParseResult] = useState(null)
+  const [analysisResult, setAnalysisResult] = useState(null)
+  const [error, setError] = useState(null)
 
   const handleTranscriptSubmit = (transcript) => {
-    setError(null);
-    setRawTranscript(transcript);
+    setError(null)
+    setRawTranscript(transcript)
 
     try {
-      const result = parseAndAnalyze(transcript);
-      setParseResult(result);
+      const result = parseAndAnalyze(transcript)
+      setParseResult(result)
 
       // If confidence is high, skip role mapping
       if (result.confidence === 'high') {
-        setViewState('mapping'); // Still show for confirmation
+        setViewState('mapping') // Still show for confirmation
       } else {
-        setViewState('mapping');
+        setViewState('mapping')
       }
     } catch (err) {
-      setError(err.message);
+      setError(err.message)
     }
-  };
+  }
 
   const handleSwapRoles = () => {
     if (parseResult) {
-      setParseResult(swapRoles(parseResult));
+      setParseResult(swapRoles(parseResult))
     }
-  };
+  }
 
   const handleAssignRole = (speaker, role) => {
     if (parseResult) {
-      setParseResult(assignSpeakerRole(parseResult, speaker, role));
+      setParseResult(assignSpeakerRole(parseResult, speaker, role))
     }
-  };
+  }
 
   const handleAnalyze = async () => {
-    setViewState('analyzing');
-    setError(null);
+    setViewState('analyzing')
+    setError(null)
 
     try {
       const response = await fetch('/api/analyze-transcript', {
@@ -55,64 +55,84 @@ export function AnalyzeSection() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           messages: parseResult.messages,
-          analysisType
-        })
-      });
+          analysisType,
+        }),
+      })
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Analysis failed');
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Analysis failed')
       }
 
-      const result = await response.json();
-      setAnalysisResult(result);
-      setViewState('results');
+      const result = await response.json()
+      setAnalysisResult(result)
+      setViewState('results')
     } catch (err) {
-      setError(err.message);
-      setViewState('mapping');
+      setError(err.message)
+      setViewState('mapping')
     }
-  };
+  }
 
   const handleReset = () => {
-    setViewState('input');
-    setRawTranscript('');
-    setParseResult(null);
-    setAnalysisResult(null);
-    setError(null);
-  };
+    setViewState('input')
+    setRawTranscript('')
+    setParseResult(null)
+    setAnalysisResult(null)
+    setError(null)
+  }
 
   return (
     <div className="analyze-section">
       {/* Header */}
       <div className="analyze-header">
         <div className="analyze-title">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="m21 21-4.3-4.3"/>
-            <path d="M11 8v6"/>
-            <path d="M8 11h6"/>
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+            <path d="M11 8v6" />
+            <path d="M8 11h6" />
           </svg>
           <div>
             <h2>Analyze Discovery Call</h2>
             <p>Upload or paste a transcript to get coaching feedback</p>
           </div>
         </div>
-
       </div>
 
       {/* Error display */}
       {error && (
         <div className="analyze-error">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
           </svg>
           <span>{error}</span>
           <button className="dismiss-error" onClick={() => setError(null)}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
@@ -120,9 +140,7 @@ export function AnalyzeSection() {
 
       {/* Content based on view state */}
       <div className="analyze-content">
-        {viewState === 'input' && (
-          <TranscriptInput onSubmit={handleTranscriptSubmit} />
-        )}
+        {viewState === 'input' && <TranscriptInput onSubmit={handleTranscriptSubmit} />}
 
         {viewState === 'mapping' && parseResult && (
           <div className="mapping-view">
@@ -140,15 +158,29 @@ export function AnalyzeSection() {
             />
             <div className="mapping-actions">
               <button className="btn-secondary" onClick={handleReset}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polyline points="15 18 9 12 15 6"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <polyline points="15 18 9 12 15 6" />
                 </svg>
                 Back
               </button>
               <button className="btn-primary" onClick={handleAnalyze}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8"/>
-                  <path d="m21 21-4.3-4.3"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.3-4.3" />
                 </svg>
                 Analyze Transcript
               </button>
@@ -164,14 +196,28 @@ export function AnalyzeSection() {
             <h3>Analyzing transcript...</h3>
             <ul className="analyzing-steps">
               <li className="step active">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polyline points="20 6 9 17 4 12"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <polyline points="20 6 9 17 4 12" />
                 </svg>
                 Parsing conversation
               </li>
               <li className="step active">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polyline points="20 6 9 17 4 12"/>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <polyline points="20 6 9 17 4 12" />
                 </svg>
                 Detecting roles
               </li>
@@ -196,5 +242,5 @@ export function AnalyzeSection() {
         )}
       </div>
     </div>
-  );
+  )
 }

@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 export function TranscriptPreview({ messages, roleAssignments }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const { sellers } = roleAssignments;
+  const [isExpanded, setIsExpanded] = useState(false)
+  const { sellers } = roleAssignments
 
   // Show first 6 messages in collapsed view
-  const displayMessages = isExpanded ? messages : messages.slice(0, 6);
-  const hasMore = messages.length > 6;
+  const displayMessages = isExpanded ? messages : messages.slice(0, 6)
+  const hasMore = messages.length > 6
 
   return (
     <div className="transcript-preview">
@@ -17,8 +17,8 @@ export function TranscriptPreview({ messages, roleAssignments }) {
 
       <div className={`preview-messages ${isExpanded ? 'expanded' : ''}`}>
         {displayMessages.map((msg, index) => {
-          const isSeller = sellers.includes(msg.speaker);
-          const role = msg.detectedRole || (isSeller ? 'seller' : 'prospect');
+          const isSeller = sellers.includes(msg.speaker)
+          const role = msg.detectedRole || (isSeller ? 'seller' : 'prospect')
 
           return (
             <div
@@ -26,9 +26,7 @@ export function TranscriptPreview({ messages, roleAssignments }) {
               className={`preview-message ${role === 'seller' ? 'seller-message' : 'prospect-message'}`}
             >
               <div className="message-speaker">
-                <span className={`role-indicator ${role}`}>
-                  {role === 'seller' ? 'S' : 'P'}
-                </span>
+                <span className={`role-indicator ${role}`}>{role === 'seller' ? 'S' : 'P'}</span>
                 <span className="speaker-name">{msg.speaker}</span>
               </div>
               <div className="message-content">
@@ -37,7 +35,7 @@ export function TranscriptPreview({ messages, roleAssignments }) {
                   : msg.content}
               </div>
             </div>
-          );
+          )
         })}
 
         {hasMore && !isExpanded && (
@@ -48,21 +46,32 @@ export function TranscriptPreview({ messages, roleAssignments }) {
       </div>
 
       {hasMore && (
-        <button
-          className="preview-toggle"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
+        <button className="preview-toggle" onClick={() => setIsExpanded(!isExpanded)}>
           {isExpanded ? (
             <>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="18 15 12 9 6 15"/>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="18 15 12 9 6 15" />
               </svg>
               Show less
             </>
           ) : (
             <>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="6 9 12 15 18 9"/>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="6 9 12 15 18 9" />
               </svg>
               Show all {messages.length} messages
             </>
@@ -70,5 +79,5 @@ export function TranscriptPreview({ messages, roleAssignments }) {
         </button>
       )}
     </div>
-  );
+  )
 }

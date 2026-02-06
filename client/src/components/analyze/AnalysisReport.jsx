@@ -1,32 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 // Discovery areas for AI Security analysis
 const analysisAreas = {
   aiAgents: {
     name: 'AI Security Discovery',
     areas: [
-      { id: 'ai_initiatives', name: 'AI Initiatives', description: 'Current AI/GenAI projects and roadmap' },
-      { id: 'agent_use_cases', name: 'Agent Use Cases', description: 'Customer service, copilots, autonomous agents' },
-      { id: 'mcp_tool_access', name: 'MCP & Tool Access', description: 'MCP and agent tool access patterns' },
-      { id: 'security_concerns', name: 'Security Concerns', description: 'Data exposure, permissions, credential risks' },
-      { id: 'governance_needs', name: 'Governance Needs', description: 'EU AI Act, SOC2, audit requirements' },
+      {
+        id: 'ai_initiatives',
+        name: 'AI Initiatives',
+        description: 'Current AI/GenAI projects and roadmap',
+      },
+      {
+        id: 'agent_use_cases',
+        name: 'Agent Use Cases',
+        description: 'Customer service, copilots, autonomous agents',
+      },
+      {
+        id: 'mcp_tool_access',
+        name: 'MCP & Tool Access',
+        description: 'MCP and agent tool access patterns',
+      },
+      {
+        id: 'security_concerns',
+        name: 'Security Concerns',
+        description: 'Data exposure, permissions, credential risks',
+      },
+      {
+        id: 'governance_needs',
+        name: 'Governance Needs',
+        description: 'EU AI Act, SOC2, audit requirements',
+      },
       { id: 'shadow_ai', name: 'Shadow AI', description: 'Ungoverned or unknown AI deployments' },
-      { id: 'current_approach', name: 'Current Approach', description: 'How they handle AI auth today' },
+      {
+        id: 'current_approach',
+        name: 'Current Approach',
+        description: 'How they handle AI auth today',
+      },
       { id: 'timeline', name: 'Timeline', description: 'Pilot, production, scale timeline' },
-      { id: 'decision_process', name: 'Decision Process', description: 'CISO, CTO, Platform team ownership' }
-    ]
-  }
-};
+      {
+        id: 'decision_process',
+        name: 'Decision Process',
+        description: 'CISO, CTO, Platform team ownership',
+      },
+    ],
+  },
+}
 
 export function AnalysisReport({ result, analysisType, onAnalyzeAnother }) {
-  const [showAreaDetails, setShowAreaDetails] = useState(false);
-  const [showQuestionDetails, setShowQuestionDetails] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [showAreaDetails, setShowAreaDetails] = useState(false)
+  const [showQuestionDetails, setShowQuestionDetails] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const handleCopyReport = async () => {
-    const typeConfig = analysisAreas[analysisType] || analysisAreas.aiAgents;
-    const coveredAreas = result.discoveredAreas || [];
-    const coveragePercent = Math.round((coveredAreas.length / typeConfig.areas.length) * 100);
+    const typeConfig = analysisAreas[analysisType] || analysisAreas.aiAgents
+    const coveredAreas = result.discoveredAreas || []
+    const coveragePercent = Math.round((coveredAreas.length / typeConfig.areas.length) * 100)
 
     const reportText = `
 DISCOVERY CALL ANALYSIS
@@ -45,66 +73,68 @@ Prospect: ${result.talkRatio?.prospect || 50}%
 Verdict: ${result.talkRatio?.verdict?.replace(/_/g, ' ') || 'N/A'}
 
 DISCOVERY COVERAGE: ${coveragePercent}% (${coveredAreas.length}/${typeConfig.areas.length} areas)
-${typeConfig.areas.map(area => {
-  const isDiscovered = coveredAreas.includes(area.id);
-  return `${isDiscovered ? '✓' : '○'} ${area.name}: ${area.description}`;
-}).join('\n')}
+${typeConfig.areas
+  .map((area) => {
+    const isDiscovered = coveredAreas.includes(area.id)
+    return `${isDiscovered ? '✓' : '○'} ${area.name}: ${area.description}`
+  })
+  .join('\n')}
 
 QUESTION ANALYSIS
 -----------------
 Total Questions: ${result.questionAnalysis?.totalQuestions || 0}
 Open-Ended: ${result.questionAnalysis?.openEndedPercent || 0}%
 Follow-Up: ${result.questionAnalysis?.followUpPercent || 0}%
-${result.questionAnalysis?.bestQuestions?.length > 0 ? `\nBest Questions:\n${result.questionAnalysis.bestQuestions.map(q => `• "${q}"`).join('\n')}` : ''}
+${result.questionAnalysis?.bestQuestions?.length > 0 ? `\nBest Questions:\n${result.questionAnalysis.bestQuestions.map((q) => `• "${q}"`).join('\n')}` : ''}
 
 STRENGTHS
 ---------
-${result.strengths?.map(s => `• ${s}`).join('\n') || 'None identified'}
+${result.strengths?.map((s) => `• ${s}`).join('\n') || 'None identified'}
 
 AREAS FOR IMPROVEMENT
 ---------------------
-${result.improvements?.map(s => `• ${s}`).join('\n') || 'None identified'}
+${result.improvements?.map((s) => `• ${s}`).join('\n') || 'None identified'}
 
 RECOMMENDATIONS
 ---------------
-${result.recommendations?.map(s => `• ${s}`).join('\n') || 'None'}
+${result.recommendations?.map((s) => `• ${s}`).join('\n') || 'None'}
 
 ---
 Generated by AI Security Discovery Guide
-`.trim();
+`.trim()
 
     try {
-      await navigator.clipboard.writeText(reportText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      await navigator.clipboard.writeText(reportText)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     } catch (err) {
-      console.error('Failed to copy:', err);
+      console.error('Failed to copy:', err)
     }
-  };
+  }
 
   const gradeColors = {
-    'A': '#10b981',
-    'B': '#22c55e',
-    'C': '#f59e0b',
-    'D': '#f97316',
-    'F': '#ef4444'
-  };
+    A: '#10b981',
+    B: '#22c55e',
+    C: '#f59e0b',
+    D: '#f97316',
+    F: '#ef4444',
+  }
 
-  const gradeColor = gradeColors[result.grade] || '#64748b';
-  const typeConfig = analysisAreas[analysisType] || analysisAreas.aiAgents;
+  const gradeColor = gradeColors[result.grade] || '#64748b'
+  const typeConfig = analysisAreas[analysisType] || analysisAreas.aiAgents
 
   // Calculate coverage
-  const coveredAreas = result.discoveredAreas || [];
-  const coveragePercent = Math.round((coveredAreas.length / typeConfig.areas.length) * 100);
+  const coveredAreas = result.discoveredAreas || []
+  const coveragePercent = Math.round((coveredAreas.length / typeConfig.areas.length) * 100)
 
   // Talk ratio verdict styling
-  const talkRatioVerdict = result.talkRatio?.verdict || 'needs_work';
+  const talkRatioVerdict = result.talkRatio?.verdict || 'needs_work'
   const verdictColors = {
     excellent: '#10b981',
     good: '#22c55e',
     needs_work: '#f59e0b',
-    poor: '#ef4444'
-  };
+    poor: '#ef4444',
+  }
 
   return (
     <div className="analysis-report">
@@ -129,9 +159,16 @@ Generated by AI Security Discovery Guide
       {/* Talk Ratio Section */}
       <div className="report-section talk-ratio-section">
         <h3>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 2v20M2 12h20"/>
-            <circle cx="12" cy="12" r="10"/>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M12 2v20M2 12h20" />
+            <circle cx="12" cy="12" r="10" />
           </svg>
           Talk Ratio
         </h3>
@@ -154,13 +191,12 @@ Generated by AI Security Discovery Guide
             <span className="seller-label">You (Seller)</span>
             <span className="prospect-label">Prospect</span>
           </div>
-          <div
-            className="talk-ratio-verdict"
-            style={{ color: verdictColors[talkRatioVerdict] }}
-          >
-            {talkRatioVerdict === 'excellent' && 'Excellent balance - ideal 60-70% prospect talk time'}
+          <div className="talk-ratio-verdict" style={{ color: verdictColors[talkRatioVerdict] }}>
+            {talkRatioVerdict === 'excellent' &&
+              'Excellent balance - ideal 60-70% prospect talk time'}
             {talkRatioVerdict === 'good' && 'Good balance - prospect doing most of the talking'}
-            {talkRatioVerdict === 'needs_work' && 'Room for improvement - try to talk less and listen more'}
+            {talkRatioVerdict === 'needs_work' &&
+              'Room for improvement - try to talk less and listen more'}
             {talkRatioVerdict === 'poor' && 'Too much seller talk - let the prospect share more'}
           </div>
         </div>
@@ -169,11 +205,18 @@ Generated by AI Security Discovery Guide
       {/* Discovery Coverage */}
       <div className="report-section coverage-section">
         <h3>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M3 3v18h18"/>
-            <path d="M18 17V9"/>
-            <path d="M13 17V5"/>
-            <path d="M8 17v-3"/>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M3 3v18h18" />
+            <path d="M18 17V9" />
+            <path d="M13 17V5" />
+            <path d="M8 17v-3" />
           </svg>
           Discovery Coverage
         </h3>
@@ -185,29 +228,55 @@ Generated by AI Security Discovery Guide
           <div className="coverage-bar-container">
             <div className="coverage-bar" style={{ width: `${coveragePercent}%` }} />
           </div>
-          <span className="coverage-count">{coveredAreas.length} of {typeConfig.areas.length} areas</span>
+          <span className="coverage-count">
+            {coveredAreas.length} of {typeConfig.areas.length} areas
+          </span>
         </div>
         <button className="toggle-details-btn" onClick={() => setShowAreaDetails(!showAreaDetails)}>
           {showAreaDetails ? 'Hide Details' : 'Show Details'}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points={showAreaDetails ? "18 15 12 9 6 15" : "6 9 12 15 18 9"} />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <polyline points={showAreaDetails ? '18 15 12 9 6 15' : '6 9 12 15 18 9'} />
           </svg>
         </button>
         {showAreaDetails && (
           <div className="area-details">
-            {typeConfig.areas.map(area => {
-              const isDiscovered = coveredAreas.includes(area.id);
+            {typeConfig.areas.map((area) => {
+              const isDiscovered = coveredAreas.includes(area.id)
               return (
-                <div key={area.id} className={`area-item ${isDiscovered ? 'discovered' : 'missed'}`}>
+                <div
+                  key={area.id}
+                  className={`area-item ${isDiscovered ? 'discovered' : 'missed'}`}
+                >
                   <div className="area-status-icon">
                     {isDiscovered ? (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
                       </svg>
                     ) : (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10"/>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <circle cx="12" cy="12" r="10" />
                       </svg>
                     )}
                   </div>
@@ -216,7 +285,7 @@ Generated by AI Security Discovery Guide
                     <span className="area-desc">{area.description}</span>
                   </div>
                 </div>
-              );
+              )
             })}
           </div>
         )}
@@ -225,10 +294,17 @@ Generated by AI Security Discovery Guide
       {/* Question Analysis */}
       <div className="report-section questions-section">
         <h3>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
           </svg>
           Question Analysis
         </h3>
@@ -248,10 +324,20 @@ Generated by AI Security Discovery Guide
         </div>
         {result.questionAnalysis?.bestQuestions?.length > 0 && (
           <>
-            <button className="toggle-details-btn" onClick={() => setShowQuestionDetails(!showQuestionDetails)}>
+            <button
+              className="toggle-details-btn"
+              onClick={() => setShowQuestionDetails(!showQuestionDetails)}
+            >
               {showQuestionDetails ? 'Hide Best Questions' : 'Show Best Questions'}
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points={showQuestionDetails ? "18 15 12 9 6 15" : "6 9 12 15 18 9"} />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points={showQuestionDetails ? '18 15 12 9 6 15' : '6 9 12 15 18 9'} />
               </svg>
             </button>
             {showQuestionDetails && (
@@ -271,9 +357,16 @@ Generated by AI Security Discovery Guide
       {/* Strengths */}
       <div className="report-section strengths-section">
         <h3>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-            <polyline points="22 4 12 14.01 9 11.01"/>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
           Strengths
         </h3>
@@ -287,10 +380,17 @@ Generated by AI Security Discovery Guide
       {/* Areas for Improvement */}
       <div className="report-section improvements-section">
         <h3>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="12" y1="8" x2="12" y2="12"/>
-            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
           </svg>
           Areas for Improvement
         </h3>
@@ -304,8 +404,15 @@ Generated by AI Security Discovery Guide
       {/* Recommendations */}
       <div className="report-section recommendations-section">
         <h3>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
           </svg>
           Recommendations
         </h3>
@@ -321,29 +428,50 @@ Generated by AI Security Discovery Guide
         <button className="btn-copy-report" onClick={handleCopyReport}>
           {copied ? (
             <>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="20 6 9 17 4 12"/>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="20 6 9 17 4 12" />
               </svg>
               Copied!
             </>
           ) : (
             <>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
               </svg>
               Copy Report
             </>
           )}
         </button>
         <button className="btn-secondary" onClick={onAnalyzeAnother}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="1 4 1 10 7 10"/>
-            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <polyline points="1 4 1 10 7 10" />
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
           </svg>
           Analyze Another
         </button>
       </div>
     </div>
-  );
+  )
 }

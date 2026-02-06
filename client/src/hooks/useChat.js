@@ -1,35 +1,38 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react'
 
 export function useChat() {
-  const [inputValue, setInputValue] = useState('');
-  const inputRef = useRef(null);
-  const messagesEndRef = useRef(null);
+  const [inputValue, setInputValue] = useState('')
+  const inputRef = useRef(null)
+  const messagesEndRef = useRef(null)
 
   // Auto-scroll to bottom when messages change
   const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, []);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
 
   // Focus input
   const focusInput = useCallback(() => {
-    inputRef.current?.focus();
-  }, []);
+    inputRef.current?.focus()
+  }, [])
 
   // Handle input change
   const handleInputChange = useCallback((e) => {
-    setInputValue(e.target.value);
-  }, []);
+    setInputValue(e.target.value)
+  }, [])
 
   // Clear input
   const clearInput = useCallback(() => {
-    setInputValue('');
-  }, []);
+    setInputValue('')
+  }, [])
 
   // Insert text at cursor position
-  const insertText = useCallback((text) => {
-    setInputValue(text);
-    focusInput();
-  }, [focusInput]);
+  const insertText = useCallback(
+    (text) => {
+      setInputValue(text)
+      focusInput()
+    },
+    [focusInput]
+  )
 
   return {
     inputValue,
@@ -40,6 +43,6 @@ export function useChat() {
     focusInput,
     handleInputChange,
     clearInput,
-    insertText
-  };
+    insertText,
+  }
 }

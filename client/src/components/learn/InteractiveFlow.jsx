@@ -1,16 +1,16 @@
-import React from 'react';
-import { FlowNode } from './FlowNode.jsx';
+import React from 'react'
+import { FlowNode } from './FlowNode.jsx'
 
 export function InteractiveFlow({ track }) {
   if (!track || !track.flow || !track.areas) {
-    return null;
+    return null
   }
 
   // Create a map of area IDs to area details
-  const areaMap = {};
-  track.areas.forEach(area => {
-    areaMap[area.id] = area;
-  });
+  const areaMap = {}
+  track.areas.forEach((area) => {
+    areaMap[area.id] = area
+  })
 
   return (
     <div className="interactive-flow">
@@ -20,8 +20,8 @@ export function InteractiveFlow({ track }) {
       </div>
       <div className="flow-diagram">
         {track.flow.map((step, index) => {
-          const area = areaMap[step.area];
-          if (!area) return null;
+          const area = areaMap[step.area]
+          if (!area) return null
 
           return (
             <FlowNode
@@ -30,9 +30,9 @@ export function InteractiveFlow({ track }) {
               area={area}
               isLast={index === track.flow.length - 1}
             />
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

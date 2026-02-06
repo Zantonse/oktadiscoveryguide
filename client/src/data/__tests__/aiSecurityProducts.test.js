@@ -4,7 +4,7 @@ import {
   areaToProductMap,
   getProductsForAreas,
   getProductByName,
-  getProductShortNames
+  getProductShortNames,
 } from '../aiSecurityProducts.js'
 
 describe('aiSecurityProducts data', () => {
@@ -14,10 +14,19 @@ describe('aiSecurityProducts data', () => {
     })
 
     it('each product should have all required fields', () => {
-      const requiredFields = ['id', 'name', 'shortName', 'identityFocus', 'description', 'painPoints', 'useCases', 'color']
+      const requiredFields = [
+        'id',
+        'name',
+        'shortName',
+        'identityFocus',
+        'description',
+        'painPoints',
+        'useCases',
+        'color',
+      ]
 
-      aiSecurityProducts.forEach(product => {
-        requiredFields.forEach(field => {
+      aiSecurityProducts.forEach((product) => {
+        requiredFields.forEach((field) => {
           expect(product).toHaveProperty(field)
           expect(product[field]).toBeDefined()
         })
@@ -25,14 +34,14 @@ describe('aiSecurityProducts data', () => {
     })
 
     it('each product should have non-empty painPoints array', () => {
-      aiSecurityProducts.forEach(product => {
+      aiSecurityProducts.forEach((product) => {
         expect(Array.isArray(product.painPoints)).toBe(true)
         expect(product.painPoints.length).toBeGreaterThan(0)
       })
     })
 
     it('each product should have non-empty useCases array', () => {
-      aiSecurityProducts.forEach(product => {
+      aiSecurityProducts.forEach((product) => {
         expect(Array.isArray(product.useCases)).toBe(true)
         expect(product.useCases.length).toBeGreaterThan(0)
       })
@@ -40,21 +49,28 @@ describe('aiSecurityProducts data', () => {
 
     it('each product should have a valid hex color', () => {
       const hexColorRegex = /^#[0-9a-fA-F]{6}$/
-      aiSecurityProducts.forEach(product => {
+      aiSecurityProducts.forEach((product) => {
         expect(product.color).toMatch(hexColorRegex)
       })
     })
 
     it('each product should have unique id', () => {
-      const ids = aiSecurityProducts.map(p => p.id)
+      const ids = aiSecurityProducts.map((p) => p.id)
       const uniqueIds = new Set(ids)
       expect(uniqueIds.size).toBe(ids.length)
     })
 
     it('should contain expected product ids', () => {
-      const expectedIds = ['auth-for-genai', 'token-vault', 'agent-identity', 'cross-app-access', 'ispm', 'mcp-security']
-      const actualIds = aiSecurityProducts.map(p => p.id)
-      expectedIds.forEach(id => {
+      const expectedIds = [
+        'auth-for-genai',
+        'token-vault',
+        'agent-identity',
+        'cross-app-access',
+        'ispm',
+        'mcp-security',
+      ]
+      const actualIds = aiSecurityProducts.map((p) => p.id)
+      expectedIds.forEach((id) => {
         expect(actualIds).toContain(id)
       })
     })
@@ -71,18 +87,18 @@ describe('aiSecurityProducts data', () => {
         'current_approach',
         'ai_initiatives',
         'timeline',
-        'decision_process'
+        'decision_process',
       ]
-      expectedAreas.forEach(area => {
+      expectedAreas.forEach((area) => {
         expect(areaToProductMap).toHaveProperty(area)
       })
     })
 
     it('all product references in map should be valid product names', () => {
-      const validNames = aiSecurityProducts.flatMap(p => [p.name, p.shortName])
+      const validNames = aiSecurityProducts.flatMap((p) => [p.name, p.shortName])
 
-      Object.values(areaToProductMap).forEach(products => {
-        products.forEach(productName => {
+      Object.values(areaToProductMap).forEach((products) => {
+        products.forEach((productName) => {
           expect(validNames).toContain(productName)
         })
       })
@@ -110,7 +126,7 @@ describe('getProductsForAreas', () => {
   it('should deduplicate products that appear in multiple areas', () => {
     const result = getProductsForAreas(['security_concerns', 'governance_needs'])
     // Token Vault appears in both areas, should only appear once
-    const tokenVaultCount = result.filter(p => p === 'Token Vault').length
+    const tokenVaultCount = result.filter((p) => p === 'Token Vault').length
     expect(tokenVaultCount).toBe(1)
   })
 
@@ -125,7 +141,15 @@ describe('getProductsForAreas', () => {
   })
 
   it('should return all unique products for all areas with products', () => {
-    const areasWithProducts = ['security_concerns', 'shadow_ai', 'mcp_tool_access', 'agent_use_cases', 'governance_needs', 'current_approach', 'ai_initiatives']
+    const areasWithProducts = [
+      'security_concerns',
+      'shadow_ai',
+      'mcp_tool_access',
+      'agent_use_cases',
+      'governance_needs',
+      'current_approach',
+      'ai_initiatives',
+    ]
     const result = getProductsForAreas(areasWithProducts)
 
     // Should include products from all areas (deduplicated)

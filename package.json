@@ -7,9 +7,14 @@
   "scripts": {
     "dev": "cd server && npm run dev",
     "build": "cd client && npm run build",
-    "vercel-build": "cd client && npm install && npm run build"
+    "vercel-build": "cd client && npm install && npm run build",
+    "prepare": "husky"
   },
   "dependencies": {
     "openai": "^4.28.0"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
   }
 }

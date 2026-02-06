@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { competitorGuide } from '../../data/learningContent.js';
+import React, { useState } from 'react'
+import { competitorGuide } from '../../data/learningContent.js'
 
 export function CompetitorGuide() {
-  const [activeCategory, setActiveCategory] = useState('ai');
-  const category = competitorGuide.categories[activeCategory];
+  const [activeCategory, setActiveCategory] = useState('ai')
+  const category = competitorGuide.categories[activeCategory]
 
   return (
     <div className="learn-topic">
@@ -35,8 +35,15 @@ export function CompetitorGuide() {
               <div className="competitor-details">
                 <div className="competitor-section">
                   <h4>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polyline points="20 6 9 17 4 12"/>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
                     </svg>
                     Strengths
                   </h4>
@@ -49,9 +56,16 @@ export function CompetitorGuide() {
 
                 <div className="competitor-section">
                   <h4>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <line x1="18" y1="6" x2="6" y2="18"/>
-                      <line x1="6" y1="6" x2="18" y2="18"/>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
                     </svg>
                     Weaknesses
                   </h4>
@@ -65,8 +79,15 @@ export function CompetitorGuide() {
                 {competitor.oktaAdvantages && (
                   <div className="competitor-section differentiators okta-advantages">
                     <h4>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                       </svg>
                       Why Okta Wins
                     </h4>
@@ -81,8 +102,15 @@ export function CompetitorGuide() {
                 {competitor.auth0Advantages && (
                   <div className="competitor-section differentiators auth0-advantages">
                     <h4>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                       </svg>
                       Why Auth0 Wins
                     </h4>
@@ -98,8 +126,15 @@ export function CompetitorGuide() {
               {competitor.handlers && (
                 <div className="competitor-handlers">
                   <h4>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                     </svg>
                     Objection Handlers
                   </h4>
@@ -118,5 +153,5 @@ export function CompetitorGuide() {
         </div>
       </div>
     </div>
-  );
+  )
 }

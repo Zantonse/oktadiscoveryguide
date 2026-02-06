@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { stakeholderPsychology } from '../../data/learningContent.js';
-import { ObjectionHandler } from './ObjectionHandler.jsx';
+import React, { useState } from 'react'
+import { stakeholderPsychology } from '../../data/learningContent.js'
+import { ObjectionHandler } from './ObjectionHandler.jsx'
 
 export function StakeholderPsychology() {
-  const [activeSection, setActiveSection] = useState('interest-levels');
-  const [showInteractiveObjections, setShowInteractiveObjections] = useState(true);
-  const section = stakeholderPsychology.sections.find(s => s.id === activeSection);
+  const [activeSection, setActiveSection] = useState('interest-levels')
+  const [showInteractiveObjections, setShowInteractiveObjections] = useState(true)
+  const section = stakeholderPsychology.sections.find((s) => s.id === activeSection)
 
   return (
     <div className="learn-topic">
@@ -60,8 +60,15 @@ export function StakeholderPsychology() {
             {section.behaviors.map((item, index) => (
               <div key={index} className="behavior-card">
                 <div className="behavior-header">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="20 6 9 17 4 12"/>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
                   </svg>
                   <h4>{item.behavior}</h4>
                 </div>
@@ -79,10 +86,17 @@ export function StakeholderPsychology() {
             {section.behaviors.map((item, index) => (
               <div key={index} className="behavior-card">
                 <div className="behavior-header">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <line x1="15" y1="9" x2="9" y2="15"/>
-                    <line x1="9" y1="9" x2="15" y2="15"/>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="15" y1="9" x2="9" y2="15" />
+                    <line x1="9" y1="9" x2="15" y2="15" />
                   </svg>
                   <h4>{item.behavior}</h4>
                 </div>
@@ -100,8 +114,15 @@ export function StakeholderPsychology() {
             {section.signals.map((signal, index) => (
               <div key={index} className="signal-card">
                 <div className="signal-header">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
                   </svg>
                   <h4>{signal.signal}</h4>
                 </div>
@@ -126,11 +147,18 @@ export function StakeholderPsychology() {
                 className={`view-toggle-btn ${showInteractiveObjections ? 'active' : ''}`}
                 onClick={() => setShowInteractiveObjections(true)}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
-                  <line x1="7" y1="2" x2="7" y2="22"/>
-                  <line x1="17" y1="2" x2="17" y2="22"/>
-                  <line x1="2" y1="12" x2="22" y2="12"/>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                  <line x1="7" y1="2" x2="7" y2="22" />
+                  <line x1="17" y1="2" x2="17" y2="22" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
                 </svg>
                 Interactive Cards
               </button>
@@ -138,13 +166,20 @@ export function StakeholderPsychology() {
                 className={`view-toggle-btn ${!showInteractiveObjections ? 'active' : ''}`}
                 onClick={() => setShowInteractiveObjections(false)}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="8" y1="6" x2="21" y2="6"/>
-                  <line x1="8" y1="12" x2="21" y2="12"/>
-                  <line x1="8" y1="18" x2="21" y2="18"/>
-                  <line x1="3" y1="6" x2="3.01" y2="6"/>
-                  <line x1="3" y1="12" x2="3.01" y2="12"/>
-                  <line x1="3" y1="18" x2="3.01" y2="18"/>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <line x1="8" y1="6" x2="21" y2="6" />
+                  <line x1="8" y1="12" x2="21" y2="12" />
+                  <line x1="8" y1="18" x2="21" y2="18" />
+                  <line x1="3" y1="6" x2="3.01" y2="6" />
+                  <line x1="3" y1="12" x2="3.01" y2="12" />
+                  <line x1="3" y1="18" x2="3.01" y2="18" />
                 </svg>
                 List View
               </button>
@@ -173,5 +208,5 @@ export function StakeholderPsychology() {
         )}
       </div>
     </div>
-  );
+  )
 }

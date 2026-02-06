@@ -1,33 +1,33 @@
-import React from 'react';
+import React from 'react'
 
 const ShuffleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="16 3 21 3 21 8"/>
-    <line x1="4" y1="20" x2="21" y2="3"/>
-    <polyline points="21 16 21 21 16 21"/>
-    <line x1="15" y1="15" x2="21" y2="21"/>
-    <line x1="4" y1="4" x2="9" y2="9"/>
+    <polyline points="16 3 21 3 21 8" />
+    <line x1="4" y1="20" x2="21" y2="3" />
+    <polyline points="21 16 21 21 16 21" />
+    <line x1="15" y1="15" x2="21" y2="21" />
+    <line x1="4" y1="4" x2="9" y2="9" />
   </svg>
-);
+)
 
 const PrevIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="15 18 9 12 15 6"/>
+    <polyline points="15 18 9 12 15 6" />
   </svg>
-);
+)
 
 const NextIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="9 18 15 12 9 6"/>
+    <polyline points="9 18 15 12 9 6" />
   </svg>
-);
+)
 
 const RestartIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="1 4 1 10 7 10"/>
-    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+    <polyline points="1 4 1 10 7 10" />
+    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
   </svg>
-);
+)
 
 export function DrillProgress({
   current,
@@ -37,9 +37,9 @@ export function DrillProgress({
   onShuffle,
   onRestart,
   canGoPrev,
-  canGoNext
+  canGoNext,
 }) {
-  const progress = total > 0 ? ((current) / total) * 100 : 0;
+  const progress = total > 0 ? (current / total) * 100 : 0
 
   return (
     <div className="drill-progress">
@@ -49,11 +49,7 @@ export function DrillProgress({
 
       <div className="drill-controls">
         <div className="drill-controls-left">
-          <button
-            className="drill-btn secondary"
-            onClick={onShuffle}
-            title="Shuffle cards"
-          >
+          <button className="drill-btn secondary" onClick={onShuffle} title="Shuffle cards">
             <ShuffleIcon />
             <span>Shuffle</span>
           </button>
@@ -95,11 +91,15 @@ export function DrillProgress({
 
         <div className="drill-controls-right">
           <div className="drill-keyboard-hints">
-            <span className="keyboard-hint"><kbd>Space</kbd> flip</span>
-            <span className="keyboard-hint"><kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate</span>
+            <span className="keyboard-hint">
+              <kbd>Space</kbd> flip
+            </span>
+            <span className="keyboard-hint">
+              <kbd>&larr;</kbd> <kbd>&rarr;</kbd> navigate
+            </span>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

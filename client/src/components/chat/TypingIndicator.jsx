@@ -1,5 +1,5 @@
-import React from 'react';
-import { Avatar } from '../common/Avatar.jsx';
+import React from 'react'
+import { Avatar } from '../common/Avatar.jsx'
 
 export function TypingIndicator({ stakeholder }) {
   return (
@@ -22,5 +22,5 @@ export function TypingIndicator({ stakeholder }) {
         </div>
       </div>
     </div>
-  );
+  )
 }

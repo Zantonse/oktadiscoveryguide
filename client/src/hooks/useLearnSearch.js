@@ -1,16 +1,16 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import {
   discoveryFundamentals,
   discoveryFramework,
   goldenQuestions,
   stakeholderPsychology,
   competitorGuide,
-  scenarioPlaybooks
-} from '../data/learningContent.js';
+  scenarioPlaybooks,
+} from '../data/learningContent.js'
 
 // Build a searchable index from all learning content
 function buildSearchIndex() {
-  const index = [];
+  const index = []
 
   // Index Discovery Fundamentals
   discoveryFundamentals.sections.forEach((section) => {
@@ -23,8 +23,8 @@ function buildSearchIndex() {
       sectionId: section.id,
       title: section.title,
       content: section.content,
-      searchText: `${section.title} ${section.content}`.toLowerCase()
-    });
+      searchText: `${section.title} ${section.content}`.toLowerCase(),
+    })
 
     // Key points
     if (section.keyPoints) {
@@ -37,9 +37,9 @@ function buildSearchIndex() {
           sectionId: section.id,
           title: section.title,
           content: point,
-          searchText: point.toLowerCase()
-        });
-      });
+          searchText: point.toLowerCase(),
+        })
+      })
     }
 
     // Mistakes
@@ -53,11 +53,11 @@ function buildSearchIndex() {
           sectionId: section.id,
           title: mistake.mistake,
           content: `${mistake.why} Instead: ${mistake.instead}`,
-          searchText: `${mistake.mistake} ${mistake.why} ${mistake.instead}`.toLowerCase()
-        });
-      });
+          searchText: `${mistake.mistake} ${mistake.why} ${mistake.instead}`.toLowerCase(),
+        })
+      })
     }
-  });
+  })
 
   // Index Discovery Framework (all tracks)
   Object.entries(discoveryFramework.tracks).forEach(([trackKey, track]) => {
@@ -73,8 +73,8 @@ function buildSearchIndex() {
         sectionId: area.id,
         title: area.name,
         content: area.description,
-        searchText: `${track.name} ${area.name} ${area.description}`.toLowerCase()
-      });
+        searchText: `${track.name} ${area.name} ${area.description}`.toLowerCase(),
+      })
 
       // Questions
       area.questions.forEach((question, idx) => {
@@ -88,9 +88,9 @@ function buildSearchIndex() {
           sectionId: area.id,
           title: area.name,
           content: question,
-          searchText: `${track.name} ${area.name} ${question}`.toLowerCase()
-        });
-      });
+          searchText: `${track.name} ${area.name} ${question}`.toLowerCase(),
+        })
+      })
 
       // Signals
       area.signals.forEach((signal, idx) => {
@@ -104,11 +104,11 @@ function buildSearchIndex() {
           sectionId: area.id,
           title: `${area.name} - Signal`,
           content: signal,
-          searchText: `${track.name} ${area.name} signal ${signal}`.toLowerCase()
-        });
-      });
-    });
-  });
+          searchText: `${track.name} ${area.name} signal ${signal}`.toLowerCase(),
+        })
+      })
+    })
+  })
 
   // Index Golden Questions
   Object.entries(goldenQuestions.tracks).forEach(([trackKey, track]) => {
@@ -122,10 +122,10 @@ function buildSearchIndex() {
         title: 'Golden Question',
         content: q.question,
         why: q.why,
-        searchText: `${trackKey} ${q.question} ${q.why} ${q.unlocks.join(' ')}`.toLowerCase()
-      });
-    });
-  });
+        searchText: `${trackKey} ${q.question} ${q.why} ${q.unlocks.join(' ')}`.toLowerCase(),
+      })
+    })
+  })
 
   // Index Stakeholder Psychology
   stakeholderPsychology.sections.forEach((section) => {
@@ -141,9 +141,9 @@ function buildSearchIndex() {
           title: `Interest Level ${level.range}: ${level.label}`,
           content: level.behaviors.join('. '),
           response: level.response,
-          searchText: `${level.label} ${level.behaviors.join(' ')} ${level.response}`.toLowerCase()
-        });
-      });
+          searchText: `${level.label} ${level.behaviors.join(' ')} ${level.response}`.toLowerCase(),
+        })
+      })
     }
 
     // Behaviors (what increases/decreases interest)
@@ -159,9 +159,10 @@ function buildSearchIndex() {
           title: behavior.behavior,
           content: behavior.why,
           example: behavior.example,
-          searchText: `${section.title} ${behavior.behavior} ${behavior.why} ${behavior.example || ''}`.toLowerCase()
-        });
-      });
+          searchText:
+            `${section.title} ${behavior.behavior} ${behavior.why} ${behavior.example || ''}`.toLowerCase(),
+        })
+      })
     }
 
     // Buying signals
@@ -176,9 +177,10 @@ function buildSearchIndex() {
           title: signal.signal,
           content: signal.meaning,
           examples: signal.examples,
-          searchText: `${signal.signal} ${signal.meaning} ${signal.examples.join(' ')}`.toLowerCase()
-        });
-      });
+          searchText:
+            `${signal.signal} ${signal.meaning} ${signal.examples.join(' ')}`.toLowerCase(),
+        })
+      })
     }
 
     // Objections
@@ -193,11 +195,11 @@ function buildSearchIndex() {
           title: obj.objection,
           content: obj.meaning,
           response: obj.response,
-          searchText: `${obj.objection} ${obj.meaning} ${obj.response}`.toLowerCase()
-        });
-      });
+          searchText: `${obj.objection} ${obj.meaning} ${obj.response}`.toLowerCase(),
+        })
+      })
     }
-  });
+  })
 
   // Index Competitor Guide
   Object.entries(competitorGuide.categories).forEach(([categoryKey, category]) => {
@@ -205,10 +207,16 @@ function buildSearchIndex() {
     if (category.competitors) {
       category.competitors.forEach((competitor) => {
         // Build differentiators text from oktaAdvantages and auth0Advantages
-        const oktaAdvantagesText = competitor.oktaAdvantages ? competitor.oktaAdvantages.join(' ') : '';
-        const auth0AdvantagesText = competitor.auth0Advantages ? competitor.auth0Advantages.join(' ') : '';
-        const differentiatorsText = competitor.differentiators ? competitor.differentiators.join(' ') : '';
-        const allAdvantages = `${oktaAdvantagesText} ${auth0AdvantagesText} ${differentiatorsText}`;
+        const oktaAdvantagesText = competitor.oktaAdvantages
+          ? competitor.oktaAdvantages.join(' ')
+          : ''
+        const auth0AdvantagesText = competitor.auth0Advantages
+          ? competitor.auth0Advantages.join(' ')
+          : ''
+        const differentiatorsText = competitor.differentiators
+          ? competitor.differentiators.join(' ')
+          : ''
+        const allAdvantages = `${oktaAdvantagesText} ${auth0AdvantagesText} ${differentiatorsText}`
 
         // Main competitor entry
         index.push({
@@ -223,8 +231,9 @@ function buildSearchIndex() {
           content: `Strengths: ${competitor.strengths.join(', ')}. Weaknesses: ${competitor.weaknesses.join(', ')}`,
           oktaAdvantages: competitor.oktaAdvantages,
           auth0Advantages: competitor.auth0Advantages,
-          searchText: `${competitor.name} ${competitor.type} ${competitor.strengths.join(' ')} ${competitor.weaknesses.join(' ')} ${allAdvantages}`.toLowerCase()
-        });
+          searchText:
+            `${competitor.name} ${competitor.type} ${competitor.strengths.join(' ')} ${competitor.weaknesses.join(' ')} ${allAdvantages}`.toLowerCase(),
+        })
 
         // Handlers
         Object.entries(competitor.handlers).forEach(([objection, response], idx) => {
@@ -237,10 +246,10 @@ function buildSearchIndex() {
             competitorName: competitor.name,
             title: objection,
             content: response,
-            searchText: `${competitor.name} ${objection} ${response}`.toLowerCase()
-          });
-        });
-      });
+            searchText: `${competitor.name} ${objection} ${response}`.toLowerCase(),
+          })
+        })
+      })
     }
 
     // Handle categories with positioning scenarios (like 'oktaVsAuth0')
@@ -259,11 +268,12 @@ function buildSearchIndex() {
           products: scenario.products,
           reasoning: scenario.reasoning,
           buyer: scenario.buyer,
-          searchText: `${scenario.scenario} ${scenario.description} ${scenario.recommendation} ${scenario.products.join(' ')} ${scenario.reasoning} ${scenario.buyer}`.toLowerCase()
-        });
-      });
+          searchText:
+            `${scenario.scenario} ${scenario.description} ${scenario.recommendation} ${scenario.products.join(' ')} ${scenario.reasoning} ${scenario.buyer}`.toLowerCase(),
+        })
+      })
     }
-  });
+  })
 
   // Index Scenario Playbooks
   Object.entries(scenarioPlaybooks.tracks).forEach(([trackKey, track]) => {
@@ -280,50 +290,51 @@ function buildSearchIndex() {
         tips: scenario.tips,
         avoid: scenario.avoid,
         probeAreas: scenario.probeAreas,
-        searchText: `${track.name} ${scenario.name} ${scenario.description} ${scenario.tips.join(' ')} ${scenario.avoid.join(' ')} ${scenario.probeAreas.join(' ')}`.toLowerCase()
-      });
-    });
-  });
+        searchText:
+          `${track.name} ${scenario.name} ${scenario.description} ${scenario.tips.join(' ')} ${scenario.avoid.join(' ')} ${scenario.probeAreas.join(' ')}`.toLowerCase(),
+      })
+    })
+  })
 
-  return index;
+  return index
 }
 
 // Debounce helper
 function useDebounce(value, delay) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
+  const [debouncedValue, setDebouncedValue] = useState(value)
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
+      setDebouncedValue(value)
+    }, delay)
 
-    return () => clearTimeout(timer);
-  }, [value, delay]);
+    return () => clearTimeout(timer)
+  }, [value, delay])
 
-  return debouncedValue;
+  return debouncedValue
 }
 
 // Highlight matching text
 function highlightMatch(text, query) {
-  if (!query || !text) return text;
+  if (!query || !text) return text
 
-  const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const regex = new RegExp(`(${escapedQuery})`, 'gi');
-  const parts = text.split(regex);
+  const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const regex = new RegExp(`(${escapedQuery})`, 'gi')
+  const parts = text.split(regex)
 
   return parts.map((part, i) =>
     regex.test(part) ? { text: part, highlight: true } : { text: part, highlight: false }
-  );
+  )
 }
 
 export function useLearnSearch() {
-  const [query, setQuery] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
+  const [query, setQuery] = useState('')
+  const [isSearching, setIsSearching] = useState(false)
 
-  const debouncedQuery = useDebounce(query, 300);
+  const debouncedQuery = useDebounce(query, 300)
 
   // Build search index once
-  const searchIndex = useMemo(() => buildSearchIndex(), []);
+  const searchIndex = useMemo(() => buildSearchIndex(), [])
 
   /**
    * Perform full-text search across all learning content with relevance scoring.
@@ -340,77 +351,77 @@ export function useLearnSearch() {
    */
   const results = useMemo(() => {
     if (!debouncedQuery || debouncedQuery.length < 2) {
-      return [];
+      return []
     }
 
-    const queryLower = debouncedQuery.toLowerCase();
-    const queryTerms = queryLower.split(/\s+/).filter(t => t.length > 1);
+    const queryLower = debouncedQuery.toLowerCase()
+    const queryTerms = queryLower.split(/\s+/).filter((t) => t.length > 1)
 
     // Score and filter results
     const scored = searchIndex
-      .map(item => {
-        let score = 0;
+      .map((item) => {
+        let score = 0
 
         // Exact match in title (highest priority - +100 points)
         // User likely searching for this specific topic or section
         if (item.title.toLowerCase().includes(queryLower)) {
-          score += 100;
+          score += 100
         }
 
         // Exact phrase match in content (+50 points)
         // Full query appears together, indicating strong relevance
         if (item.searchText.includes(queryLower)) {
-          score += 50;
+          score += 50
         }
 
         // Individual term matches (accumulate across all terms)
-        queryTerms.forEach(term => {
+        queryTerms.forEach((term) => {
           // Term in title: +20 points (titles are more important than body text)
           if (item.title.toLowerCase().includes(term)) {
-            score += 20;
+            score += 20
           }
           // Term in content: +10 points (baseline relevance)
           if (item.searchText.includes(term)) {
-            score += 10;
+            score += 10
           }
-        });
+        })
 
         // Boost high-value content types
         // Golden questions are critical learning content
-        if (item.type === 'golden-question') score *= 1.2;
+        if (item.type === 'golden-question') score *= 1.2
         // Objections and competitor handlers are practical, immediately actionable
-        if (item.type === 'psychology-objection') score *= 1.1;
-        if (item.type === 'competitor-handler') score *= 1.1;
+        if (item.type === 'psychology-objection') score *= 1.1
+        if (item.type === 'competitor-handler') score *= 1.1
 
-        return { ...item, score };
+        return { ...item, score }
       })
-      .filter(item => item.score > 0)
+      .filter((item) => item.score > 0)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 15); // Limit to top 15 results for performance and UI clarity
+      .slice(0, 15) // Limit to top 15 results for performance and UI clarity
 
     // Add highlighted content
-    return scored.map(item => ({
+    return scored.map((item) => ({
       ...item,
       highlightedTitle: highlightMatch(item.title, debouncedQuery),
       highlightedContent: highlightMatch(
         item.content.length > 150 ? item.content.substring(0, 150) + '...' : item.content,
         debouncedQuery
-      )
-    }));
-  }, [debouncedQuery, searchIndex]);
+      ),
+    }))
+  }, [debouncedQuery, searchIndex])
 
   // Track searching state
   useEffect(() => {
     if (query !== debouncedQuery) {
-      setIsSearching(true);
+      setIsSearching(true)
     } else {
-      setIsSearching(false);
+      setIsSearching(false)
     }
-  }, [query, debouncedQuery]);
+  }, [query, debouncedQuery])
 
   const clearSearch = useCallback(() => {
-    setQuery('');
-  }, []);
+    setQuery('')
+  }, [])
 
   return {
     query,
@@ -419,6 +430,6 @@ export function useLearnSearch() {
     isSearching,
     clearSearch,
     hasResults: results.length > 0,
-    hasQuery: query.length > 0
-  };
+    hasQuery: query.length > 0,
+  }
 }

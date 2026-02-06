@@ -1,18 +1,20 @@
-import React from 'react';
-import { Avatar } from '../common/Avatar.jsx';
+import React from 'react'
+import { Avatar } from '../common/Avatar.jsx'
 
 export function ChatMessage({ message, stakeholder, isStreaming }) {
-  const isUser = message.role === 'user';
+  const isUser = message.role === 'user'
 
   const formatTime = (timestamp) => {
     return new Date(timestamp).toLocaleTimeString([], {
       hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
+      minute: '2-digit',
+    })
+  }
 
   return (
-    <div className={`chat-message ${isUser ? 'user' : 'assistant'} ${isStreaming ? 'streaming' : ''}`}>
+    <div
+      className={`chat-message ${isUser ? 'user' : 'assistant'} ${isStreaming ? 'streaming' : ''}`}
+    >
       {!isUser && (
         <div className="message-avatar">
           <Avatar icon={stakeholder?.avatar || 'user'} size="small" />
@@ -32,14 +34,14 @@ export function ChatMessage({ message, stakeholder, isStreaming }) {
         <div className="message-bubble">
           <p>{message.content}</p>
           {isStreaming && (
-            <span className="streaming-cursor" aria-label="AI is typing">▋</span>
+            <span className="streaming-cursor" aria-label="AI is typing">
+              ▋
+            </span>
           )}
         </div>
 
         {isUser && message.timestamp && (
-          <div className="message-timestamp">
-            {formatTime(message.timestamp)}
-          </div>
+          <div className="message-timestamp">{formatTime(message.timestamp)}</div>
         )}
       </div>
 
@@ -51,5 +53,5 @@ export function ChatMessage({ message, stakeholder, isStreaming }) {
         </div>
       )}
     </div>
-  );
+  )
 }

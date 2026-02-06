@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 const ChevronDownIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="6 9 12 15 18 9"/>
+    <polyline points="6 9 12 15 18 9" />
   </svg>
-);
+)
 
 const ChevronUpIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="18 15 12 9 6 15"/>
+    <polyline points="18 15 12 9 6 15" />
   </svg>
-);
+)
 
 export function FlowNode({ step, area, isLast }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false)
 
   return (
     <div className={`flow-node ${isExpanded ? 'expanded' : ''}`}>
@@ -52,7 +52,9 @@ export function FlowNode({ step, area, isLast }) {
               <h5>Listen For</h5>
               <div className="flow-node-signals">
                 {area.signals.map((signal, idx) => (
-                  <span key={idx} className="flow-signal-tag">{signal}</span>
+                  <span key={idx} className="flow-signal-tag">
+                    {signal}
+                  </span>
                 ))}
               </div>
             </div>
@@ -60,5 +62,5 @@ export function FlowNode({ step, area, isLast }) {
         )}
       </div>
     </div>
-  );
+  )
 }

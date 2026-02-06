@@ -18,14 +18,14 @@ describe('ProductPanel', () => {
 
     it('should render all 6 products', () => {
       render(<ProductPanel />)
-      aiSecurityProducts.forEach(product => {
+      aiSecurityProducts.forEach((product) => {
         expect(screen.getByText(product.shortName)).toBeInTheDocument()
       })
     })
 
     it('should show identity focus for each product', () => {
       render(<ProductPanel />)
-      aiSecurityProducts.forEach(product => {
+      aiSecurityProducts.forEach((product) => {
         expect(screen.getByText(product.identityFocus)).toBeInTheDocument()
       })
     })
@@ -101,7 +101,7 @@ describe('ProductPanel', () => {
       await user.click(productButton)
 
       // Check for quoted pain points
-      product.painPoints.forEach(point => {
+      product.painPoints.forEach((point) => {
         expect(screen.getByText(`"${point}"`)).toBeInTheDocument()
       })
     })
@@ -114,7 +114,7 @@ describe('ProductPanel', () => {
       const productButton = screen.getByRole('button', { name: new RegExp(product.shortName, 'i') })
       await user.click(productButton)
 
-      product.useCases.forEach(useCase => {
+      product.useCases.forEach((useCase) => {
         expect(screen.getByText(useCase)).toBeInTheDocument()
       })
     })
@@ -157,7 +157,7 @@ describe('ProductPanel', () => {
     it('should display colored indicators for each product', () => {
       render(<ProductPanel />)
 
-      aiSecurityProducts.forEach(product => {
+      aiSecurityProducts.forEach((product) => {
         const productCard = screen.getByText(product.shortName).closest('.product-card')
         const indicator = productCard.querySelector('.product-indicator')
         expect(indicator).toHaveStyle({ backgroundColor: product.color })
@@ -174,8 +174,10 @@ describe('ProductPanel', () => {
 
     it('should have accessible buttons for each product', () => {
       render(<ProductPanel />)
-      aiSecurityProducts.forEach(product => {
-        const productButton = screen.getByRole('button', { name: new RegExp(product.shortName, 'i') })
+      aiSecurityProducts.forEach((product) => {
+        const productButton = screen.getByRole('button', {
+          name: new RegExp(product.shortName, 'i'),
+        })
         expect(productButton).toBeInTheDocument()
       })
     })

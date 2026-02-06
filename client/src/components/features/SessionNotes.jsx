@@ -1,8 +1,8 @@
-import React from 'react';
-import { useSession } from '../../contexts/SessionContext.jsx';
+import React from 'react'
+import { useSession } from '../../contexts/SessionContext.jsx'
 
 export function SessionNotes() {
-  const { sessionNotes, setSessionNotes } = useSession();
+  const { sessionNotes, setSessionNotes } = useSession()
 
   return (
     <div className="session-notes">
@@ -19,5 +19,5 @@ Tips:
 - List technical requirements discovered"
       />
     </div>
-  );
+  )
 }

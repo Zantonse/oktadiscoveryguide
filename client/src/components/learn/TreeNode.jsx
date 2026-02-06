@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 const PlusIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="12" y1="5" x2="12" y2="19"/>
-    <line x1="5" y1="12" x2="19" y2="12"/>
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
   </svg>
-);
+)
 
 const MinusIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <line x1="5" y1="12" x2="19" y2="12"/>
+    <line x1="5" y1="12" x2="19" y2="12" />
   </svg>
-);
+)
 
 const SentimentIndicator = ({ sentiment }) => {
   const sentimentConfig = {
@@ -19,21 +19,21 @@ const SentimentIndicator = ({ sentiment }) => {
     neutral: { className: 'neutral', label: 'Neutral' },
     urgent: { className: 'urgent', label: 'Urgent' },
     skeptical: { className: 'skeptical', label: 'Skeptical' },
-    negative: { className: 'negative', label: 'Negative' }
-  };
+    negative: { className: 'negative', label: 'Negative' },
+  }
 
-  const config = sentimentConfig[sentiment] || sentimentConfig.neutral;
+  const config = sentimentConfig[sentiment] || sentimentConfig.neutral
 
   return (
     <span className={`sentiment-indicator ${config.className}`} title={config.label}>
       <span className="sentiment-dot" />
     </span>
-  );
-};
+  )
+}
 
 export function TreeNode({ branch, depth = 0, isLast = false }) {
-  const [isExpanded, setIsExpanded] = useState(depth < 1);
-  const hasChildren = branch.nextBranches && branch.nextBranches.length > 0;
+  const [isExpanded, setIsExpanded] = useState(depth < 1)
+  const hasChildren = branch.nextBranches && branch.nextBranches.length > 0
 
   return (
     <div className={`tree-node depth-${Math.min(depth, 3)}`}>
@@ -52,9 +52,7 @@ export function TreeNode({ branch, depth = 0, isLast = false }) {
           disabled={!hasChildren}
         >
           {hasChildren && (
-            <span className="tree-node-toggle">
-              {isExpanded ? <MinusIcon /> : <PlusIcon />}
-            </span>
+            <span className="tree-node-toggle">{isExpanded ? <MinusIcon /> : <PlusIcon />}</span>
           )}
           <div className="tree-node-label">
             <span className="tree-node-response-label">
@@ -99,5 +97,5 @@ export function TreeNode({ branch, depth = 0, isLast = false }) {
         )}
       </div>
     </div>
-  );
+  )
 }

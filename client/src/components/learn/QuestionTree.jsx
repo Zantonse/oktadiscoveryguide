@@ -1,35 +1,35 @@
-import React, { useState } from 'react';
-import { TreeNode } from './TreeNode.jsx';
+import React, { useState } from 'react'
+import { TreeNode } from './TreeNode.jsx'
 
 const ExpandAllIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="15 3 21 3 21 9"/>
-    <polyline points="9 21 3 21 3 15"/>
-    <line x1="21" y1="3" x2="14" y2="10"/>
-    <line x1="3" y1="21" x2="10" y2="14"/>
+    <polyline points="15 3 21 3 21 9" />
+    <polyline points="9 21 3 21 3 15" />
+    <line x1="21" y1="3" x2="14" y2="10" />
+    <line x1="3" y1="21" x2="10" y2="14" />
   </svg>
-);
+)
 
 const CollapseAllIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="4 14 10 14 10 20"/>
-    <polyline points="20 10 14 10 14 4"/>
-    <line x1="14" y1="10" x2="21" y2="3"/>
-    <line x1="3" y1="21" x2="10" y2="14"/>
+    <polyline points="4 14 10 14 10 20" />
+    <polyline points="20 10 14 10 14 4" />
+    <line x1="14" y1="10" x2="21" y2="3" />
+    <line x1="3" y1="21" x2="10" y2="14" />
   </svg>
-);
+)
 
 export function QuestionTree({ tree }) {
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState(0)
 
   // Force re-render to reset expansion state
   const handleExpandAll = () => {
     // This is a simple approach - in a real app, you'd use context or state management
-    setKey(prev => prev + 1);
-  };
+    setKey((prev) => prev + 1)
+  }
 
   if (!tree || !tree.branches) {
-    return null;
+    return null
   }
 
   return (
@@ -51,12 +51,12 @@ export function QuestionTree({ tree }) {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
 export function QuestionTreeList({ trees }) {
   if (!trees || trees.length === 0) {
-    return null;
+    return null
   }
 
   return (
@@ -69,5 +69,5 @@ export function QuestionTreeList({ trees }) {
         <QuestionTree key={tree.id} tree={tree} />
       ))}
     </div>
-  );
+  )
 }

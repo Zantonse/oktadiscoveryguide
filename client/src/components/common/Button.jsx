@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 export function Button({
   children,
@@ -8,7 +8,7 @@ export function Button({
   onClick,
   className = '',
   type = 'button',
-  icon
+  icon,
 }) {
   return (
     <button
@@ -20,5 +20,5 @@ export function Button({
       {icon && <span className="btn-icon">{icon}</span>}
       {children}
     </button>
-  );
+  )
 }

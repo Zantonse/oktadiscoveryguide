@@ -1,26 +1,22 @@
 import { describe, it, expect } from 'vitest'
-import {
-  aiSecurityProducts,
-  areaToProductMap,
-  getProductByName,
-} from '../aiSecurityProducts.js'
+import { aiSecurityProducts, areaToProductMap, getProductByName } from '../aiSecurityProducts.js'
 
 describe('Data Integrity Tests', () => {
   describe('areaToProductMap references', () => {
     it('all product names in areaToProductMap should be findable via getProductByName', () => {
       const allProductReferences = Object.values(areaToProductMap).flat()
 
-      allProductReferences.forEach(productName => {
+      allProductReferences.forEach((productName) => {
         const product = getProductByName(productName)
         expect(product, `Product "${productName}" should be findable`).toBeDefined()
       })
     })
 
     it('all discovery areas should map to valid products', () => {
-      const validProductNames = aiSecurityProducts.flatMap(p => [p.name, p.shortName])
+      const validProductNames = aiSecurityProducts.flatMap((p) => [p.name, p.shortName])
 
       Object.entries(areaToProductMap).forEach(([area, products]) => {
-        products.forEach(productName => {
+        products.forEach((productName) => {
           expect(
             validProductNames,
             `Area "${area}" references invalid product "${productName}"`
@@ -32,7 +28,7 @@ describe('Data Integrity Tests', () => {
 
   describe('product data consistency', () => {
     it('all products should have consistent shortName that is findable', () => {
-      aiSecurityProducts.forEach(product => {
+      aiSecurityProducts.forEach((product) => {
         const foundByShortName = getProductByName(product.shortName)
         expect(foundByShortName, `Product ${product.id} shortName lookup failed`).toBeDefined()
         expect(foundByShortName.id).toBe(product.id)
@@ -40,7 +36,7 @@ describe('Data Integrity Tests', () => {
     })
 
     it('all products should have consistent name that is findable', () => {
-      aiSecurityProducts.forEach(product => {
+      aiSecurityProducts.forEach((product) => {
         const foundByName = getProductByName(product.name)
         expect(foundByName, `Product ${product.id} name lookup failed`).toBeDefined()
         expect(foundByName.id).toBe(product.id)
@@ -50,12 +46,10 @@ describe('Data Integrity Tests', () => {
 
   describe('no orphaned references', () => {
     it('areaToProductMap should not reference non-existent products', () => {
-      const validNames = new Set(
-        aiSecurityProducts.flatMap(p => [p.name, p.shortName])
-      )
+      const validNames = new Set(aiSecurityProducts.flatMap((p) => [p.name, p.shortName]))
 
       const allReferences = Object.values(areaToProductMap).flat()
-      const invalidReferences = allReferences.filter(name => !validNames.has(name))
+      const invalidReferences = allReferences.filter((name) => !validNames.has(name))
 
       expect(invalidReferences, 'Found orphaned product references').toEqual([])
     })
@@ -64,7 +58,8 @@ describe('Data Integrity Tests', () => {
       const referencedProducts = new Set(Object.values(areaToProductMap).flat())
 
       const unreferencedProducts = aiSecurityProducts.filter(
-        product => !referencedProducts.has(product.name) && !referencedProducts.has(product.shortName)
+        (product) =>
+          !referencedProducts.has(product.name) && !referencedProducts.has(product.shortName)
       )
 
       // Auth for GenAI and MCP Security may not be referenced, that's OK
@@ -75,7 +70,7 @@ describe('Data Integrity Tests', () => {
 
   describe('product category coverage', () => {
     it('should have products covering core AI security domains', () => {
-      const productNames = aiSecurityProducts.map(p => p.name.toLowerCase())
+      const productNames = aiSecurityProducts.map((p) => p.name.toLowerCase())
 
       // Core domains we expect to cover
       const expectedDomains = [
@@ -86,8 +81,8 @@ describe('Data Integrity Tests', () => {
         'ispm', // posture management
       ]
 
-      expectedDomains.forEach(domain => {
-        const hasDomain = productNames.some(name => name.includes(domain))
+      expectedDomains.forEach((domain) => {
+        const hasDomain = productNames.some((name) => name.includes(domain))
         expect(hasDomain, `Missing product covering "${domain}" domain`).toBe(true)
       })
     })
@@ -97,7 +92,7 @@ describe('Data Integrity Tests', () => {
     it('should have products mapped to security-critical areas', () => {
       const securityCriticalAreas = ['security_concerns', 'shadow_ai', 'governance_needs']
 
-      securityCriticalAreas.forEach(area => {
+      securityCriticalAreas.forEach((area) => {
         expect(
           areaToProductMap[area],
           `Security-critical area "${area}" should exist`
@@ -116,7 +111,7 @@ describe('Data Integrity Tests', () => {
 
       // timeline and decision_process are expected to be empty
       const expectedEmptyAreas = ['timeline', 'decision_process']
-      emptyAreas.forEach(area => {
+      emptyAreas.forEach((area) => {
         expect(expectedEmptyAreas, `Unexpected empty area: ${area}`).toContain(area)
       })
     })

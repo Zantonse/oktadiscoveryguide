@@ -1,73 +1,80 @@
-import React from 'react';
+import React from 'react'
 
 const StarIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2">
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    stroke="currentColor"
+    strokeWidth="2"
+  >
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
   </svg>
-);
+)
 
 const QuestionIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="10"/>
-    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-    <line x1="12" y1="17" x2="12.01" y2="17"/>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+    <line x1="12" y1="17" x2="12.01" y2="17" />
   </svg>
-);
+)
 
 const AlertIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="10"/>
-    <line x1="12" y1="8" x2="12" y2="12"/>
-    <line x1="12" y1="16" x2="12.01" y2="16"/>
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="8" x2="12" y2="12" />
+    <line x1="12" y1="16" x2="12.01" y2="16" />
   </svg>
-);
+)
 
 const FlipIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M17 1l4 4-4 4"/>
-    <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-    <path d="M7 23l-4-4 4-4"/>
-    <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+    <path d="M17 1l4 4-4 4" />
+    <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+    <path d="M7 23l-4-4 4-4" />
+    <path d="M21 13v2a4 4 0 0 1-4 4H3" />
   </svg>
-);
+)
 
 function getTypeConfig(type) {
   const configs = {
     golden: {
       icon: <StarIcon />,
       label: 'Golden Question',
-      className: 'golden'
+      className: 'golden',
     },
     discovery: {
       icon: <QuestionIcon />,
       label: 'Discovery Question',
-      className: 'discovery'
+      className: 'discovery',
     },
     objection: {
       icon: <AlertIcon />,
       label: 'Objection Handler',
-      className: 'objection'
+      className: 'objection',
     },
     mistake: {
       icon: <AlertIcon />,
       label: 'Common Mistake',
-      className: 'mistake'
-    }
-  };
-  return configs[type] || configs.discovery;
+      className: 'mistake',
+    },
+  }
+  return configs[type] || configs.discovery
 }
 
 function getTrackLabel(track) {
   const labels = {
     sales: 'Sales',
     technical: 'Technical',
-    aiAgents: 'AI Agents'
-  };
-  return labels[track] || track;
+    aiAgents: 'AI Agents',
+  }
+  return labels[track] || track
 }
 
 export function Flashcard({ card, isFlipped, onFlip }) {
-  const typeConfig = getTypeConfig(card.type);
+  const typeConfig = getTypeConfig(card.type)
 
   const renderFront = () => {
     // Different front content based on card type
@@ -78,7 +85,7 @@ export function Flashcard({ card, isFlipped, onFlip }) {
           <div className="flashcard-main-text">{card.objection}</div>
           <div className="flashcard-hint">Click to reveal response</div>
         </div>
-      );
+      )
     }
 
     if (card.type === 'mistake') {
@@ -88,7 +95,7 @@ export function Flashcard({ card, isFlipped, onFlip }) {
           <div className="flashcard-main-text">{card.mistake}</div>
           <div className="flashcard-hint">Click to learn why and what to do instead</div>
         </div>
-      );
+      )
     }
 
     // Golden and discovery questions
@@ -98,8 +105,8 @@ export function Flashcard({ card, isFlipped, onFlip }) {
         <div className="flashcard-main-text">{card.front}</div>
         <div className="flashcard-hint">Click to reveal the question</div>
       </div>
-    );
-  };
+    )
+  }
 
   const renderBack = () => {
     // Different back content based on card type
@@ -121,7 +128,7 @@ export function Flashcard({ card, isFlipped, onFlip }) {
             </div>
           )}
         </div>
-      );
+      )
     }
 
     if (card.type === 'mistake') {
@@ -136,7 +143,7 @@ export function Flashcard({ card, isFlipped, onFlip }) {
             <div className="flashcard-section-text flashcard-highlight">{card.instead}</div>
           </div>
         </div>
-      );
+      )
     }
 
     // Golden questions have more detail
@@ -159,7 +166,7 @@ export function Flashcard({ card, isFlipped, onFlip }) {
             </div>
           )}
         </div>
-      );
+      )
     }
 
     // Discovery questions
@@ -173,8 +180,8 @@ export function Flashcard({ card, isFlipped, onFlip }) {
           </div>
         )}
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <div
@@ -184,8 +191,8 @@ export function Flashcard({ card, isFlipped, onFlip }) {
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          onFlip();
+          e.preventDefault()
+          onFlip()
         }
       }}
     >
@@ -196,9 +203,7 @@ export function Flashcard({ card, isFlipped, onFlip }) {
               {typeConfig.icon}
               <span>{typeConfig.label}</span>
             </div>
-            {card.track && (
-              <div className="flashcard-track">{getTrackLabel(card.track)}</div>
-            )}
+            {card.track && <div className="flashcard-track">{getTrackLabel(card.track)}</div>}
           </div>
           {renderFront()}
           <div className="flashcard-flip-hint">
@@ -212,9 +217,7 @@ export function Flashcard({ card, isFlipped, onFlip }) {
               {typeConfig.icon}
               <span>{typeConfig.label}</span>
             </div>
-            {card.track && (
-              <div className="flashcard-track">{getTrackLabel(card.track)}</div>
-            )}
+            {card.track && <div className="flashcard-track">{getTrackLabel(card.track)}</div>}
           </div>
           {renderBack()}
           <div className="flashcard-flip-hint">
@@ -224,5 +227,5 @@ export function Flashcard({ card, isFlipped, onFlip }) {
         </div>
       </div>
     </div>
-  );
+  )
 }

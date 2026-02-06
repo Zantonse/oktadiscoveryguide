@@ -1,96 +1,96 @@
-import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react'
 
-const SessionContext = createContext(null);
+const SessionContext = createContext(null)
 
-const TIMER_DURATION = 30 * 60; // 30 minutes in seconds
+const TIMER_DURATION = 30 * 60 // 30 minutes in seconds
 
 export function SessionProvider({ children }) {
   // Selection state
-  const [selectedIndustry, setSelectedIndustry] = useState(null);
-  const [selectedStakeholder, setSelectedStakeholder] = useState(null);
-  const selectedTrack = 'aiAgents'; // Fixed to AI Security track
-  const [selectedScenario, setSelectedScenario] = useState(null);
-  const [availableScenarios, setAvailableScenarios] = useState([]);
-  const [discoveryProgress, setDiscoveryProgress] = useState(0);
+  const [selectedIndustry, setSelectedIndustry] = useState(null)
+  const [selectedStakeholder, setSelectedStakeholder] = useState(null)
+  const selectedTrack = 'aiAgents' // Fixed to AI Security track
+  const [selectedScenario, setSelectedScenario] = useState(null)
+  const [availableScenarios, setAvailableScenarios] = useState([])
+  const [discoveryProgress, setDiscoveryProgress] = useState(0)
 
   // Timer state
-  const [timerStarted, setTimerStarted] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(TIMER_DURATION);
-  const timerRef = useRef(null);
+  const [timerStarted, setTimerStarted] = useState(false)
+  const [timeRemaining, setTimeRemaining] = useState(TIMER_DURATION)
+  const timerRef = useRef(null)
 
   // Fetch available scenarios on mount
   useEffect(() => {
     const fetchScenarios = async () => {
       try {
-        const response = await fetch('/api/scenarios/aiAgents');
-        const data = await response.json();
+        const response = await fetch('/api/scenarios/aiAgents')
+        const data = await response.json()
         if (data.success) {
-          setAvailableScenarios(data.scenarios);
+          setAvailableScenarios(data.scenarios)
         } else {
-          setAvailableScenarios([]);
+          setAvailableScenarios([])
         }
       } catch (error) {
-        console.error('Failed to fetch scenarios:', error);
-        setAvailableScenarios([]);
+        console.error('Failed to fetch scenarios:', error)
+        setAvailableScenarios([])
       }
-    };
-    fetchScenarios();
-  }, []);
+    }
+    fetchScenarios()
+  }, [])
 
   // Conversation state
-  const [messages, setMessages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [conversationStarted, setConversationStarted] = useState(false);
-  const [streamingMessage, setStreamingMessage] = useState(null);
+  const [messages, setMessages] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [conversationStarted, setConversationStarted] = useState(false)
+  const [streamingMessage, setStreamingMessage] = useState(null)
 
   // Session metadata
-  const [sessionNotes, setSessionNotes] = useState('');
-  const [suggestedQuestions, setSuggestedQuestions] = useState([]);
-  const [coachingHint, setCoachingHint] = useState(null);
-  const [productHints, setProductHints] = useState([]);
-  const [interestLevel, setInterestLevel] = useState(5);
-  const [discoveredAreas, setDiscoveredAreas] = useState([]);
-  const [conversationEnded, setConversationEnded] = useState(false);
-  const [reportCard, setReportCard] = useState(null);
-  const [timerExpired, setTimerExpired] = useState(false);
-  const [discoveryStage, setDiscoveryStage] = useState('opening');
-  const [nextPriorityAreas, setNextPriorityAreas] = useState([]);
-  const [phase, setPhase] = useState('discovery'); // 'discovery' or 'bridge'
+  const [sessionNotes, setSessionNotes] = useState('')
+  const [suggestedQuestions, setSuggestedQuestions] = useState([])
+  const [coachingHint, setCoachingHint] = useState(null)
+  const [productHints, setProductHints] = useState([])
+  const [interestLevel, setInterestLevel] = useState(5)
+  const [discoveredAreas, setDiscoveredAreas] = useState([])
+  const [conversationEnded, setConversationEnded] = useState(false)
+  const [reportCard, setReportCard] = useState(null)
+  const [timerExpired, setTimerExpired] = useState(false)
+  const [discoveryStage, setDiscoveryStage] = useState('opening')
+  const [nextPriorityAreas, setNextPriorityAreas] = useState([])
+  const [phase, setPhase] = useState('discovery') // 'discovery' or 'bridge'
 
   // Timer effect - counts down when started
   useEffect(() => {
     if (timerStarted && !conversationEnded && timeRemaining > 0) {
       timerRef.current = setInterval(() => {
-        setTimeRemaining(prev => {
+        setTimeRemaining((prev) => {
           if (prev <= 1) {
-            clearInterval(timerRef.current);
-            setTimerExpired(true);
-            return 0;
+            clearInterval(timerRef.current)
+            setTimerExpired(true)
+            return 0
           }
-          return prev - 1;
-        });
-      }, 1000);
+          return prev - 1
+        })
+      }, 1000)
     }
 
     return () => {
       if (timerRef.current) {
-        clearInterval(timerRef.current);
+        clearInterval(timerRef.current)
       }
-    };
-  }, [timerStarted, conversationEnded]);
+    }
+  }, [timerStarted, conversationEnded])
 
   // Auto-end conversation when timer expires
   useEffect(() => {
     if (timerExpired && !conversationEnded && messages.length > 0) {
-      endConversationRef.current?.();
+      endConversationRef.current?.()
     }
-  }, [timerExpired, conversationEnded, messages.length]);
+  }, [timerExpired, conversationEnded, messages.length])
 
   // Ref to hold endConversation for timer effect
-  const endConversationRef = useRef(null);
+  const endConversationRef = useRef(null)
 
   // Check if ready to start conversation
-  const canStartConversation = selectedIndustry && selectedStakeholder;
+  const canStartConversation = selectedIndustry && selectedStakeholder
 
   // Get current config for API calls
   const getConfig = useCallback(() => {
@@ -100,189 +100,200 @@ export function SessionProvider({ children }) {
       track: 'aiAgents',
       phaseId: phase === 'bridge' ? 'bridge' : 'ai-discovery',
       scenarioId: selectedScenario?.id,
-      phase
-    };
-  }, [selectedIndustry, selectedStakeholder, selectedScenario, phase]);
+      phase,
+    }
+  }, [selectedIndustry, selectedStakeholder, selectedScenario, phase])
 
   // Add a message to the conversation
   const addMessage = useCallback((role, content) => {
-    setMessages(prev => [...prev, {
-      id: Date.now(),
-      role,
-      content,
-      timestamp: new Date().toISOString()
-    }]);
-  }, []);
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        role,
+        content,
+        timestamp: new Date().toISOString(),
+      },
+    ])
+  }, [])
 
   // Start a new conversation
   const startConversation = useCallback(async () => {
-    if (!canStartConversation) return;
+    if (!canStartConversation) return
 
-    setIsLoading(true);
-    setConversationStarted(true);
-    setMessages([]);
-    setCoachingHint(null);
+    setIsLoading(true)
+    setConversationStarted(true)
+    setMessages([])
+    setCoachingHint(null)
 
     try {
       const response = await fetch('/api/chat/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ config: getConfig() })
-      });
+        body: JSON.stringify({ config: getConfig() }),
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (data.success) {
-        addMessage('assistant', data.message);
+        addMessage('assistant', data.message)
         // Set initial coaching hint for the opening
-        setCoachingHint("Start by introducing yourself and explaining why you wanted to meet. Ask an open-ended question about their current situation.");
-        fetchSuggestedQuestions();
+        setCoachingHint(
+          'Start by introducing yourself and explaining why you wanted to meet. Ask an open-ended question about their current situation.'
+        )
+        fetchSuggestedQuestions()
       }
     } catch (error) {
-      console.error('Failed to start conversation:', error);
-      addMessage('assistant', 'Sorry, there was an error starting the conversation. Please try again.');
+      console.error('Failed to start conversation:', error)
+      addMessage(
+        'assistant',
+        'Sorry, there was an error starting the conversation. Please try again.'
+      )
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, [canStartConversation, getConfig, addMessage]);
+  }, [canStartConversation, getConfig, addMessage])
 
   // Send a message with streaming (falls back to non-streaming on Vercel)
-  const sendMessage = useCallback(async (content) => {
-    if (!content.trim() || isLoading) return;
+  const sendMessage = useCallback(
+    async (content) => {
+      if (!content.trim() || isLoading) return
 
-    // Start timer on first user message (messages only has assistant opening)
-    if (!timerStarted && messages.length === 1) {
-      setTimerStarted(true);
-    }
+      // Start timer on first user message (messages only has assistant opening)
+      if (!timerStarted && messages.length === 1) {
+        setTimerStarted(true)
+      }
 
-    addMessage('user', content);
-    setIsLoading(true);
-    setCoachingHint(null);
-    setStreamingMessage('');
+      addMessage('user', content)
+      setIsLoading(true)
+      setCoachingHint(null)
+      setStreamingMessage('')
 
-    try {
-      const apiMessages = [...messages, { role: 'user', content }].map(m => ({
-        role: m.role,
-        content: m.content
-      }));
+      try {
+        const apiMessages = [...messages, { role: 'user', content }].map((m) => ({
+          role: m.role,
+          content: m.content,
+        }))
 
-      const response = await fetch('/api/chat/stream', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: apiMessages,
-          config: getConfig()
+        const response = await fetch('/api/chat/stream', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: apiMessages,
+            config: getConfig(),
+          }),
         })
-      });
 
-      const contentType = response.headers.get('content-type');
+        const contentType = response.headers.get('content-type')
 
-      // Handle non-streaming JSON response (Vercel serverless)
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        setStreamingMessage(null);
+        // Handle non-streaming JSON response (Vercel serverless)
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json()
+          setStreamingMessage(null)
 
-        if (data.success) {
-          addMessage('assistant', data.message);
-          if (data.coachingHint) {
-            setCoachingHint(data.coachingHint);
-          }
-          if (data.productHints && data.productHints.length > 0) {
-            setProductHints(data.productHints);
-          }
-          if (data.interestLevel) {
-            setInterestLevel(data.interestLevel);
-          }
-          if (data.discoveryProgress !== undefined) {
-            setDiscoveryProgress(data.discoveryProgress);
-          }
-          if (data.discoveredAreas && data.discoveredAreas.length > 0) {
-            setDiscoveredAreas(prev => {
-              const combined = [...new Set([...prev, ...data.discoveredAreas])];
-              return combined;
-            });
-          }
-          if (data.conversationEnded) {
-            setConversationEnded(true);
-            if (data.reportCard) {
-              setReportCard(data.reportCard);
+          if (data.success) {
+            addMessage('assistant', data.message)
+            if (data.coachingHint) {
+              setCoachingHint(data.coachingHint)
+            }
+            if (data.productHints && data.productHints.length > 0) {
+              setProductHints(data.productHints)
+            }
+            if (data.interestLevel) {
+              setInterestLevel(data.interestLevel)
+            }
+            if (data.discoveryProgress !== undefined) {
+              setDiscoveryProgress(data.discoveryProgress)
+            }
+            if (data.discoveredAreas && data.discoveredAreas.length > 0) {
+              setDiscoveredAreas((prev) => {
+                const combined = [...new Set([...prev, ...data.discoveredAreas])]
+                return combined
+              })
+            }
+            if (data.conversationEnded) {
+              setConversationEnded(true)
+              if (data.reportCard) {
+                setReportCard(data.reportCard)
+              }
+            } else {
+              fetchSuggestedQuestions()
             }
           } else {
-            fetchSuggestedQuestions();
+            addMessage('assistant', 'Sorry, there was an error. Please try again.')
           }
         } else {
-          addMessage('assistant', 'Sorry, there was an error. Please try again.');
-        }
-      } else {
-        // Handle SSE streaming response (local dev)
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let fullMessage = '';
+          // Handle SSE streaming response (local dev)
+          const reader = response.body.getReader()
+          const decoder = new TextDecoder()
+          let fullMessage = ''
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
 
-          const text = decoder.decode(value);
-          const lines = text.split('\n');
+            const text = decoder.decode(value)
+            const lines = text.split('\n')
 
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              try {
-                const data = JSON.parse(line.slice(6));
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                try {
+                  const data = JSON.parse(line.slice(6))
 
-                if (data.type === 'content') {
-                  fullMessage += data.content;
-                  setStreamingMessage(fullMessage);
-                } else if (data.type === 'done') {
-                  // Finalize the message (use cleanMessage if provided to strip interest tag)
-                  setStreamingMessage(null);
-                  addMessage('assistant', data.cleanMessage || fullMessage);
-                  if (data.coachingHint) {
-                    setCoachingHint(data.coachingHint);
-                  }
-                  if (data.productHints && data.productHints.length > 0) {
-                    setProductHints(data.productHints);
-                  }
-                  if (data.interestLevel) {
-                    setInterestLevel(data.interestLevel);
-                  }
-                  if (data.discoveryProgress !== undefined) {
-                    setDiscoveryProgress(data.discoveryProgress);
-                  }
-                  if (data.discoveredAreas && data.discoveredAreas.length > 0) {
-                    setDiscoveredAreas(prev => {
-                      const combined = [...new Set([...prev, ...data.discoveredAreas])];
-                      return combined;
-                    });
-                  }
-                  if (data.conversationEnded) {
-                    setConversationEnded(true);
-                    if (data.reportCard) {
-                      setReportCard(data.reportCard);
+                  if (data.type === 'content') {
+                    fullMessage += data.content
+                    setStreamingMessage(fullMessage)
+                  } else if (data.type === 'done') {
+                    // Finalize the message (use cleanMessage if provided to strip interest tag)
+                    setStreamingMessage(null)
+                    addMessage('assistant', data.cleanMessage || fullMessage)
+                    if (data.coachingHint) {
+                      setCoachingHint(data.coachingHint)
                     }
-                  } else {
-                    fetchSuggestedQuestions();
+                    if (data.productHints && data.productHints.length > 0) {
+                      setProductHints(data.productHints)
+                    }
+                    if (data.interestLevel) {
+                      setInterestLevel(data.interestLevel)
+                    }
+                    if (data.discoveryProgress !== undefined) {
+                      setDiscoveryProgress(data.discoveryProgress)
+                    }
+                    if (data.discoveredAreas && data.discoveredAreas.length > 0) {
+                      setDiscoveredAreas((prev) => {
+                        const combined = [...new Set([...prev, ...data.discoveredAreas])]
+                        return combined
+                      })
+                    }
+                    if (data.conversationEnded) {
+                      setConversationEnded(true)
+                      if (data.reportCard) {
+                        setReportCard(data.reportCard)
+                      }
+                    } else {
+                      fetchSuggestedQuestions()
+                    }
+                  } else if (data.type === 'error') {
+                    setStreamingMessage(null)
+                    addMessage('assistant', 'Sorry, there was an error. Please try again.')
                   }
-                } else if (data.type === 'error') {
-                  setStreamingMessage(null);
-                  addMessage('assistant', 'Sorry, there was an error. Please try again.');
+                } catch (e) {
+                  // Skip malformed JSON
                 }
-              } catch (e) {
-                // Skip malformed JSON
               }
             }
           }
         }
+      } catch (error) {
+        console.error('Failed to send message:', error)
+        setStreamingMessage(null)
+        addMessage('assistant', 'Sorry, there was an error. Please try again.')
+      } finally {
+        setIsLoading(false)
       }
-    } catch (error) {
-      console.error('Failed to send message:', error);
-      setStreamingMessage(null);
-      addMessage('assistant', 'Sorry, there was an error. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [messages, isLoading, getConfig, addMessage, timerStarted]);
+    },
+    [messages, isLoading, getConfig, addMessage, timerStarted]
+  )
 
   // Fetch suggested questions
   const fetchSuggestedQuestions = useCallback(async () => {
@@ -294,37 +305,37 @@ export function SessionProvider({ children }) {
           config: getConfig(),
           conversationHistory: messages.slice(-4),
           discoveredAreas,
-          discoveryProgress
-        })
-      });
+          discoveryProgress,
+        }),
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (data.success) {
-        setSuggestedQuestions(data.questions);
+        setSuggestedQuestions(data.questions)
         if (data.stage) {
-          setDiscoveryStage(data.stage);
+          setDiscoveryStage(data.stage)
         }
         if (data.nextPriorityAreas) {
-          setNextPriorityAreas(data.nextPriorityAreas);
+          setNextPriorityAreas(data.nextPriorityAreas)
         }
       }
     } catch (error) {
-      console.error('Failed to fetch suggestions:', error);
+      console.error('Failed to fetch suggestions:', error)
     }
-  }, [getConfig, messages, discoveredAreas, discoveryProgress]);
+  }, [getConfig, messages, discoveredAreas, discoveryProgress])
 
   // End conversation manually
   const endConversation = useCallback(async () => {
-    if (messages.length === 0) return;
+    if (messages.length === 0) return
 
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
-      const apiMessages = messages.map(m => ({
+      const apiMessages = messages.map((m) => ({
         role: m.role,
-        content: m.content
-      }));
+        content: m.content,
+      }))
 
       const response = await fetch('/api/chat/end', {
         method: 'POST',
@@ -333,61 +344,63 @@ export function SessionProvider({ children }) {
           messages: apiMessages,
           config: getConfig(),
           interestLevel,
-          discoveredAreas
-        })
-      });
+          discoveredAreas,
+        }),
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (data.success && data.reportCard) {
-        setConversationEnded(true);
-        setReportCard(data.reportCard);
+        setConversationEnded(true)
+        setReportCard(data.reportCard)
       }
     } catch (error) {
-      console.error('Failed to end conversation:', error);
+      console.error('Failed to end conversation:', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, [messages, getConfig, interestLevel, discoveredAreas]);
+  }, [messages, getConfig, interestLevel, discoveredAreas])
 
   // Update ref so timer effect can call endConversation
   useEffect(() => {
-    endConversationRef.current = endConversation;
-  }, [endConversation]);
+    endConversationRef.current = endConversation
+  }, [endConversation])
 
   // Enter bridge mode (transition from discovery to solution positioning)
   const enterBridgeMode = useCallback(() => {
-    setPhase('bridge');
-    setCoachingHint("Now connect their pain points to Okta products. Use their language, reference what they told you.");
-  }, []);
+    setPhase('bridge')
+    setCoachingHint(
+      'Now connect their pain points to Okta products. Use their language, reference what they told you.'
+    )
+  }, [])
 
   // Reset session
   const resetSession = useCallback(() => {
-    setSelectedIndustry(null);
-    setSelectedStakeholder(null);
-    setSelectedScenario(null);
-    setDiscoveryProgress(0);
-    setMessages([]);
-    setConversationStarted(false);
-    setSessionNotes('');
-    setSuggestedQuestions([]);
-    setCoachingHint(null);
-    setProductHints([]);
-    setStreamingMessage(null);
-    setInterestLevel(5);
-    setDiscoveredAreas([]);
-    setConversationEnded(false);
-    setReportCard(null);
-    setTimerStarted(false);
-    setTimeRemaining(TIMER_DURATION);
-    setTimerExpired(false);
-    setDiscoveryStage('opening');
-    setNextPriorityAreas([]);
-    setPhase('discovery');
+    setSelectedIndustry(null)
+    setSelectedStakeholder(null)
+    setSelectedScenario(null)
+    setDiscoveryProgress(0)
+    setMessages([])
+    setConversationStarted(false)
+    setSessionNotes('')
+    setSuggestedQuestions([])
+    setCoachingHint(null)
+    setProductHints([])
+    setStreamingMessage(null)
+    setInterestLevel(5)
+    setDiscoveredAreas([])
+    setConversationEnded(false)
+    setReportCard(null)
+    setTimerStarted(false)
+    setTimeRemaining(TIMER_DURATION)
+    setTimerExpired(false)
+    setDiscoveryStage('opening')
+    setNextPriorityAreas([])
+    setPhase('discovery')
     if (timerRef.current) {
-      clearInterval(timerRef.current);
+      clearInterval(timerRef.current)
     }
-  }, []);
+  }, [])
 
   // Export session data
   const exportSession = useCallback(() => {
@@ -397,20 +410,27 @@ export function SessionProvider({ children }) {
         stakeholder: selectedStakeholder,
         track: selectedTrack,
         discoveryProgress,
-        exportedAt: new Date().toISOString()
+        exportedAt: new Date().toISOString(),
       },
       conversation: messages,
-      notes: sessionNotes
-    };
+      notes: sessionNotes,
+    }
 
-    const blob = new Blob([JSON.stringify(sessionData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `discovery-session-${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }, [selectedIndustry, selectedStakeholder, selectedTrack, discoveryProgress, messages, sessionNotes]);
+    const blob = new Blob([JSON.stringify(sessionData, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `discovery-session-${Date.now()}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }, [
+    selectedIndustry,
+    selectedStakeholder,
+    selectedTrack,
+    discoveryProgress,
+    messages,
+    sessionNotes,
+  ])
 
   const value = {
     // Selection state
@@ -461,20 +481,16 @@ export function SessionProvider({ children }) {
     endConversation,
     resetSession,
     exportSession,
-    fetchSuggestedQuestions
-  };
+    fetchSuggestedQuestions,
+  }
 
-  return (
-    <SessionContext.Provider value={value}>
-      {children}
-    </SessionContext.Provider>
-  );
+  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
 }
 
 export function useSession() {
-  const context = useContext(SessionContext);
+  const context = useContext(SessionContext)
   if (!context) {
-    throw new Error('useSession must be used within a SessionProvider');
+    throw new Error('useSession must be used within a SessionProvider')
   }
-  return context;
+  return context
 }
