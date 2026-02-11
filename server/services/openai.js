@@ -3,6 +3,7 @@ import { getIndustryContext } from '../prompts/industries.js';
 import { getPersonaContext } from '../prompts/personas.js';
 import { getScenarioContext } from '../prompts/scenarios.js';
 import { getPhasePrompt, buildSystemPrompt } from '../prompts/systemPrompt.js';
+import { getTechnicalDeepDivePrompt, getArchitectureLabPrompt, getBriefingRoomPrompt, getProofPointMatchPrompt } from '../prompts/challengePrompts.js';
 
 let openai = null;
 
@@ -1099,6 +1100,150 @@ export async function endConversation(messages, config, interestLevel, discovere
     };
   } catch (error) {
     console.error('Error ending conversation:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+}
+
+// Parse challenge scorecard tags from AI response
+function parseChallengeResponse(rawMessage) {
+  const scorecardMatch = rawMessage.match(/\[SCORECARD\]([\s\S]*?)\[\/SCORECARD\]/);
+  const feedbackMatch = rawMessage.match(/\[FEEDBACK\]([\s\S]*?)\[\/FEEDBACK\]/);
+  const greatAnswersMatch = rawMessage.match(/\[GREAT_ANSWERS\]([\s\S]*?)\[\/GREAT_ANSWERS\]/);
+  const missedMatch = rawMessage.match(/\[MISSED\]([\s\S]*?)\[\/MISSED\]/);
+  const idealMatch = rawMessage.match(/\[IDEAL_RESPONSE\]([\s\S]*?)\[\/IDEAL_RESPONSE\]/);
+  const altProofMatch = rawMessage.match(/\[ALTERNATIVE_PROOF_POINTS\]([\s\S]*?)\[\/ALTERNATIVE_PROOF_POINTS\]/);
+
+  // Parse scorecard into key-value pairs
+  const scores = {};
+  if (scorecardMatch) {
+    const lines = scorecardMatch[1].trim().split('\n');
+    for (const line of lines) {
+      const match = line.match(/(\w+):\s*(\d+)/);
+      if (match) {
+        scores[match[1].toLowerCase()] = parseInt(match[2], 10);
+      }
+    }
+  }
+
+  // Clean the conversational message (remove all tags)
+  const message = rawMessage
+    .replace(/\[SCORECARD\][\s\S]*?\[\/SCORECARD\]/, '')
+    .replace(/\[FEEDBACK\][\s\S]*?\[\/FEEDBACK\]/, '')
+    .replace(/\[GREAT_ANSWERS\][\s\S]*?\[\/GREAT_ANSWERS\]/, '')
+    .replace(/\[MISSED\][\s\S]*?\[\/MISSED\]/, '')
+    .replace(/\[IDEAL_RESPONSE\][\s\S]*?\[\/IDEAL_RESPONSE\]/, '')
+    .replace(/\[ALTERNATIVE_PROOF_POINTS\][\s\S]*?\[\/ALTERNATIVE_PROOF_POINTS\]/, '')
+    .trim();
+
+  return {
+    message,
+    scores,
+    feedback: feedbackMatch ? feedbackMatch[1].trim() : '',
+    greatAnswers: greatAnswersMatch ? greatAnswersMatch[1].trim() : '',
+    missed: missedMatch ? missedMatch[1].trim() : '',
+    idealResponse: idealMatch ? idealMatch[1].trim() : '',
+    alternativeProofPoints: altProofMatch ? altProofMatch[1].trim() : '',
+    hasScorecard: Object.keys(scores).length > 0
+  };
+}
+
+// Challenge: Technical Deep Dive (multi-turn)
+export async function generateTechnicalChallenge(topic, messages) {
+  if (!openai) {
+    return {
+      success: true,
+      message: 'Demo mode: Connect to LiteLLM for real technical challenges. In a real session, an AI would play a skeptical technical persona testing your knowledge of ' + topic.topic + '.',
+      scores: null,
+      feedback: '',
+      hasScorecard: false,
+      demo: true
+    };
+  }
+
+  const systemPrompt = getTechnicalDeepDivePrompt(topic);
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: MODEL_NAME,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        ...messages
+      ],
+      temperature: 0.8,
+      max_tokens: 1500
+    });
+
+    const rawMessage = response.choices[0].message.content;
+    const parsed = parseChallengeResponse(rawMessage);
+
+    return {
+      success: true,
+      ...parsed,
+      usage: response.usage
+    };
+  } catch (error) {
+    console.error('Technical challenge error:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+}
+
+// Challenge: Single-turn evaluation (Architecture Lab, Briefing Room, Proof Point Match)
+export async function evaluateChallenge(mode, scenario, userResponse) {
+  if (!openai) {
+    return {
+      success: true,
+      scores: { gap_identification: 7, product_mapping: 6, articulation: 7 },
+      feedback: 'Demo mode: Connect to LiteLLM for real AI-powered evaluation of your responses.',
+      missed: '',
+      idealResponse: '',
+      alternativeProofPoints: '',
+      hasScorecard: true,
+      demo: true
+    };
+  }
+
+  let systemPrompt;
+  switch (mode) {
+    case 'architecture':
+      systemPrompt = getArchitectureLabPrompt(scenario);
+      break;
+    case 'briefing':
+      systemPrompt = getBriefingRoomPrompt(scenario);
+      break;
+    case 'proofpoint':
+      systemPrompt = getProofPointMatchPrompt(scenario);
+      break;
+    default:
+      throw new Error(`Unknown challenge mode: ${mode}`);
+  }
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: MODEL_NAME,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userResponse }
+      ],
+      temperature: 0.7,
+      max_tokens: 2000
+    });
+
+    const rawMessage = response.choices[0].message.content;
+    const parsed = parseChallengeResponse(rawMessage);
+
+    return {
+      success: true,
+      ...parsed,
+      usage: response.usage
+    };
+  } catch (error) {
+    console.error('Challenge evaluate error:', error);
     return {
       success: false,
       error: error.message

@@ -2,7 +2,8 @@ import express from 'express';
 import { industries, getIndustryById } from '../prompts/industries.js';
 import { personas, getAllPersonas, getPersonaById } from '../prompts/personas.js';
 import { scenarios, getScenariosByTrack, getScenario } from '../prompts/scenarios.js';
-import { generateResponse, generateResponseStream, generateOpeningMessage, generateSuggestedQuestions, endConversation, analyzeTranscript } from '../services/openai.js';
+import { generateResponse, generateResponseStream, generateOpeningMessage, generateSuggestedQuestions, endConversation, analyzeTranscript, generateTechnicalChallenge, evaluateChallenge } from '../services/openai.js';
+import { technicalTopics, architectureScenarios, briefingPrompts, proofPointScenarios } from '../../client/src/data/challenges.js';
 
 const router = express.Router();
 
@@ -366,6 +367,89 @@ router.post('/analyze-transcript', async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to analyze transcript'
+    });
+  }
+});
+
+// GET /api/challenge/scenarios/:mode - Return scenario data for a challenge mode
+router.get('/challenge/scenarios/:mode', (req, res) => {
+  const { mode } = req.params;
+  const scenarioMap = {
+    technical: technicalTopics,
+    architecture: architectureScenarios,
+    briefing: briefingPrompts,
+    proofpoint: proofPointScenarios
+  };
+
+  const scenarios = scenarioMap[mode];
+  if (!scenarios) {
+    return res.status(404).json({
+      success: false,
+      error: 'Unknown challenge mode. Use: technical, architecture, briefing, proofpoint'
+    });
+  }
+
+  res.json({ success: true, mode, scenarios });
+});
+
+// POST /api/challenge/technical - Multi-turn Technical Deep Dive
+router.post('/challenge/technical', async (req, res) => {
+  const { topicId, messages } = req.body;
+
+  if (!topicId || !messages || !Array.isArray(messages)) {
+    return res.status(400).json({
+      success: false,
+      error: 'topicId and messages array are required'
+    });
+  }
+
+  const topic = technicalTopics.find(t => t.id === topicId);
+  if (!topic) {
+    return res.status(404).json({
+      success: false,
+      error: 'Topic not found'
+    });
+  }
+
+  try {
+    const response = await generateTechnicalChallenge(topic, messages);
+    res.json(response);
+  } catch (error) {
+    console.error('Technical challenge error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to generate technical challenge response'
+    });
+  }
+});
+
+// POST /api/challenge/evaluate - Single-turn evaluation for Architecture Lab, Briefing Room, Proof Point Match
+router.post('/challenge/evaluate', async (req, res) => {
+  const { mode, scenario, response: userResponse } = req.body;
+
+  if (!mode || !scenario || !userResponse) {
+    return res.status(400).json({
+      success: false,
+      error: 'mode, scenario, and response are required'
+    });
+  }
+
+  const validModes = ['architecture', 'briefing', 'proofpoint'];
+  if (!validModes.includes(mode)) {
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid mode. Use: architecture, briefing, proofpoint'
+    });
+  }
+
+  try {
+    const result = await evaluateChallenge(mode, scenario, userResponse);
+    res.json(result);
+  } catch (error) {
+    console.error('Challenge evaluate error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to evaluate challenge response'
     });
   }
 });
