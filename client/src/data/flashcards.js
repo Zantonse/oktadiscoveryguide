@@ -75,6 +75,112 @@ export const flashcards = {
         why: 'Step-up auth for AI is an emerging need. CIBA enables out-of-band approval.',
         unlocks: ['token_exchange_patterns', 'security_concerns', 'governance_needs'],
       },
+      // New golden questions based on real customer discovery transcripts
+      {
+        id: 'ai-golden-11',
+        front: 'Exposing the OAuth vs Agent Identity gap',
+        back: "How is what you've built for AI agent auth different from a regular OAuth client ID and secret?",
+        why: 'This is the #1 question real customers ask. Reveals whether they understand workload principal vs regular OAuth.',
+        unlocks: ['current_approach', 'token_exchange_patterns', 'agent_use_cases'],
+      },
+      {
+        id: 'ai-golden-12',
+        front: 'Uncovering brokered consent gaps',
+        back: 'For third-party services like Salesforce or Asana, do users log in and authorize separately, or does that go through your identity provider?',
+        why: 'Exposes the brokered consent gap. Most orgs have separate OAuth flows that bypass their IDP.',
+        unlocks: ['third_party_integrations', 'token_exchange_patterns', 'security_concerns'],
+      },
+      {
+        id: 'ai-golden-13',
+        front: 'Understanding incremental build patterns',
+        back: 'Did your team design the agent security architecture up front, or did it evolve piece by piece?',
+        why: 'Most teams build incrementally and realize they need to step back. Validates their experience.',
+        unlocks: ['current_approach', 'agent_use_cases', 'security_concerns'],
+      },
+      {
+        id: 'ai-golden-14',
+        front: 'Testing user context visibility',
+        back: 'When you look at your agent architecture, do you have visibility into the user who initiated the request all the way through to the downstream resource?',
+        why: 'Tests whether they understand the workload principal + subject relationship. Many lose user context.',
+        unlocks: ['token_exchange_patterns', 'security_concerns', 'multi_agent_architecture'],
+      },
+      // Golden questions from Aryaka and Hunter transcripts
+      {
+        id: 'ai-golden-15',
+        front: 'Justifying switch from open-source auth',
+        back: 'What value would justify moving from your current auth solution to something purpose-built for AI agents?',
+        why: 'Customers on Keycloak/open-source need to see value beyond basic auth. Find the gaps as they scale AI.',
+        unlocks: ['current_approach', 'agent_use_cases', 'product_fit'],
+      },
+      {
+        id: 'ai-golden-16',
+        front: 'Understanding authz timing in agent pipeline',
+        back: 'Does your authorization check happen when the agent analyzes the prompt to decide which tools to use, or when it actually makes the API call?',
+        why: 'Sophisticated question that reveals deep understanding. Most teams only check at API time and miss prompt-time filtering.',
+        unlocks: ['security_concerns', 'mcp_tool_access', 'token_exchange_patterns'],
+      },
+      {
+        id: 'ai-golden-17',
+        front: 'Training-based vs technical governance',
+        back: 'Are your AI governance controls mostly training and policy, or do you have technical enforcement?',
+        why: "Many orgs rely on training only. Technical controls (ISPM) fill the gap that training can't.",
+        unlocks: ['governance_needs', 'shadow_ai', 'security_concerns'],
+      },
+      {
+        id: 'ai-golden-18',
+        front: 'Productivity tools vs app-integrated agents',
+        back: 'Are your agents just being used as productivity tools today, or are any of them actually integrated with internal applications and data?',
+        why: 'Reveals maturity level. Copilot/ChatGPT for productivity is very different from agents connected to internal apps.',
+        unlocks: ['agent_use_cases', 'ai_initiatives', 'timeline'],
+      },
+      // New golden questions from 23 real customer discovery transcripts
+      {
+        id: 'ai-golden-19',
+        front: 'Universal agent inventory question',
+        back: 'How many AI agents exist in your organization today?',
+        why: "The universal opener. 70% of CISOs can't answer this. Reveals ISPM need immediately and shows shadow AI visibility gap.",
+        unlocks: ['shadow_ai', 'governance_needs', 'ai_initiatives'],
+      },
+      {
+        id: 'ai-golden-20',
+        front: 'Getting concrete architecture',
+        back: 'Walk me through how one of your agents works end-to-end — from user input to API call to data response.',
+        why: 'Gets concrete instead of abstract. Forces them to reveal architecture gaps, token exchange patterns, and governance holes.',
+        unlocks: ['agent_use_cases', 'mcp_tool_access', 'current_approach', 'security_concerns'],
+      },
+      {
+        id: 'ai-golden-21',
+        front: 'The #1 FGA discovery question',
+        back: 'Does the agent inherit the full permissions of the user or developer who created it, or do you scope it down?',
+        why: 'THE #1 discovery question across all 23 transcripts. FGA is universally needed but rarely explicitly controlled.',
+        unlocks: ['security_concerns', 'governance_needs', 'mcp_tool_access'],
+      },
+      {
+        id: 'ai-golden-22',
+        front: 'Testing governance maturity — lifecycle reviews',
+        back: 'Are you adding lifecycle reviews, access reviews, or revocation processes specifically for your AI agents?',
+        why: "Tests governance maturity. Most organizations haven't thought about agent lifecycle beyond creation.",
+        unlocks: ['governance_needs', 'security_concerns', 'current_approach'],
+      },
+      {
+        id: 'ai-golden-23',
+        front: 'AI classification maturity question',
+        back: 'Would you classify your AI as summarization, creative, or autonomous? Which category has the most agents?',
+        why: "Uses customer's own language for AI categorization. Reveals where they are on maturity spectrum and which products matter most.",
+        unlocks: ['ai_initiatives', 'agent_use_cases', 'security_concerns'],
+      },
+      {
+        id: 'ai-golden-24',
+        front: 'Third-party MCP consent gap',
+        back: "What happens when your agent needs to access a system that's not behind your IDP — like a third-party Salesforce or Atlassian MCP server?",
+        why: 'Exposes the brokered consent gap. Most teams have separate OAuth flows that bypass their IDP entirely.',
+        unlocks: [
+          'mcp_tool_access',
+          'third_party_integrations',
+          'security_concerns',
+          'current_approach',
+        ],
+      },
     ],
     discovery: [
       {
@@ -228,6 +334,55 @@ export const flashcards = {
         back: 'How do you govern what external tools agents can access?',
         area: 'third_party_integrations',
       },
+      // New discovery cards based on real customer transcripts
+      {
+        id: 'ai-disc-26',
+        front: 'Current Approach: OAuth vs Agent difference',
+        back: 'How is what you built for agents different from a regular OAuth client ID and secret?',
+        area: 'current_approach',
+      },
+      {
+        id: 'ai-disc-27',
+        front: 'Current Approach: Incremental build',
+        back: 'Did your team build this incrementally, or did you design the architecture up front?',
+        area: 'current_approach',
+      },
+      {
+        id: 'ai-disc-28',
+        front: 'Third-Party MCP: Separate OAuth',
+        back: 'For services like Salesforce or Asana — do users have to log in separately and authorize once?',
+        area: 'third_party_integrations',
+      },
+      {
+        id: 'ai-disc-29',
+        front: 'MCP & Tool Access: Gateway architecture',
+        back: 'Have you built or are you building an MCP gateway to route between different MCP servers?',
+        area: 'mcp_tool_access',
+      },
+      {
+        id: 'ai-disc-30',
+        front: 'Shadow AI: Agent count visibility',
+        back: 'Do you know how many AI agents exist in your organization today?',
+        area: 'shadow_ai',
+      },
+      {
+        id: 'ai-disc-31',
+        front: 'Shadow AI: Chrome browser extension',
+        back: 'Are you using a managed Chrome browser where you could deploy extensions for agent discovery?',
+        area: 'shadow_ai',
+      },
+      {
+        id: 'ai-disc-32',
+        front: 'Token Exchange: ID token passthrough',
+        back: 'Are you passing the ID token all the way through to MCP servers, or do you exchange it along the way?',
+        area: 'token_exchange_patterns',
+      },
+      {
+        id: 'ai-disc-33',
+        front: 'Multi-Agent: Autonomous discovery',
+        back: 'How do you discover agents that are autonomous — talking to each other without a user in the loop?',
+        area: 'multi_agent_architecture',
+      },
     ],
   },
 }
@@ -380,6 +535,86 @@ export const productFlashcards = [
       'Agent identity needed → ID-JAG. User context needed → OBO. Human approval needed → CIBA.',
     productFit: 'XAA + Token Vault',
   },
+  // New technical flashcards based on real customer discovery transcripts
+  {
+    id: 'tech-7',
+    front: 'What is Brokered Consent?',
+    back: "OAuth consent brokered through Okta for third-party resources (Salesforce, Asana) that don't natively use your IDP. User authorizes once, Okta manages the refresh token ongoing.",
+    useCase:
+      "Agent accessing third-party MCP servers where the resource server doesn't talk to Okta for validation",
+    flow: 'User grants OAuth consent once → Okta brokers and stores refresh token → Agent uses token for ongoing access',
+    productFit: 'XAA (on roadmap Q2)',
+  },
+  {
+    id: 'tech-8',
+    front: 'What is the common MCP Gateway pattern?',
+    back: 'Chatbot → MCP Gateway (validates JWT, routes requests) → Individual MCP Servers (Salesforce, Asana, internal tools). The gateway decides which downstream server fulfills the request.',
+    useCase: 'Organizations with multiple MCP servers need a central routing and validation layer',
+    flow: 'User prompt → Chatbot → Token exchange → MCP Gateway → Downstream MCP server',
+    productFit: 'XAA + Agent Identity',
+  },
+  {
+    id: 'tech-9',
+    front: 'Coarse-grained vs Fine-grained authorization for agents?',
+    back: 'Coarse-grained: OAuth scopes mapped to MCP tools (e.g., inventory:read). Fine-grained (FGA): Relationship-based per-resource permissions (e.g., user X can view document Y). Use both layers together.',
+    useCase:
+      'Scopes control what tools the agent can call. FGA controls what data the user can access through those tools.',
+    productFit: 'Okta auth servers (coarse) + Auth0 FGA (fine)',
+  },
+  {
+    id: 'tech-10',
+    front: 'How does agent discovery work in ISPM?',
+    back: 'Two methods: (1) Platform connectors — read-only API to Microsoft, AWS, Google to discover agents, permissions, and owners. (2) Chrome browser extension — captures OAuth consent grants for user-in-the-flow agents.',
+    useCase: 'Shadow AI discovery and agent inventory',
+    productFit: 'Okta ISPM for AI',
+  },
+  {
+    id: 'tech-11',
+    front: 'How is an AI agent different from a regular OAuth client app?',
+    back: 'An AI agent is a first-class identity in Universal Directory with its own profile, owner, credentials (workload principal), and managed connections. Unlike a regular OAuth app, the agent has explicit relationships to users and resources, with policy-controlled token exchange via ID-JAG.',
+    useCase: 'Understanding the core value proposition vs DIY OAuth',
+    productFit: 'Okta Agent Identity',
+  },
+  // New product recommendation flashcards from customer discovery patterns
+  {
+    id: 'prod-13',
+    front: 'When to recommend ISPM as the entry point',
+    back: 'Customer can\'t answer "how many agents do you have?" or doesn\'t have visibility into AI tool usage.',
+    productIndicators: [
+      'No agent inventory',
+      'Shadow AI visibility gap',
+      'Compliance concerns',
+      'Pre-pilot stage',
+    ],
+    buyer: 'CISO, Security Architect',
+    why: 'ISPM is pure discovery play. No commitment needed, just visibility. 70% of customers are pre-pilot — ISPM gets them to see the problem.',
+  },
+  {
+    id: 'prod-14',
+    front: 'When to recommend FGA as the first product',
+    back: 'Customer\'s #1 concern is "agents are accessing too much data" or "we can\'t scope down agent permissions."',
+    productIndicators: [
+      'Permission overflow problem',
+      'Multi-tenant agents',
+      'RAG security needs',
+      'Fine-grained control pain',
+    ],
+    buyer: 'Data Science Manager, AI Platform Lead, Security Architect',
+    why: "FGA solves the universal permission-scoping problem. Every customer has this pain but most haven't framed it yet.",
+  },
+  {
+    id: 'prod-15',
+    front: 'When to offer POC instead of demo',
+    back: 'Customer has already started building their own solution or is technically mature (Auth0 customers, enterprise architects).',
+    productIndicators: [
+      'Custom MCP gateway built',
+      'Early-stage production agents',
+      'Team evaluating multiple vendors',
+      'Technical buy-in already present',
+    ],
+    buyer: 'CTO, AI Platform Lead, Platform Engineer',
+    why: "Technical customers don't need slides. They need hands-on evaluation. Offer: Colab notebook + preview tenant + checkpoint call in 1 week.",
+  },
 ]
 
 // Objection handler flashcards
@@ -426,6 +661,141 @@ export const objectionFlashcards = [
     meaning: "Polite way of ending without commitment. You haven't earned a next meeting.",
     response: "Ask what specific information would be helpful. Try to understand what's missing.",
     avoid: "Accepting and hoping they'll read it",
+  },
+  // Real-world objections observed in customer discovery calls
+  {
+    id: 'obj-7',
+    objection: '"How is this agent different from a regular client ID and secret?"',
+    meaning:
+      "They've built OAuth for agents and don't see the difference. This is the most common real-world objection.",
+    response:
+      'Explain the workload principal: the agent is a first-class identity with its own profile, owner, and managed connections. The key difference is preserving the user-to-agent relationship via ID-JAG token exchange.',
+    avoid: 'Deflecting to a demo instead of directly answering the question',
+  },
+  {
+    id: 'obj-8',
+    objection: '"We already started building this ourselves"',
+    meaning:
+      "They've invested effort and need validation, not dismissal. But they paused because they see gaps.",
+    response:
+      "Validate their work. Ask what prompted the pause. Offer to help assess gaps. Show what Okta provides natively that they'd otherwise have to maintain.",
+    avoid: 'Making them feel their effort was wasted or that they should have come to you first',
+  },
+  {
+    id: 'obj-9',
+    objection: '"We read the docs and got confused"',
+    meaning:
+      'Genuine interest but the complexity is a barrier. They need hands-on help, not more docs.',
+    response:
+      'Offer a POC environment with a guided Colab notebook. Suggest a checkpoint call in 1-2 weeks.',
+    avoid: 'Sending more documentation or links to the same docs',
+  },
+  {
+    id: 'obj-10',
+    objection: '"That\'s on your roadmap — what about today?"',
+    meaning: 'They need a solution now. Roadmap items are promises, not products.',
+    response:
+      'Be transparent with dates. Show what works today. Offer workarounds or design patterns for current capabilities.',
+    avoid: 'Being vague about timelines or overselling roadmap features',
+  },
+  // Objections from Aryaka and Hunter transcripts
+  {
+    id: 'obj-11',
+    objection: '"We went with Keycloak/open-source for cost reasons"',
+    meaning:
+      "They already evaluated commercial auth and decided on cost. Basic auth isn't the value prop.",
+    response:
+      'Show value beyond basic auth: Token Vault, FGA for RAG security, MCP auth, ISPM. Position as complementary.',
+    avoid: "Trying to compete on basic authentication — they've already decided",
+  },
+  {
+    id: 'obj-12',
+    objection: '"We\'re a Microsoft shop — we already have Entra"',
+    meaning:
+      "They see no reason to add another IDP. Need to see AI-specific value Entra doesn't provide.",
+    response:
+      "Lead with ISPM (IDP-agnostic, works with Entra). Show agent discovery and AI governance capabilities. Don't position as IDP replacement.",
+    avoid: 'Saying "we would need to be the IDP" — this kills the deal instantly',
+  },
+  {
+    id: 'obj-13',
+    objection: '"I was wondering if Okta was doing something outside of normal authentication"',
+    meaning: "They already have auth solved. They're looking for the AI-specific value prop.",
+    response:
+      "Skip auth. Lead with: agent discovery (ISPM), agent identity (separate from users), fine-grained authorization (FGA). These are things their current auth can't do.",
+    avoid: 'Presenting the standard IAM pitch when they want AI-specific capabilities',
+  },
+  {
+    id: 'obj-14',
+    objection:
+      '"How do you define the fine-grained model? I understand RBAC but not relationships"',
+    meaning: 'They need concrete examples and hands-on access. ReBAC is new to most teams.',
+    response:
+      'Show the FGA modeling playground with their specific use case. Walk through tuples and relationship definitions. Offer sandbox access.',
+    avoid: 'Explaining concepts abstractly — show the code and the modeling tool',
+  },
+  // New objections from 23 real customer discovery transcripts
+  {
+    id: 'obj-15',
+    objection: '"What does this cost?"',
+    meaning:
+      "Price-first buyer asking before understanding product. Signals they're price-sensitive or evaluating multiple vendors.",
+    response:
+      'Don\'t answer yet. Ask: "What problem are we solving first? Once we understand the value, we can talk pricing." Establish value before cost discussion.',
+    avoid: 'Quoting price without understanding their use case',
+  },
+  {
+    id: 'obj-16',
+    objection: '"We\'ll wait until the market matures"',
+    meaning:
+      "Build-vs-wait objection. They're hesitant about committing before seeing where the industry settles.",
+    response:
+      "Ask what happens if agents ship without security framework in the meantime. Show them competitors aren't waiting. Position early movers as having advantage.",
+    avoid: 'Respecting the wait — create urgency around risk and competitive positioning',
+  },
+  {
+    id: 'obj-17',
+    objection: '"We already have an MCP gateway"',
+    meaning: 'They built something custom. Validate their investment. But dig into gaps.',
+    response:
+      'Validate the build: "That\'s smart, many teams are building this." Then ask about: token exchange patterns, user context preservation, fine-grained authorization, credential rotation. Listen for gaps.',
+    avoid: "Dismissing their custom solution — they've invested effort and pride in it",
+  },
+  {
+    id: 'obj-18',
+    objection: '"We\'re evaluating multiple vendors"',
+    meaning:
+      "Multi-vendor eval underway. Need to understand who else they're looking at and what criteria matter.",
+    response:
+      'Ask: "Who else are you evaluating?" and "What\'s most important in your evaluation?" Position against specific competitors (Transmit Security, Ping, CyberArk). Differentiate clearly.',
+    avoid: "Assuming they'll pick Okta/Auth0 — they won't unless you position clearly",
+  },
+  {
+    id: 'obj-19',
+    objection: '"Our authorization is a mess — we need to fix that first"',
+    meaning:
+      "Authorization debt is real. They see the problem but think it's a prerequisite to solving agents.",
+    response:
+      'Flip it: "That\'s exactly why you need FGA now. AI agents will expose your authz gaps. FGA was designed for this exact problem." Position ISPM + FGA as the fix.',
+    avoid: 'Accepting "fix authz first" — this is procrastination disguised as prudence',
+  },
+  {
+    id: 'obj-20',
+    objection: '"We already have Microsoft Entra, why do we need Okta?"',
+    meaning:
+      "The Entra objection. They see Okta as redundant when they're already a Microsoft shop.",
+    response:
+      "Lead with ISPM (IDP-agnostic, works alongside Entra). Highlight: shadow AI discovery, agent identity as separate from user identity, audit compliance for AI. Don't position as Entra replacement.",
+    avoid: 'Saying "you need to switch to Okta" — this kills the deal instantly',
+  },
+  {
+    id: 'obj-21',
+    objection: '"Budget is locked for this year"',
+    meaning:
+      'Budget cycle objection. Common especially mid-year. FY budgets are already committed.',
+    response:
+      'Ask: "When does next FY planning start?" and "Can we do a POC now with budget commitment for next year?" Position as discovery-phase initiative with commitment downstream.',
+    avoid: 'Accepting as final — budget-timing objections are often surmountable',
   },
 ]
 
@@ -523,6 +893,45 @@ export const competitorFlashcards = {
       auth0Advantage: 'Okta-owned, comprehensive CIAM, proven at scale',
     },
   ],
+  transmitSecurity: [
+    {
+      id: 'comp-transmit-1',
+      objection: "We're looking at Transmit Security",
+      response:
+        'Transmit focuses on fraud and runtime security. Okta/Auth0 is identity-native with ISPM for discovery, Agent Identity for workload principals, and Token Vault for credential management. What specific capability are you evaluating?',
+      oktaAdvantage:
+        'Enterprise identity management + ISPM for shadow AI discovery + Agent Identity',
+      auth0Advantage:
+        'Identity-native approach + Token Vault for credential management + FGA for authorization',
+    },
+    {
+      id: 'comp-transmit-2',
+      objection: 'Transmit has AI-native security',
+      response:
+        "Transmit is strong on runtime protection. But they don't have enterprise identity management, ISPM for AI discovery, or relationship-based access control for agents. They're a point solution in the runtime layer.",
+      oktaAdvantage: 'Identity-first platform with ISPM and Agent Identity',
+      auth0Advantage: 'Comprehensive identity platform with Token Vault and FGA',
+    },
+  ],
+  cyberArk: [
+    {
+      id: 'comp-cyber-1',
+      objection: 'CyberArk handles our privileged access',
+      response:
+        'CyberArk is PAM (Privileged Access Management). AI agents need OAuth-based workload identity with managed connections, not vault-based privileged access. Different problem, different solution.',
+      oktaAdvantage: 'Workload identity management designed for AI agents and services',
+      auth0Advantage: 'Developer-friendly identity platform with agent-specific features',
+    },
+    {
+      id: 'comp-cyber-2',
+      objection: 'We checked CyberArk for AI agents',
+      response:
+        "What did you learn? CyberArk can store credentials, but it doesn't solve token exchange, agent discovery, or fine-grained authorization for AI. Okta/Auth0 solve the identity layer that CyberArk doesn't.",
+      oktaAdvantage:
+        'Complete identity platform for agents (ISPM + Agent Identity + Token Exchange)',
+      auth0Advantage: 'Purpose-built for AI agent authentication and authorization',
+    },
+  ],
 }
 
 // Common mistakes flashcards
@@ -569,6 +978,35 @@ export const mistakeFlashcards = [
     mistake: 'Chasing every tangent',
     why: 'You lose focus and control of the conversation. Some tangents are tests.',
     instead: 'Acknowledge tangents briefly, note them, and redirect back to the main topic.',
+  },
+  // New mistakes from 23 real customer discovery transcripts
+  {
+    id: 'mistake-8',
+    mistake: 'Talking to the wrong person',
+    why: 'Tapestry (MFA help desk person, not AI-involved), Restoration Hardware (general IAM person). Wrong contact = wasted call.',
+    instead:
+      'Before the call, verify the contact\'s AI involvement. Ask the caller: "Are you involved in AI initiatives?" If not, ask for the right person.',
+  },
+  {
+    id: 'mistake-9',
+    mistake: 'Not asking about competitors',
+    why: "Dropbox, Qualtrics, Amphenol all mentioned evaluating others. If you don't ask, you can't position against them.",
+    instead:
+      'Always ask: "Are you evaluating other vendors?" and "Who?" Listen for Transmit Security, Ping, CyberArk, Microsoft Entra. Know your positioning.',
+  },
+  {
+    id: 'mistake-10',
+    mistake: 'Deferring pricing questions',
+    why: 'Multiple calls ended with "we\'ll get back to you on pricing." You lose momentum and credibility.',
+    instead:
+      'Have ballpark ranges ready (e.g., "Typically $X-Y for this use case"). If pressed for exact quotes, say you need requirements first, but give a range now.',
+  },
+  {
+    id: 'mistake-11',
+    mistake: 'Excessive small talk eating discovery time',
+    why: "Amphenol (35% small talk), Tapestry (20%). You've got 30-45 minutes. Every minute of chat is a minute of discovery lost.",
+    instead:
+      'Build rapport in 2-3 minutes max. Then transition: "Let\'s dive into your AI security challenges..." Keep discovery-focused.',
   },
 ]
 

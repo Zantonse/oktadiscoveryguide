@@ -505,6 +505,161 @@ export const questionTrees = {
         ],
       },
       {
+        id: 'ai-already-building',
+        rootQuestion: "Can you walk me through what you've built so far for agent authentication?",
+        description: 'Discovery path for customers who have already started building',
+        branches: [
+          {
+            responseType: 'mcp-gateway',
+            responseLabel: 'Built MCP Gateway',
+            example:
+              '"We built an MCP gateway that validates tokens and routes to downstream MCP servers..."',
+            sentiment: 'positive',
+            followUp:
+              'How does your gateway validate the tokens — does it check scopes, or just verify the JWT signature?',
+            nextBranches: [
+              {
+                responseType: 'scope-based',
+                responseLabel: 'Scope-Based Routing',
+                example:
+                  '"We exchange the token for the right scopes, then the gateway routes based on that..."',
+                followUp:
+                  "Are you passing the user's ID token all the way through, or do you exchange it at each hop?",
+                insight:
+                  'They may be losing the workload principal relationship. Key gap for XAA with ID-JAG.',
+                productRecommendation: 'XAA with ID-JAG for token exchange',
+              },
+              {
+                responseType: 'basic-jwt',
+                responseLabel: 'Basic JWT Validation',
+                example: '"We just validate the JWT and pass it through..."',
+                followUp:
+                  'How do you handle the case where different users should have different access to the same MCP server?',
+                insight:
+                  'No scoped authorization — opportunity for custom auth server with access policies.',
+                productRecommendation: 'Okta custom authorization servers + access policies',
+              },
+            ],
+          },
+          {
+            responseType: 'token-exchange',
+            responseLabel: 'Built Token Exchange',
+            example:
+              '"We exchange the user token to get tokens with the right scopes for downstream services..."',
+            sentiment: 'positive',
+            followUp: 'How is what you built different from a regular OAuth client ID and secret?',
+            nextBranches: [
+              {
+                responseType: 'confused',
+                responseLabel: 'Struggles to Articulate Difference',
+                example: '"That\'s actually what we\'re trying to understand..."',
+                followUp:
+                  'Let me explain the key difference — with Okta, the agent is a first-class identity with its own workload principal...',
+                insight:
+                  'Perfect teaching moment. Explain workload principal, managed connections, and ID-JAG.',
+                productRecommendation: 'Okta Agent Identity + XAA',
+              },
+              {
+                responseType: 'understands-gap',
+                responseLabel: 'Sees the Gap',
+                example: '"We lose the user context when we pass through the gateway..."',
+                followUp:
+                  "That's exactly the problem ID-JAG solves. Would a hands-on POC environment help your team evaluate?",
+                insight: "They're ready for a POC. Offer Colab notebook and preview tenant.",
+                productRecommendation: 'XAA with ID-JAG + POC environment',
+              },
+            ],
+          },
+          {
+            responseType: 'third-party-services',
+            responseLabel: 'Third-Party Services Outside IDP',
+            example: '"We have Salesforce and Asana MCP servers where users log in separately..."',
+            sentiment: 'neutral',
+            followUp:
+              'How do you handle the ongoing refresh of those third-party tokens? Is it per-user or shared?',
+            nextBranches: [
+              {
+                responseType: 'per-user',
+                responseLabel: 'Per-User Authorization',
+                example: '"Each user authorizes once and we store the token..."',
+                followUp:
+                  "Brokered consent through Okta would automate that — user authorizes once, Okta manages the refresh. That's coming in Q2.",
+                insight: 'Clear fit for brokered consent. Be transparent about timing.',
+                productRecommendation: 'Brokered consent (Q2 roadmap)',
+              },
+              {
+                responseType: 'shared-creds',
+                responseLabel: 'Shared Service Account',
+                example: '"We use a shared service account for the integration..."',
+                followUp:
+                  'How do you audit what each user accessed through that shared credential?',
+                insight:
+                  'Shared creds = no user-level audit trail. Opportunity for managed connections with per-user scoping.',
+                productRecommendation: 'Managed connections (secrets + service accounts)',
+              },
+            ],
+          },
+          {
+            responseType: 'piece-by-piece',
+            responseLabel: 'Built Incrementally / Needs Reset',
+            example:
+              '"The team built it piece by piece... we realized we need to step back and evaluate..."',
+            sentiment: 'neutral',
+            followUp: 'What prompted you to pause and take a step back?',
+            nextBranches: [
+              {
+                responseType: 'scaling-concerns',
+                responseLabel: 'Scaling Concerns',
+                example: '"It works for our two services but we\'re about to add more..."',
+                followUp:
+                  'Let us set up a preview tenant and Colab notebook so your team can evaluate the full pattern.',
+                insight: 'They need a holistic architecture view. Offer guided POC, not just docs.',
+                productRecommendation: 'Full Okta for AI Agents evaluation',
+              },
+              {
+                responseType: 'doc-confusion',
+                responseLabel: 'Confused by Documentation',
+                example: '"We read through the docs and got confused..."',
+                followUp:
+                  "Let's do a working session where we walk through your specific architecture with the Okta tools.",
+                insight: "Docs aren't enough. Offer hands-on checkpoint call in 1-2 weeks.",
+                productRecommendation: 'Guided enablement + checkpoint sessions',
+              },
+            ],
+          },
+          {
+            responseType: 'entra-based',
+            responseLabel: 'Using Microsoft Entra for Agents',
+            example: '"We use Entra workload identities for our agents..."',
+            sentiment: 'neutral',
+            followUp:
+              'How do you handle agent discovery — knowing which agents exist and what they can access?',
+            nextBranches: [
+              {
+                responseType: 'no-discovery',
+                responseLabel: 'No Agent Discovery',
+                example: '"We don\'t really have that visibility..."',
+                followUp:
+                  "That's where ISPM comes in. It works alongside Entra — no need to replace your IDP.",
+                insight:
+                  'ISPM is IDP-agnostic. Position as complement, not replacement. Never say "you need to switch to Okta."',
+                productRecommendation: 'Okta ISPM for AI (alongside Entra)',
+              },
+              {
+                responseType: 'manual-tracking',
+                responseLabel: 'Manual Tracking',
+                example: '"We have a spreadsheet of registered agents..."',
+                followUp:
+                  'How often does that get updated? What about agents teams spin up without telling IT?',
+                insight:
+                  "Shadow AI gap even in Microsoft shops. ISPM automates what spreadsheets can't.",
+                productRecommendation: 'Okta ISPM for AI',
+              },
+            ],
+          },
+        ],
+      },
+      {
         id: 'ai-security',
         rootQuestion: 'What keeps you up at night about AI security?',
         description: 'Understanding their fears and priorities',
@@ -556,6 +711,322 @@ export const questionTrees = {
                 example: '"We need to limit what agents can do..."',
                 followUp: 'How do you envision setting those limits?',
                 insight: 'Policy-based access control is the answer',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'ai-maturity',
+        rootQuestion: 'How many AI agents exist in your organization today?',
+        description: 'Assessing agent maturity level - the universal opener from real calls',
+        branches: [
+          {
+            responseType: 'unknown',
+            responseLabel: "We Don't Know",
+            example: '"We don\'t really have visibility into that..."',
+            sentiment: 'neutral',
+            followUp:
+              "That's actually very common. Would visibility into agent deployments be valuable?",
+            nextBranches: [
+              {
+                responseType: 'visibility-yes',
+                responseLabel: "Yes, That's a Concern",
+                example: '"Yes, that\'s something we\'ve been worried about..."',
+                followUp: 'What would you do with that visibility?',
+                insight: 'ISPM is the entry point. Shadow AI discovery and agent governance.',
+                productRecommendation: 'Okta ISPM for AI',
+              },
+              {
+                responseType: 'visibility-no',
+                responseLabel: 'Not Really a Priority',
+                example: '"Not really a priority right now..."',
+                followUp: 'What IS the priority for AI right now?',
+                insight: 'Redirect to their actual pain. May need a different entry point.',
+              },
+            ],
+          },
+          {
+            responseType: 'few-pilots',
+            responseLabel: 'We Have a Few in Pilot',
+            example: '"We have a couple of pilots running..."',
+            sentiment: 'positive',
+            followUp: 'What use cases are they covering?',
+            nextBranches: [
+              {
+                responseType: 'customer-service',
+                responseLabel: 'Customer Service / Help Desk',
+                example: '"Customer service chatbots, help desk automation..."',
+                followUp: 'How do those agents authenticate to your backend systems?',
+                insight: 'Auth0 for customer-facing, Token Vault for agent credential storage',
+                productRecommendation: 'Auth0 for GenAI + Token Vault',
+              },
+              {
+                responseType: 'internal-productivity',
+                responseLabel: 'Internal Productivity',
+                example: '"Internal Copilots and productivity tools..."',
+                followUp: 'Are those Copilot/ChatGPT Enterprise, or custom-built agents?',
+                insight: 'Copilot = ISPM play for shadow AI. Custom = full agent identity stack.',
+                productRecommendation: 'Okta Workforce Identity + Agent Identity or ISPM',
+              },
+            ],
+          },
+          {
+            responseType: 'advanced',
+            responseLabel: '50+ Agents, Hundreds of Developers',
+            example:
+              '"We have dozens of agents in production, teams building across the organization..."',
+            sentiment: 'positive',
+            followUp: 'How are you handling identity for those agents at scale?',
+            nextBranches: [
+              {
+                responseType: 'client-ids',
+                responseLabel: 'Each Agent Gets a Client ID',
+                example: '"Each agent gets its own OAuth client ID..."',
+                followUp:
+                  'How is that different from a regular OAuth app? What makes it work for agents specifically?',
+                insight:
+                  'They may not understand workload principals yet. Teaching moment on managed identity.',
+                productRecommendation: 'Okta Agent Identity for managed workload principals',
+              },
+              {
+                responseType: 'custom-system',
+                responseLabel: 'We Built Our Own System',
+                example: '"We built our own agent identity and token exchange system..."',
+                followUp: 'What prompted you to look at Okta?',
+                insight:
+                  "They hit scaling limits. Opportunity to show how we handle complexity they've discovered.",
+                productRecommendation: 'Full Okta for AI Agents (XAA, ID-JAG, ISPM)',
+              },
+            ],
+          },
+          {
+            responseType: 'policy-against',
+            responseLabel: 'We Have a Policy Against AI',
+            example: '"We\'ve restricted AI usage..."',
+            sentiment: 'skeptical',
+            followUp: 'How are you enforcing that policy?',
+            nextBranches: [
+              {
+                responseType: 'training-docs',
+                responseLabel: 'Training and Policy Docs',
+                example: '"Training, policy documentation, and governance reviews..."',
+                followUp: 'Do you have technical enforcement, or is it trust-based?',
+                insight: 'Shadow AI gap even with policy. ISPM can automate detection.',
+                productRecommendation: 'Okta ISPM for AI (detect shadow AI)',
+              },
+              {
+                responseType: 'network-block',
+                responseLabel: 'Block at Network Level',
+                example: '"We block it at the network level..."',
+                followUp:
+                  "What about browser-based AI tools that don't need special network access?",
+                insight: 'Chrome extensions + OAuth grant monitoring will catch shadow AI.',
+                productRecommendation: 'Okta ISPM for AI (OAuth-based detection)',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'ai-permissions',
+        rootQuestion:
+          'When an agent acts on behalf of a user, does it inherit the full user permissions or do you scope it down?',
+        description: 'The #1 discovery question - FGA is universally needed',
+        branches: [
+          {
+            responseType: 'full-permissions',
+            responseLabel: 'Full User Permissions',
+            example: '"The agent inherits whatever permissions the user has..."',
+            sentiment: 'urgent',
+            followUp: 'So if the agent makes a mistake, it has the same blast radius as the user?',
+            nextBranches: [
+              {
+                responseType: 'concern-acknowledged',
+                responseLabel: "Yes, That's a Concern",
+                example: '"Yeah, that\'s something we\'re worried about..."',
+                followUp:
+                  "That's exactly what fine-grained authorization solves. Want me to show you how FGA works?",
+                insight: "Direct FGA pitch opportunity. They're ready to hear the solution.",
+                productRecommendation: 'Auth0 FGA for fine-grained authorization',
+              },
+              {
+                responseType: 'trust-guardrails',
+                responseLabel: 'We Trust the Guardrails',
+                example: '"We trust the AI guardrails to prevent bad actions..."',
+                followUp:
+                  'What if the model hallucinates and calls the wrong API or accesses the wrong data?',
+                insight:
+                  "Technical guardrails aren't enough. Identity-layer controls are mandatory.",
+                productRecommendation: 'Auth0 FGA for technical authorization enforcement',
+              },
+            ],
+          },
+          {
+            responseType: 'scoped-manually',
+            responseLabel: 'We Scope It Down Manually',
+            example: '"We manually create scoped tokens or service accounts for each agent..."',
+            sentiment: 'neutral',
+            followUp: 'How do you manage that across multiple agents and multiple systems?',
+            nextBranches: [
+              {
+                responseType: 'getting-unwieldy',
+                responseLabel: "It's Getting Unwieldy",
+                example: '"It\'s getting hard to track and manage as we add more agents..."',
+                followUp:
+                  "That's the pattern we see at scale. FGA with Relationship-Based Access Control automates that.",
+                insight:
+                  "They're feeling the pain of manual scoping. Ready for structured authorization.",
+                productRecommendation: 'Auth0 FGA with ReBAC',
+              },
+              {
+                responseType: 'works-for-now',
+                responseLabel: 'It Works for Now',
+                example: '"It\'s manageable at our current scale..."',
+                followUp: 'How many agents and how many systems is that across?',
+                insight: 'Probe for scale concerns. When do they hit the wall?',
+              },
+            ],
+          },
+          {
+            responseType: 'not-thought-through',
+            responseLabel: "We Haven't Thought About It",
+            example: '"We haven\'t really addressed this yet..."',
+            sentiment: 'neutral',
+            followUp:
+              "That's common for teams just getting started. Most teams discover this need when they move from pilot to production.",
+            nextBranches: [
+              {
+                responseType: 'early-stage',
+                responseLabel: "We're Far From Production",
+                example: '"We\'re still in early pilots..."',
+                followUp: 'What would need to be true security-wise before you go to production?',
+                insight: 'Plant the seed now. FGA becomes critical when they scale.',
+                productRecommendation: 'Position FGA as production requirement',
+              },
+              {
+                responseType: 'production-soon',
+                responseLabel: "Actually We're Going to Production Soon",
+                example: '"Actually, we\'re planning to scale in the next few months..."',
+                followUp:
+                  'Then this is the right time to think about it. What systems will agents access?',
+                insight: 'Urgency - they need to solve this now before production scaling.',
+                productRecommendation: 'Auth0 FGA (urgent implementation before scale)',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'ai-evaluation',
+        rootQuestion: 'Are you evaluating other vendors for AI security?',
+        description: 'Competitive and budget discovery - handle price-first buyers',
+        branches: [
+          {
+            responseType: 'price-first',
+            responseLabel: 'What Does This Cost?',
+            example: '"Before we go further, what\'s the pricing model?"',
+            sentiment: 'neutral',
+            followUp:
+              'Happy to get into pricing. First, help me understand which capabilities matter most so I can give you an accurate picture.',
+            nextBranches: [
+              {
+                responseType: 'ballpark-only',
+                responseLabel: 'Just Give Me a Ballpark',
+                example: '"Just give me a rough order of magnitude..."',
+                followUp:
+                  'For agent identity and FGA, it depends on agent count and authorization volume. Can you share those numbers?',
+                insight: "Don't deflect entirely - give a framework for pricing.",
+                productRecommendation: 'Pricing framework based on agent count and volume',
+              },
+              {
+                responseType: 'budget-constrained',
+                responseLabel: 'We Have a Specific Budget',
+                example: '"We have a budget of X for this..."',
+                followUp:
+                  "What's the range you're working with? I want to make sure we scope appropriately.",
+                insight: 'Work backward from budget to solution.',
+                productRecommendation: 'Scope solution to fit budget',
+              },
+            ],
+          },
+          {
+            responseType: 'competitor-transmit',
+            responseLabel: 'Evaluating Transmit Security',
+            example: '"We\'re looking at Transmit Security for AI security..."',
+            sentiment: 'neutral',
+            followUp: 'What specifically attracted you to Transmit?',
+            nextBranches: [
+              {
+                responseType: 'ai-native',
+                responseLabel: 'AI-Native Security Positioning',
+                example: '"They position as AI-native security..."',
+                followUp:
+                  "Transmit is strong on runtime security. Are you also looking for agent discovery (ISPM) and identity management? That's where we differentiate.",
+                insight: 'Position breadth vs point solution. We cover full lifecycle.',
+                productRecommendation: 'Okta for full AI security lifecycle',
+              },
+              {
+                responseType: 'recommended',
+                responseLabel: 'They Were Recommended',
+                example: '"Someone recommended them..."',
+                followUp:
+                  "What capabilities are you evaluating them on? I want to make sure we're comparing apples to apples.",
+                insight: 'Get the eval criteria before comparing.',
+              },
+            ],
+          },
+          {
+            responseType: 'market-timing',
+            responseLabel: "We'll Wait Until Market Matures",
+            example: '"We\'re going to wait until the market stabilizes..."',
+            sentiment: 'skeptical',
+            followUp:
+              'What happens to your agent deployments in the meantime? Are they shipping without security controls?',
+            nextBranches: [
+              {
+                responseType: 'paused-agents',
+                responseLabel: "We've Paused Agent Work",
+                example: '"We\'ve actually paused agent projects..."',
+                followUp: 'What would restart them?',
+                insight: 'Security may be the blocker. Position as enabler, not constraint.',
+                productRecommendation: 'Position Okta/Auth0 as enabler for agent projects',
+              },
+              {
+                responseType: 'agents-shipping',
+                responseLabel: 'Agents Shipping Anyway',
+                example: '"Agents are shipping, but without formal security architecture..."',
+                followUp:
+                  'So the risk is growing while you wait. Would a lightweight start with ISPM for visibility make sense?',
+                insight: 'ISPM as low-commitment entry point.',
+                productRecommendation: 'Okta ISPM for AI (low-commitment starting point)',
+              },
+            ],
+          },
+          {
+            responseType: 'budget-timing',
+            responseLabel: 'Budget is Locked This Year',
+            example: '"Our budget cycle is already closed for this year..."',
+            sentiment: 'neutral',
+            followUp: 'When does your next planning cycle start?',
+            nextBranches: [
+              {
+                responseType: 'future-planning',
+                responseLabel: 'Q3/Q4 Planning Cycle',
+                example: '"We do planning again in Q3..."',
+                followUp:
+                  "Let's do a POC now so you have data for the business case. No commitment needed.",
+                insight: 'POC as bridge to next budget cycle.',
+                productRecommendation: 'POC + business case development',
+              },
+              {
+                responseType: 'already-submitted',
+                responseLabel: 'Already Submitted for Next Year',
+                example: '"We already have our initial request in for next year..."',
+                followUp: 'Is AI security in that plan?',
+                insight:
+                  "May need to get added to next year's budget. Help build the business case.",
+                productRecommendation: 'Help develop business case for next budget cycle',
               },
             ],
           },
