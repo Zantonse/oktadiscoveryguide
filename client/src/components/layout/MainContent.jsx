@@ -5,6 +5,7 @@ import { ReportCard } from '../features/ReportCard.jsx'
 import { ProductPanel } from '../features/ProductPanel.jsx'
 import { LearnSection } from '../learn/LearnSection.jsx'
 import { DrillMode } from '../drill/DrillMode.jsx'
+import { ChallengeSection } from '../challenge/ChallengeSection.jsx'
 import { AnalyzeSection } from '../analyze/AnalyzeSection.jsx'
 import { useSession } from '../../contexts/SessionContext.jsx'
 import { useTheme } from '../../App.jsx'
@@ -27,6 +28,15 @@ export function MainContent() {
     return (
       <main className="main-content drill-view">
         <DrillMode />
+      </main>
+    )
+  }
+
+  // Render Challenge section based on activeView
+  if (activeView === 'challenge') {
+    return (
+      <main className="main-content challenge-view">
+        <ChallengeSection />
       </main>
     )
   }

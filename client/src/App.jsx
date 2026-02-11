@@ -60,7 +60,7 @@ function App() {
   })
 
   const [showSettings, setShowSettings] = useState(false)
-  const [activeView, setActiveView] = useState('learn') // 'learn' | 'drill' | 'practice' | 'analyze'
+  const [activeView, setActiveView] = useState('learn') // 'learn' | 'drill' | 'challenge' | 'practice' | 'analyze'
 
   useEffect(() => {
     localStorage.setItem('discovery-guide-theme', theme)
