@@ -585,6 +585,246 @@ export const discoveryFramework = {
         { step: 12, area: 'timeline', goal: 'Establish urgency' },
         { step: 13, area: 'decision_process', goal: 'Map stakeholders' },
       ],
+      knowledgeSections: [
+        {
+          id: 'okta-agentic-identity-view',
+          title: "Okta's View on Agentic Identities",
+          description:
+            'Background knowledge on agentic AI identity — the concepts, architecture, and Okta product positioning sellers need before going into discovery conversations.',
+          subsections: [
+            {
+              id: 'what-is-agentic-ai',
+              title: 'What is Agentic AI?',
+              content:
+                'Agentic AI refers to AI systems that can autonomously plan, decide, and act to achieve goals — going beyond simple prompt-response interactions. Unlike traditional AI that waits for instructions, agentic AI operates with a degree of independence that makes identity and access management critical.',
+              keyPoints: [
+                'Autonomy — Agents make independent decisions, requiring identity controls that govern what they can do without human approval',
+                'Goal-oriented execution — Agents pursue multi-step objectives, accessing multiple systems and APIs along the way',
+                'Adaptive learning — Agents adjust behavior based on outcomes, meaning their access patterns change over time',
+                'Memory & state — Agents maintain context across interactions, creating persistent sessions that need lifecycle management',
+                'Tool use — Agents invoke external tools and APIs, each requiring authenticated and authorized access',
+              ],
+            },
+            {
+              id: 'identity-requirements',
+              title: 'Identity Requirements by Agent Type',
+              content:
+                'Different types of AI agents have different identity needs. Understanding where a customer sits on this spectrum helps position the right Okta products.',
+              items: [
+                {
+                  name: 'Reactive Agents',
+                  description:
+                    'Respond to inputs without maintaining state. Chatbots, Q&A bots, simple classifiers.',
+                  identityNeed:
+                    'Basic authentication — validate the calling user, enforce per-request authorization. Okta OIDC / OAuth flows.',
+                },
+                {
+                  name: 'Deliberative Agents',
+                  description:
+                    'Plan multi-step actions, reason about goals, and execute across systems. Copilots, workflow agents, research agents.',
+                  identityNeed:
+                    'Scoped delegation — the agent acts on behalf of a user with constrained permissions. Token exchange (OBO, ID-JAG), fine-grained authorization (FGA).',
+                },
+                {
+                  name: 'Hybrid Agents',
+                  description:
+                    'Combine reactive speed with deliberative planning. Most enterprise agents fall here — they respond quickly but can escalate to multi-step reasoning.',
+                  identityNeed:
+                    'Dynamic authorization — start with basic access, escalate via step-up auth (CIBA) when the agent decides to take a sensitive action.',
+                },
+                {
+                  name: 'Multi-Agent Systems',
+                  description:
+                    'Multiple agents collaborating — orchestrator agents delegating to specialist agents. Common in complex enterprise workflows.',
+                  identityNeed:
+                    'Agent-to-agent trust — each agent has its own identity (Workload Principal), managed connections define what each agent can access, and audit trails track the full chain of delegation.',
+                },
+              ],
+            },
+            {
+              id: 'agentic-architecture',
+              title: 'Agentic AI Architecture & Identity Layers',
+              content:
+                'Agentic AI systems follow a layered architecture. Identity controls are needed at every layer — not just at the front door.',
+              layers: [
+                {
+                  name: 'Perception Layer',
+                  description:
+                    'Where the agent ingests data — user prompts, API responses, sensor data, document retrieval (RAG).',
+                  identity:
+                    'User authentication (OIDC), data access authorization (FGA), RAG pipeline security — ensuring the agent only retrieves documents the user is authorized to see.',
+                  oktaProduct: 'Auth for GenAI, Auth0 FGA',
+                },
+                {
+                  name: 'Planning Layer',
+                  description:
+                    'Where the agent reasons, selects tools, and decides on a plan of action. This is where the LLM decides which MCP tools to call.',
+                  identity:
+                    'Scope validation — does the agent have permission to use this tool? Policy evaluation before execution, not after. This is where prompt injection risks live.',
+                  oktaProduct: 'Agent Identity (policy engine), ISPM',
+                },
+                {
+                  name: 'Action Layer',
+                  description:
+                    'Where the agent executes — calling APIs, writing to databases, sending emails, invoking MCP servers.',
+                  identity:
+                    'Token exchange (OBO, ID-JAG) for delegated access, Token Vault for stored credentials, managed connections for third-party services, audit logging of every action.',
+                  oktaProduct: 'Token Vault, Cross App Access (XAA)',
+                },
+                {
+                  name: 'Memory Layer',
+                  description:
+                    'Where the agent stores context — conversation history, learned preferences, cached results. Persistent state across sessions.',
+                  identity:
+                    "Session lifecycle management, data retention policies, ensuring memory contents respect the original authorization context (a downscoped token shouldn't let the agent cache data it accessed with a higher privilege).",
+                  oktaProduct: 'ISPM (posture monitoring), Agent Identity (lifecycle)',
+                },
+              ],
+            },
+            {
+              id: 'okta-product-mapping',
+              title: 'Okta Product Mapping to Agentic AI Challenges',
+              content:
+                'Each Okta AI security product addresses specific challenges in the agentic AI landscape. Use this mapping to connect customer pain points to product capabilities.',
+              mappings: [
+                {
+                  challenge: 'AI apps need user authentication with consent and scoping',
+                  product: 'Auth for GenAI',
+                  solution:
+                    'OIDC/OAuth flows purpose-built for AI applications. Handles user login, consent screens, and token issuance with AI-specific scopes. Supports both workforce (Okta) and customer (Auth0) identity.',
+                },
+                {
+                  challenge: 'Agents need credentials to access third-party services',
+                  product: 'Token Vault',
+                  solution:
+                    'Secure credential storage for agent-to-service access. Agents never see raw credentials — Token Vault brokers access, manages refresh tokens, and rotates secrets automatically.',
+                },
+                {
+                  challenge: 'Agents access multiple enterprise applications on behalf of users',
+                  product: 'Cross App Access (XAA)',
+                  solution:
+                    "Token exchange across authorization server trust boundaries. ID-JAG enables an agent to present a user's identity to a resource server and receive a scoped access token — without the user logging in again.",
+                },
+                {
+                  challenge: "Agents need their own identity, not just the user's",
+                  product: 'Agent Identity',
+                  solution:
+                    'First-class agent identities in Universal Directory as Workload Principals. Each agent gets a client_id, managed connections define what it can access, and lifecycle policies govern creation, rotation, and deprovisioning.',
+                },
+                {
+                  challenge: 'No visibility into what AI agents exist or what they can access',
+                  product: 'ISPM',
+                  solution:
+                    'Identity Security Posture Management discovers agents across cloud platforms (AWS, Azure, GCP) via read-only API connectors. Chrome extension discovers user-level AI tool usage. Surfaces over-privileged agents and stale credentials.',
+                },
+                {
+                  challenge: "Agents use MCP to connect to tools but there's no identity layer",
+                  product: 'MCP Security',
+                  solution:
+                    "Okta provides the identity layer for MCP — authenticating users, authorizing tool access via scopes mapped to MCP tools, and ensuring agents only invoke tools they're permitted to use. Works with MCP gateways for centralized policy enforcement.",
+                },
+              ],
+            },
+            {
+              id: 'agentic-vs-generative',
+              title: 'Agentic vs. Generative AI — Why Identity Matters More',
+              content:
+                'Customers often conflate generative AI and agentic AI. This comparison helps sellers explain why agentic AI demands a fundamentally different identity approach.',
+              comparison: [
+                {
+                  capability: 'Core function',
+                  generative: 'Generate content (text, images, code) from prompts',
+                  agentic: 'Autonomously plan, decide, and execute multi-step goals',
+                },
+                {
+                  capability: 'Interaction style',
+                  generative: 'Single prompt → single response (stateless)',
+                  agentic: 'Ongoing autonomous operation with tool use (stateful)',
+                },
+                {
+                  capability: 'System access',
+                  generative: 'Limited — reads context, generates output',
+                  agentic: 'Broad — reads data, calls APIs, writes to systems, invokes tools',
+                },
+                {
+                  capability: 'Autonomy level',
+                  generative: 'None — always human-in-the-loop',
+                  agentic: 'High — can operate without human approval for routine tasks',
+                },
+                {
+                  capability: 'Memory',
+                  generative: 'Session-only (context window)',
+                  agentic: 'Persistent across sessions (long-term memory, learned preferences)',
+                },
+                {
+                  capability: 'Identity need',
+                  generative: "User authentication only — who's asking the question?",
+                  agentic:
+                    'Agent identity + user delegation + tool authorization + credential management + lifecycle governance',
+                },
+                {
+                  capability: 'Risk profile',
+                  generative: 'Data leakage, hallucination, prompt injection',
+                  agentic:
+                    'All generative risks PLUS unauthorized actions, privilege escalation, credential theft, rogue agent behavior',
+                },
+              ],
+            },
+            {
+              id: 'risks-and-challenges',
+              title: 'Challenges & Risks Okta Addresses',
+              content:
+                "Key risks in agentic AI deployments and how Okta's approach mitigates them. Use these in discovery to validate customer concerns and position solutions.",
+              risks: [
+                {
+                  risk: 'Delegation & control — Who authorized this agent to act?',
+                  oktaApproach:
+                    'Agent Identity with Workload Principals gives every agent a verifiable identity. Managed connections define what each agent can access. OBO token exchange preserves user context through the chain.',
+                },
+                {
+                  risk: 'Credential security — Agents need secrets to access services',
+                  oktaApproach:
+                    'Token Vault stores and brokers credentials so agents never handle raw secrets. Automatic rotation, revocation on policy violation, and audit trail of every credential use.',
+                },
+                {
+                  risk: 'Scale & sprawl — Hundreds of agents with no inventory',
+                  oktaApproach:
+                    'ISPM discovers agents across cloud platforms and surfaces over-privileged or stale agent identities. Chrome extension discovers user-level AI tool adoption for shadow AI visibility.',
+                },
+                {
+                  risk: 'Prompt injection — Adversarial inputs causing agents to take unauthorized actions',
+                  oktaApproach:
+                    'Authorization checks at the action layer (not just the prompt layer). Even if an agent is tricked into requesting a sensitive action, policy evaluation denies it. Defense in depth: authentication + authorization + audit.',
+                },
+                {
+                  risk: 'Multi-agent trust — Agent A calls Agent B, who calls Agent C',
+                  oktaApproach:
+                    "Each agent verifies the calling agent's identity. Scope-based coarse authorization plus FGA fine-grained checks. Full audit trail in syslog captures the delegation chain including policy denials.",
+                },
+                {
+                  risk: 'Regulatory compliance — EU AI Act, SOC2, audit requirements',
+                  oktaApproach:
+                    'Agent lifecycle management (creation, rotation, deprovisioning). Comprehensive audit logging. Posture monitoring to ensure continuous compliance. Classification of agents by risk level.',
+                },
+              ],
+            },
+            {
+              id: 'future-outlook',
+              title: 'The Future of Agentic AI Identity',
+              content:
+                'Where the industry is heading — useful for positioning Okta as forward-looking and addressing customer questions about roadmap and long-term strategy.',
+              keyPoints: [
+                'Identity-native agent frameworks — Future agent frameworks will have identity built in from the start, not bolted on. Okta is working with framework authors (LangChain, CrewAI, etc.) to embed identity primitives.',
+                'Behavioral trust scoring — Beyond static permissions, agents will be evaluated on behavioral patterns. An agent that suddenly accesses unusual resources triggers step-up verification or suspension.',
+                "Autonomous agent-to-agent trust — Full peer-to-peer agent authentication without human-in-the-loop. Okta's agent-to-agent enablement (roadmap Q3) will allow agents to verify each other's identity and negotiate access.",
+                'Quantum-resistant agent credentials — As quantum computing advances, agent credentials will need post-quantum cryptographic protection. Long-lived agent identities are particularly vulnerable.',
+                'Federated agent identity — Agents operating across organizational boundaries will need federated trust — similar to how SAML/OIDC federated human identity, but adapted for machine-to-machine delegation chains.',
+                'Regulatory evolution — Expect AI-specific identity regulations beyond EU AI Act. SOC2 and ISO 27001 will likely add AI agent governance controls. Early investment in agent lifecycle management pays off.',
+              ],
+            },
+          ],
+        },
+      ],
     },
   },
 }

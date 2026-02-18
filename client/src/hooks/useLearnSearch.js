@@ -108,6 +108,45 @@ function buildSearchIndex() {
         })
       })
     })
+
+    // Index Knowledge Sections
+    if (track.knowledgeSections) {
+      track.knowledgeSections.forEach((section) => {
+        section.subsections.forEach((sub) => {
+          // Collect all text from the subsection's various data shapes
+          const extraText = []
+          if (sub.keyPoints) extraText.push(...sub.keyPoints)
+          if (sub.items)
+            sub.items.forEach((item) =>
+              extraText.push(item.name, item.description, item.identityNeed)
+            )
+          if (sub.layers)
+            sub.layers.forEach((layer) =>
+              extraText.push(layer.name, layer.description, layer.identity, layer.oktaProduct)
+            )
+          if (sub.mappings)
+            sub.mappings.forEach((m) => extraText.push(m.challenge, m.product, m.solution))
+          if (sub.comparison)
+            sub.comparison.forEach((c) => extraText.push(c.capability, c.generative, c.agentic))
+          if (sub.risks) sub.risks.forEach((r) => extraText.push(r.risk, r.oktaApproach))
+
+          index.push({
+            id: `framework-${trackKey}-knowledge-${section.id}-${sub.id}`,
+            type: 'knowledge-section',
+            topic: 'framework',
+            topicName: 'Discovery Framework',
+            track: trackKey,
+            trackName: track.name,
+            sectionId: sub.id,
+            parentSection: section.title,
+            title: sub.title,
+            content: sub.content,
+            searchText:
+              `${section.title} ${sub.title} ${sub.content} ${extraText.join(' ')}`.toLowerCase(),
+          })
+        })
+      })
+    }
   })
 
   // Index Golden Questions
